@@ -9,9 +9,8 @@
     <description>$description$</description>
     <licenseUrl>https://github.com/AlturosDestinations/Alturos.Yolo/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/AlturosDestinations/Alturos.Yolo</projectUrl>
-    <tags>yolo2 volov2 objectdetection</tags>
+    <tags>yolo darknet yolo2 yolov2 objectdetection wrapper</tags>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <tags>Yolo darknet wrapper</tags>
   </metadata>
   <files>
     <file src="Alturos.Yolo.targets" target="build\net461" />
