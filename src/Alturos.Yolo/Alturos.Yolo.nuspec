@@ -7,6 +7,9 @@
     <authors>$author$</authors>
     <owners>$author$</owners>
     <description>$description$</description>
+    <licenseUrl>https://github.com/AlturosDestinations/Alturos.Yolo/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/AlturosDestinations/Alturos.Yolo</projectUrl>
+    <tags>yolo2 volov2 objectdetection</tags>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <tags>Yolo darknet wrapper</tags>
   </metadata>
