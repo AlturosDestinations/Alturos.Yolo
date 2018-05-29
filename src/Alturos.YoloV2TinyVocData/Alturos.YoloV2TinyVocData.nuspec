@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package>
+  <metadata minClientVersion="3.3.0">
+    <id>Alturos.YoloV2TinyVocData</id>
+    <version>1.0.0</version>
+    <authors>Alturos Destinations</authors>
+    <owners>Alturos Destinations</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Yolo V2 tiny voc data</description>
+    <tags>yolov2-tiny-voc</tags>
+  </metadata>
+  <files>
+    <file src="Alturos.YoloV2TinyVocData.targets" target="build\net46" />
+    <file src="data\yolov2-tiny-voc.cfg" target="build\net46" />
+    <file src="data\yolov2-tiny-voc.weights" target="build\net46" />
+    <file src="data\voc.names" target="build\net46" />
+  </files>
+</package>

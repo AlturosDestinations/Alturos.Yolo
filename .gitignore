@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+/nuget.exe
+/nuget pack.cmd
+
 # User-specific files
 *.suo
 *.user

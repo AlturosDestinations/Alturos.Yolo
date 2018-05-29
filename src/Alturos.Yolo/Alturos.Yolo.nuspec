@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package>
+  <metadata minClientVersion="3.3.0">
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <description>$description$</description>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <tags>Yolo darknet wrapper</tags>
+  </metadata>
+  <files>
+    <file src="Alturos.Yolo.targets" target="build\net461" />
+    <file src="dependencies\opencv_world340.dll" target="build\net461" />
+    <file src="dependencies\yolo.dll" target="build\net461" />
+  </files>
+</package>
