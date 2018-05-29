@@ -1,6 +1,6 @@
 # Alturos.Yolo
 
-Send an image to yolo and receive the position of the detected objects. Requires .net 461 and x64 build.
+Send an image to [yolo](https://github.com/pjreddie/darknet) and receive the position of the detected objects. Requires .net 461 and x64 build.
 
 ### nuget
 The package is available on [nuget](https://www.nuget.org/packages/Alturos.Yolo)
