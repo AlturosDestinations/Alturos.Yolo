@@ -1,6 +1,6 @@
 #ifndef GEMM_H
 #define GEMM_H
-   
+
 void gemm(int TA, int TB, int M, int N, int K, float ALPHA, 
                     float *A, int lda, 
                     float *B, int ldb,

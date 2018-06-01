@@ -13,7 +13,7 @@ typedef struct network{
     float *workspace;
     int n;
     int batch;
-	int *seen;
+    int *seen;
     float epoch;
     int subdivisions;
     float momentum;
@@ -49,7 +49,7 @@ typedef struct network{
     float exposure;
     float saturation;
     float hue;
-	int small_object;
+    int small_object;
 
 //    int gpu_index;
     tree *hierarchy;

@@ -24,12 +24,12 @@ typedef struct{
 } dbox;
 
 typedef struct detection {
-	box bbox;
-	int classes;
-	float *prob;
-	float *mask;
-	float objectness;
-	int sort_class;
+    box bbox;
+    int classes;
+    float *prob;
+    float *mask;
+    float objectness;
+    int sort_class;
 } detection;
 
 float box_iou(box a, box b);
@@ -37,19 +37,19 @@ float box_iou(box a, box b);
 YOLODLL_API void do_nms_sort(detection *dets, int total, int classes, float thresh);
 
 typedef struct {
-		int x, y, w, h;
-	} int_box;
+        int x, y, w, h;
+    } int_box;
 
 typedef struct rectangelecandidate {
-	int_box rectangle;
-	double confidence;
-	//char * objectType;
-	char objectType[50];
+    int_box rectangle;
+    double confidence;
+    //char * objectType;
+    char objectType[50];
 
 } RectangleCandidate;
 
 typedef struct recanglecandidatecontainer {
-	RectangleCandidate candidates[10];
+    RectangleCandidate candidates[10];
 } RectangleCandidateContainer;
 
 #endif

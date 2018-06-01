@@ -5,8 +5,8 @@
 #include "opencv2/highgui/highgui_c.h"
 
 typedef struct {
-	int w;
-	int h;
+    int w;
+    int h;
     int c;
     float *data;
 } image;

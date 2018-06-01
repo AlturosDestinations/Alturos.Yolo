@@ -3,7 +3,7 @@
 
 ACTIVATION get_activation(char *s)
 {
-//	printf("active 1\n");
+//    printf("active 1\n");
     if (strcmp(s, "logistic")==0) return LOGISTIC;
     if (strcmp(s, "loggy")==0) return LOGGY;
     if (strcmp(s, "relu")==0) return RELU;
@@ -14,12 +14,12 @@ ACTIVATION get_activation(char *s)
     if (strcmp(s, "lhtan")==0) return LHTAN;
     if (strcmp(s, "linear")==0) return LINEAR;
     if (strcmp(s, "ramp")==0) return RAMP;
-	if (strcmp(s, "leaky") == 0)
-	{
-//		printf("active 2\n");
-		return LEAKY;
-	}
-	if (strcmp(s, "tanh")==0) return TANH;
+    if (strcmp(s, "leaky") == 0)
+    {
+//      printf("active 2\n");
+        return LEAKY;
+    }
+    if (strcmp(s, "tanh")==0) return TANH;
     if (strcmp(s, "stair")==0) return STAIR;
     fprintf(stderr, "Couldn't find activation function %s, going with ReLU\n", s);
     return RELU;

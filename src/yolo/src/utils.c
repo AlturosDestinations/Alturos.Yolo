@@ -104,5 +104,5 @@ float rand_uniform(float min, float max)
         max = swap;
     }
     return ((float)rand()/RAND_MAX * (max - min)) + min;
-	//return (random_float() * (max - min)) + min;
+    //return (random_float() * (max - min)) + min;
 }

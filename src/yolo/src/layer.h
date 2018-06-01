@@ -33,10 +33,10 @@ typedef enum {
     NETWORK,
     XNOR,
     REGION,
-	YOLO,
+    YOLO,
     REORG,
-	UPSAMPLE,
-	REORG_OLD,
+    UPSAMPLE,
+    REORG_OLD,
     BLANK
 } LAYER_TYPE;
 
@@ -45,15 +45,15 @@ typedef enum{
 } COST_TYPE;
 
 typedef struct {
-	int batch;
-	float learning_rate;
-	float momentum;
-	float decay;
-	int adam;
-	float B1;
-	float B2;
-	float eps;
-	int t;
+    int batch;
+    float learning_rate;
+    float momentum;
+    float decay;
+    int adam;
+    float B1;
+    float B2;
+    float eps;
+    int t;
 } update_args;
 
 struct layer{
@@ -98,7 +98,7 @@ struct layer{
     float exposure;
     float shift;
     float ratio;
-	int focal_loss;
+    int focal_loss;
     int softmax;
     int classes;
     int coords;
@@ -110,9 +110,9 @@ struct layer{
     int noadjust;
     int reorg;
     int log;
-	int tanh;
-	int *mask;
-	int total;
+    int tanh;
+    int *mask;
+    int total;
 
     int adam;
     float B1;
@@ -134,14 +134,14 @@ struct layer{
     float coord_scale;
     float object_scale;
     float noobject_scale;
-	float mask_scale;
+    float mask_scale;
     float class_scale;
     int bias_match;
     int random;
-	float ignore_thresh;
-	float truth_thresh;
+    float ignore_thresh;
+    float truth_thresh;
     float thresh;
-	float focus;
+    float focus;
     int classfix;
     int absolute;
 

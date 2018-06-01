@@ -61,7 +61,7 @@ typedef struct size_params{
 
 convolutional_layer parse_convolutional(list *options, size_params params)
 {
-//	printf("Conv 1\n");
+//    printf("Conv 1\n");
     int n = option_find_int(options, "filters",1);
     int size = option_find_int(options, "size",1);
     int stride = option_find_int(options, "stride",1);
@@ -69,26 +69,26 @@ convolutional_layer parse_convolutional(list *options, size_params params)
     int padding = option_find_int_quiet(options, "padding",0);
     if(pad) padding = size/2;
 
-//	printf("Conv 2\n");
+//    printf("Conv 2\n");
     char *activation_s = option_find_str(options, "activation", "logistic");
-	
-//	printf("Conv 3\n");
-	//printf("%s\n", activation_s[0]);
+    
+//    printf("Conv 3\n");
+    //printf("%s\n", activation_s[0]);
 
     ACTIVATION activation = get_activation(activation_s);
-//	printf("Conv 4\n");
+//    printf("Conv 4\n");
 
     int batch,h,w,c;
     h = params.h;
     w = params.w;
     c = params.c;
     batch=params.batch;
-//	printf("Conv 5\n");
+//    printf("Conv 5\n");
     if(!(h && w && c)) error("Layer before convolutional layer must output image.");
     int batch_normalize = option_find_int_quiet(options, "batch_normalize", 0);
     int binary = option_find_int_quiet(options, "binary", 0);
     int xnor = option_find_int_quiet(options, "xnor", 0);
-//	printf("Conv 6\n");
+//    printf("Conv 6\n");
     convolutional_layer layer = make_convolutional_layer(batch,h,w,c,n,size,stride,padding,activation, batch_normalize, binary, xnor, params.net.adam);
     layer.flipped = option_find_int_quiet(options, "flipped", 0);
     layer.dot = option_find_float_quiet(options, "dot", 0);
@@ -97,7 +97,7 @@ convolutional_layer parse_convolutional(list *options, size_params params)
         layer.B2 = params.net.B2;
         layer.eps = params.net.eps;
     }
-//	printf("Conv 5\n");
+//    printf("Conv 5\n");
     return layer;
 }
 
@@ -106,7 +106,7 @@ layer parse_region(list *options, size_params params)
     int coords = option_find_int(options, "coords", 4);
     int classes = option_find_int(options, "classes", 20);
     int num = option_find_int(options, "num", 1);
-	int max_boxes = option_find_int_quiet(options, "max", 30);
+    int max_boxes = option_find_int_quiet(options, "max", 30);
 
     layer l = make_region_layer(params.batch, params.w, params.h, num, classes, coords, max_boxes);
     assert(l.outputs == params.inputs);
@@ -115,7 +115,7 @@ layer parse_region(list *options, size_params params)
     l.sqrt = option_find_int_quiet(options, "sqrt", 0);
 
     l.softmax = option_find_int(options, "softmax", 0);
-	l.focal_loss = option_find_int_quiet(options, "focal_loss", 0);
+    l.focal_loss = option_find_int_quiet(options, "focal_loss", 0);
     //l.max_boxes = option_find_int_quiet(options, "max",30);
     l.jitter = option_find_float(options, "jitter", .2);
     l.rescore = option_find_int_quiet(options, "rescore",0);
@@ -128,7 +128,7 @@ layer parse_region(list *options, size_params params)
     l.coord_scale = option_find_float(options, "coord_scale", 1);
     l.object_scale = option_find_float(options, "object_scale", 1);
     l.noobject_scale = option_find_float(options, "noobject_scale", 1);
-	l.mask_scale = option_find_float(options, "mask_scale", 1);
+    l.mask_scale = option_find_float(options, "mask_scale", 1);
     l.class_scale = option_find_float(options, "class_scale", 1);
     l.bias_match = option_find_int_quiet(options, "bias_match",0);
 
@@ -186,7 +186,7 @@ learning_rate_policy get_policy(char *s)
 
 void parse_net_options(list *options, network *net)
 {
-//	printf("option 1\n");
+//    printf("option 1\n");
     net->batch = option_find_int(options, "batch",1);
     net->learning_rate = option_find_float(options, "learning_rate", .001);
     net->momentum = option_find_float(options, "momentum", .9);
@@ -197,7 +197,7 @@ void parse_net_options(list *options, network *net)
     net->batch *= net->time_steps;
     net->subdivisions = subdivs;
 
-//	printf("option 2\n");
+//    printf("option 2\n");
     net->adam = option_find_int_quiet(options, "adam", 0);
     if(net->adam){
         net->B1 = option_find_float(options, "B1", .9);
@@ -212,23 +212,23 @@ void parse_net_options(list *options, network *net)
     net->max_crop = option_find_int_quiet(options, "max_crop",net->w*2);
     net->min_crop = option_find_int_quiet(options, "min_crop",net->w);
 
-//	printf("option 3\n");
-	net->small_object = option_find_int_quiet(options, "small_object", 0);
+//    printf("option 3\n");
+    net->small_object = option_find_int_quiet(options, "small_object", 0);
     net->angle = option_find_float_quiet(options, "angle", 0);
     net->aspect = option_find_float_quiet(options, "aspect", 1);
     net->saturation = option_find_float_quiet(options, "saturation", 1);
     net->exposure = option_find_float_quiet(options, "exposure", 1);
     net->hue = option_find_float_quiet(options, "hue", 0);
-	net->power = option_find_float_quiet(options, "power", 4);
-//	printf("option 4\n");
+    net->power = option_find_float_quiet(options, "power", 4);
+//    printf("option 4\n");
     if(!net->inputs && !(net->h && net->w && net->c)) error("No input parameters supplied");
 
     char *policy_s = option_find_str(options, "policy", "constant");
-//	printf("option 5\n");
-	net->policy = get_policy(policy_s);
-//	printf("option 6\n");
-	net->burn_in = option_find_int_quiet(options, "burn_in", 0);
-//	printf("option 7\n");
+//    printf("option 5\n");
+    net->policy = get_policy(policy_s);
+//    printf("option 6\n");
+    net->burn_in = option_find_int_quiet(options, "burn_in", 0);
+//    printf("option 7\n");
 
     if(net->policy == STEP){
         net->step = option_find_int(options, "step", 1);
@@ -237,7 +237,7 @@ void parse_net_options(list *options, network *net)
         char *l = option_find(options, "steps");   
         char *p = option_find(options, "scales");   
         if(!l || !p) error("STEPS policy must have steps and scales in cfg file");
-	
+    
         int len = strlen(l);
         int n = 1;
         int i;
@@ -266,7 +266,7 @@ void parse_net_options(list *options, network *net)
         //net->power = option_find_float(options, "power", 1);
     }
     net->max_batches = option_find_int(options, "max_batches", 0);
-//	printf("option 8\n");
+//    printf("option 8\n");
 }
 
 int is_network(section *s)
@@ -277,7 +277,7 @@ int is_network(section *s)
 
 extern network parse_network_cfg_custom(char *filename, int batch)
 {
-//	printf("parser 1\n");
+//    printf("parser 1\n");
     list *sections = read_cfg(filename);
     node *n = sections->front;
     if(!n) error("Config file has no sections");
@@ -285,55 +285,55 @@ extern network parse_network_cfg_custom(char *filename, int batch)
 //    net.gpu_index = gpu_index;
     size_params params;
 
-//	printf("parser 2\n");
+//    printf("parser 2\n");
     section *s = (section *)n->val;
     list *options = s->options;
     if(!is_network(s)) error("First section must be [net] or [network]");
     parse_net_options(options, &net);
 
-//	printf("parser 3\n");
+//    printf("parser 3\n");
     params.h = net.h;
     params.w = net.w;
     params.c = net.c;
     params.inputs = net.inputs;
-	if (batch > 0) net.batch = batch;
+    if (batch > 0) net.batch = batch;
     params.batch = net.batch;
     params.time_steps = net.time_steps;
     params.net = net;
 
-//	printf("parser 4\n");
+//    printf("parser 4\n");
     size_t workspace_size = 0;
     n = n->next;
     int count = 0;
     free_section(s);
     fprintf(stderr, "layer     filters    size              input                output\n");
     
-//	printf("parser 5\n");
-	while(n){
+//    printf("parser 5\n");
+    while(n){
         params.index = count;
         fprintf(stderr, "%5d ", count);
         s = (section *)n->val;
         options = s->options;
         layer l = {0};
         LAYER_TYPE lt = string_to_layer_type(s->type);
-		
+        
         if(lt == CONVOLUTIONAL)
-		{
-			//printf("parser 6\n");
+        {
+            //printf("parser 6\n");
             l = parse_convolutional(options, params);
         }
-		else if(lt == REGION)
-		{
+        else if(lt == REGION)
+        {
             l = parse_region(options, params);
-		}
-		else if(lt == MAXPOOL)
-		{
+        }
+        else if(lt == MAXPOOL)
+        {
             l = parse_maxpool(options, params);
-        }		
-		else{
+        }        
+        else{
             fprintf(stderr, "Type not recognized: %s\n", s->type);
         }
-	//	printf("parser 7\n");
+    //    printf("parser 7\n");
         l.onlyforward = option_find_int_quiet(options, "onlyforward", 0);
         l.stopbackward = option_find_int_quiet(options, "stopbackward", 0);
         l.dontload = option_find_int_quiet(options, "dontload", 0);
@@ -358,7 +358,7 @@ extern network parse_network_cfg_custom(char *filename, int batch)
         //printf("%ld\n", workspace_size);
         net.workspace = calloc(1, workspace_size);
     }
-//	printf("parser 8\n");
+//    printf("parser 8\n");
     return net;
 }
 
@@ -503,16 +503,16 @@ void load_weights_upto(network *net, char *filename, int cutoff)
     fread(&major, sizeof(int), 1, fp);
     fread(&minor, sizeof(int), 1, fp);
     fread(&revision, sizeof(int), 1, fp);
-	if ((major * 10 + minor) >= 2) {
-		printf("\n seen 64 \n");
-		uint64_t iseen = 0;
-		fread(&iseen, sizeof(uint64_t), 1, fp);
-		*net->seen = iseen;
-	}
-	else {
-		printf("\n seen 32 \n");
-		fread(net->seen, sizeof(int), 1, fp);
-	}
+    if ((major * 10 + minor) >= 2) {
+        printf("\n seen 64 \n");
+        uint64_t iseen = 0;
+        fread(&iseen, sizeof(uint64_t), 1, fp);
+        *net->seen = iseen;
+    }
+    else {
+        printf("\n seen 32 \n");
+        fread(net->seen, sizeof(int), 1, fp);
+    }
     int transpose = (major > 1000) || (minor > 1000);
 
     int i;
