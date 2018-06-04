@@ -12,6 +12,10 @@ motorbike | 44.71 | 1932 | 699 | 411 | 441 |
 
 ### System requirements
 - .NET Framework 4.6.1
+- [Microsoft Visual C++ Visual Studio 2017](https://go.microsoft.com/fwlink/?LinkId=746572)
+
+### Build requirements
+- Visual Studio 2017
 - x64 build
 
 ### nuget
