@@ -7,7 +7,7 @@
     <owners>Alturos Destinations</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Yolo V2 tiny voc data</description>
-    <tags>yolov2-tiny-voc</tags>
+    <tags>yolov2-tiny-voc aeroplane bicycle bird boat bottle bus car cat chair cow diningtable dog horse motorbike person pottedplant sheep sofa train tvmonitor</tags>
   </metadata>
   <files>
     <file src="Alturos.YoloV2TinyVocData.targets" target="build\net46" />
