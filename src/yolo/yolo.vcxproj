@@ -102,6 +102,8 @@
     <ClInclude Include="src\option_list.h" />
     <ClInclude Include="src\parser.h" />
     <ClInclude Include="src\region_layer.h" />
+    <ClInclude Include="src\reorg_layer.h" />
+    <ClInclude Include="src\route_layer.h" />
     <ClInclude Include="src\tree.h" />
     <ClInclude Include="src\utils.h" />
     <ClInclude Include="src\yolo.h" />
@@ -125,6 +127,8 @@
     <ClCompile Include="src\option_list.c" />
     <ClCompile Include="src\parser.c" />
     <ClCompile Include="src\region_layer.c" />
+    <ClCompile Include="src\reorg_layer.c" />
+    <ClCompile Include="src\route_layer.c" />
     <ClCompile Include="src\softmax_layer.c" />
     <ClCompile Include="src\tree.c" />
     <ClCompile Include="src\utils.c" />
