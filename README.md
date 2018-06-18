@@ -42,6 +42,8 @@ CPU | yolo v2 tiny voc | yolo v2  | yolo 9000 |
 Intel i7 3770 (with OpenMP) | 557 ms | - | - | 
 Intel i7 3770 (without OpenMP) | 1155 ms | - | - | 
 
+This project don't have currently gpu support
+
 Graphic card | Single precision | yolo v2 tiny voc | yolo v2  | yolo 9000 |
 --- | --- | --- | --- | --- |
 NVIDIA Quadro K420 | 300 GFLOPS | 94 ms | 296 ms | 640 ms | 
