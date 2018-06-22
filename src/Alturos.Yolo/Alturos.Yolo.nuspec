@@ -11,6 +11,7 @@
     <projectUrl>https://github.com/AlturosDestinations/Alturos.Yolo</projectUrl>
     <tags>yolo darknet yolo2 yolov2 objectdetection wrapper</tags>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
+	<releaseNotes>Increase performance, activate multi core support</releaseNotes>
   </metadata>
   <files>
     <file src="Alturos.Yolo.targets" target="build\net461" />
