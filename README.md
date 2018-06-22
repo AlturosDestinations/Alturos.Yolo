@@ -4,7 +4,7 @@ In this project you will find the source code to compile yolo so it can be acces
 
 Send an image to [yolo](https://github.com/pjreddie/darknet) and receive the position of the detected objects. Our project is meant to return the object-type and -position as processable data.
 
-![object detection result](https://github.com/AlturosDestinations/Alturos.Yolo/blob/master/doc/objectdetection.jpg)
+![object detection result](doc/objectdetection.jpg)
 
 Type | Confidence | X | Y | Width | Height |
 --- | --- | --- | --- | --- | --- |
@@ -34,3 +34,22 @@ var yoloWrapper = new YoloWrapper();
 yoloWrapper.Initialize(new YoloConfiguration("yolov2-tiny-voc.cfg", "yolov2-tiny-voc.weights", "voc.names"));
 var items = yoloWrapper.ProcessImage(imageData);
 ```
+
+### Performance (processing of one image 1024x683)
+
+CPU | yolo v2 tiny voc | yolo v2  | yolo 9000 |
+--- | --- | --- | --- | 
+Intel i7 3770 (with OpenMP) | 557 ms | - | - | 
+Intel i7 3770 (without OpenMP) | 1155 ms | - | - | 
+
+This project don't have currently gpu support
+
+Graphic card | Single precision | yolo v2 tiny voc | yolo v2  | yolo 9000 |
+--- | --- | --- | --- | --- |
+NVIDIA Quadro K420 | 300 GFLOPS | 94 ms | 296 ms | 640 ms | 
+NVIDIA Quadro K620 | 768 GFLOPS | - | - | - | 
+NVIDIA Quadro K1200 | 1151 GFLOPS | - | - | - | 
+NVIDIA GeForce GT 710 | 366 GFLOPS | - | - | - | 
+NVIDIA GeForce GT 730 | 693 GFLOPS | - | - | - | 
+NVIDIA GeForce GT 1030 | 1098 GFLOPS | - | - | - | 
+NVIDIA GeForce GTX 1060 | 4372 GFLOPS | - | - | - | 
