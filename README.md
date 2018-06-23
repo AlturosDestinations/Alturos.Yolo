@@ -51,5 +51,5 @@ NVIDIA Quadro K620 | 768 GFLOPS | - | - | - |
 NVIDIA Quadro K1200 | 1151 GFLOPS | - | - | - | 
 NVIDIA GeForce GT 710 | 366 GFLOPS | - | - | - | 
 NVIDIA GeForce GT 730 | 693 GFLOPS | - | - | - | 
-NVIDIA GeForce GT 1030 | 1098 GFLOPS | - | - | - | 
+NVIDIA GeForce GT 1030 | 1098 GFLOPS | 23 ms | 64 ms| 180 ms | 
 NVIDIA GeForce GTX 1060 | 4372 GFLOPS | - | - | - | 
