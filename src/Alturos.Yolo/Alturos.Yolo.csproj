@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigurationDetector.cs" />
     <Compile Include="Model\CoreRectangle.cs" />
     <Compile Include="Model\CoreRectangleCandidate.cs" />
     <Compile Include="Model\CoreRectangleCandidateContainer.cs" />
