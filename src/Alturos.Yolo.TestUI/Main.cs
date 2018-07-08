@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Alturos.Yolo.TestUI
@@ -21,19 +22,23 @@ namespace Alturos.Yolo.TestUI
             this.Text = $"Alturos Yolo TestUI {Application.ProductVersion}";
 
             var files = Directory.GetFiles(@".\Images");
+            //var files = Directory.GetFiles(@"C:\Users\tinoh\Desktop\Fotos iPhone");
             this.dataGridViewFiles.DataSource = files.Select(o => new { Name = o }).ToList();
 
             var configurationDetector = new ConfigurationDetector();
             var config = configurationDetector.Detect();
-
             if (config == null)
             {
                 MessageBox.Show($"Yolo configuration detection failure", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            this._yoloWrapper = new YoloWrapper();
-            this.Initialize(config);
+            Task.Run(() => this.Initialize(config));
+        }
+
+        private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this._yoloWrapper.Dispose();
         }
 
         private string GetCurrentImage()
@@ -44,41 +49,18 @@ namespace Alturos.Yolo.TestUI
 
         private void dataGridViewFiles_SelectionChanged(object sender, EventArgs e)
         {
+            var oldImage = this.pictureBox1.Image;
             var fileName = this.GetCurrentImage();
-            this.pictureBox1.Image = Image.FromFile(fileName);
+            if (fileName.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase))
+            {
+                this.pictureBox1.Image = Image.FromFile(fileName);
+            }
+            oldImage?.Dispose();
         }
 
         private void buttonSendImage_Click(object sender, EventArgs e)
         {
-            try
-            {
-                var fileName = this.GetCurrentImage();
-                var imageData = File.ReadAllBytes(fileName);
-
-                var sw = new Stopwatch();
-                sw.Start();
-                var data = this._yoloWrapper.ProcessImage(imageData);
-                sw.Stop();
-
-                this.toolStripStatusLabel1.Text = $"processing in {sw.Elapsed.TotalMilliseconds}ms";
-
-                var items = data.Select(o => new YoloItem
-                {
-                    Type = o.objectType,
-                    Confidence = o.confidence,
-                    X = o.rectangle.topLeftCorner.x,
-                    Y = o.rectangle.topLeftCorner.y,
-                    Width = o.rectangle.width,
-                    Height = o.rectangle.height
-                }).ToList();
-
-                this.dataGridView1.DataSource = items;
-                this.DrawImage(items);
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show($"Process image exception:{exception}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            this.Detect();
         }
 
         private void DrawImage(List<YoloItem> items)
@@ -98,42 +80,69 @@ namespace Alturos.Yolo.TestUI
                     var width = item.Width;
                     var height = item.Height;
 
-                    var pen = new Pen(Brushes.GreenYellow, 2);
-
-                    if (item.Confidence > 50)
+                    using (var pen = this.GetBrush(item.Confidence, image.Width))
                     {
-                        pen = new Pen(Brushes.DarkRed, 4);
+                        canvas.DrawRectangle(pen, x, y, width, height);
+                        canvas.Flush();
                     }
-                    if (item.Confidence > 20 && item.Confidence <= 50)
-                    {
-                        pen = new Pen(Brushes.Orange, 3);
-                    }
-
-                    canvas.DrawRectangle(pen, x, y, width, height);
-                    canvas.Flush();
                 }
             }
 
+            var oldImage = this.pictureBox1.Image;
             this.pictureBox1.Image = image;
+            oldImage?.Dispose();
         }
 
-        private void Initialize(YoloConfiguration yoloConfiguration)
+        private Pen GetBrush(double confidence, int width)
+        {
+            var size = width / 100;
+
+            if (confidence > 50)
+            {
+                return new Pen(Brushes.DarkRed, size);
+            }
+            else if (confidence > 20 && confidence <= 50)
+            {
+                return new Pen(Brushes.Orange, size);
+            }
+
+            return new Pen(Brushes.GreenYellow, size);
+        }
+
+        private void Initialize(YoloConfiguration config)
         {
             var sw = new Stopwatch();
             sw.Start();
-            var successful = this._yoloWrapper.Initialize(yoloConfiguration);
+            this._yoloWrapper = new YoloWrapper(config.ConfigFile, config.WeightsFile, config.NamesFile, 0);
             sw.Stop();
 
-            if (successful)
+            this.statusStrip1.Invoke(new MethodInvoker(delegate () { this.toolStripStatusLabel1.Text = $"Initialize elapsed in {sw.Elapsed.TotalMilliseconds}ms DetectionSystem:{this._yoloWrapper.DetectionSystem}"; }));
+            this.buttonSendImage.Invoke(new MethodInvoker(delegate () { this.buttonSendImage.Enabled = true; }));
+        }        
+
+        private void Detect()
+        {
+            var memoryTransfer = true;
+
+            var fileName = this.GetCurrentImage();
+            var imageData = File.ReadAllBytes(fileName);
+
+            var sw = new Stopwatch();
+            sw.Start();
+            List<YoloItem> items;
+            if (memoryTransfer)
             {
-                this.toolStripStatusLabel1.Text = $"Initialize elapsed in {sw.Elapsed.TotalMilliseconds}ms";
+                items = this._yoloWrapper.Detect(imageData).ToList();
             }
             else
             {
-                this.toolStripStatusLabel1.Text = $"Initialize failure";
+                items = this._yoloWrapper.Detect(fileName).ToList();
             }
+            sw.Stop();
+            this.toolStripStatusLabel1.Text = $"processing in {sw.Elapsed.TotalMilliseconds}ms";
 
-            this.buttonSendImage.Enabled = true;
+            this.dataGridView1.DataSource = items;
+            this.DrawImage(items);
         }
     }
 }

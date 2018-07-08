@@ -42,10 +42,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigurationDetector.cs" />
-    <Compile Include="Model\CoreRectangle.cs" />
-    <Compile Include="Model\CoreRectangleCandidate.cs" />
-    <Compile Include="Model\CoreRectangleCandidateContainer.cs" />
-    <Compile Include="Model\Point2D.cs" />
+    <Compile Include="DetectionSystem.cs" />
+    <Compile Include="Model\BboxContainer.cs" />
+    <Compile Include="Model\BboxT.cs" />
+    <Compile Include="Model\EnvironmentReport.cs" />
     <Compile Include="Model\YoloItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="YoloConfiguration.cs" />
@@ -56,9 +56,13 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>opencv_world340.dll</TargetPath>
     </ContentWithTargetPath>
-    <ContentWithTargetPath Include="dependencies\yolo.dll">
+    <ContentWithTargetPath Include="dependencies\yolo_cpp_dll_cpu.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>yolo.dll</TargetPath>
+      <TargetPath>yolo_cpp_dll_cpu.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="dependencies\yolo_cpp_dll_gpu.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>yolo_cpp_dll_gpu.dll</TargetPath>
     </ContentWithTargetPath>
   </ItemGroup>
   <ItemGroup />

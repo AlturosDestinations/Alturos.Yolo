@@ -16,6 +16,7 @@
   <files>
     <file src="Alturos.Yolo.targets" target="build\net461" />
     <file src="dependencies\opencv_world340.dll" target="build\net461" />
-    <file src="dependencies\yolo.dll" target="build\net461" />
+	<file src="dependencies\yolo_cpp_dll_cpu.dll" target="build\net461" />
+    <file src="dependencies\yolo_cpp_dll_gpu.dll" target="build\net461" />
   </files>
 </package>

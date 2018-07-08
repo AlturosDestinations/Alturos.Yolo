@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace Alturos.Yolo.TestConsole
 {
@@ -10,8 +11,7 @@ namespace Alturos.Yolo.TestConsole
         {
             var retrys = 100;
 
-            var yoloWrapper = new YoloWrapper();
-            yoloWrapper.Initialize(new YoloConfiguration("yolov2-tiny-voc.cfg", "yolov2-tiny-voc.weights", "voc.names"));
+            var yoloWrapper = new YoloWrapper("yolov2-tiny-voc.cfg", "yolov2-tiny-voc.weights", "voc.names");
 
             Console.WriteLine("Start yolo detection");
 
@@ -26,16 +26,16 @@ namespace Alturos.Yolo.TestConsole
 
                     var sw = new Stopwatch();
                     sw.Start();
-                    var items = yoloWrapper.ProcessImage(imageData);
+                    var items = yoloWrapper.Detect(imageData).ToList();
                     sw.Stop();
-                    Console.WriteLine($"{fileInfo.Name} found {items.Length} results, elapsed {sw.Elapsed.TotalMilliseconds:0.00}ms");
-                    if (items.Length > 0)
+                    Console.WriteLine($"{fileInfo.Name} found {items.Count} results, elapsed {sw.Elapsed.TotalMilliseconds:0.00}ms");
+                    if (items.Count > 0)
                     {
                         Console.WriteLine("------------------DETAILS-----------------");
 
                         foreach (var item in items)
                         {
-                            Console.WriteLine($"Type:{item.objectType} Confidence:{item.confidence:0.00}");
+                            Console.WriteLine($"Type:{item.Type} Confidence:{item.Confidence:0.00}");
                         }
 
                         Console.WriteLine("------------------------------------------");

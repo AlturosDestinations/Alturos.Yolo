@@ -5,8 +5,12 @@
       <Link>opencv_world340.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="$(MSBuildThisFileDirectory)\yolo.dll">
-      <Link>yolo.dll</Link>
+    <None Include="$(MSBuildThisFileDirectory)\yolo_cpp_dll_cpu.dll">
+      <Link>yolo_cpp_dll_cpu.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)\yolo_cpp_dll_gpu.dll">
+      <Link>yolo_cpp_dll_gpu.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
