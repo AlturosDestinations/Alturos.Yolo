@@ -58,4 +58,4 @@ NVIDIA GeForce GTX 1060 | 4372 GFLOPS | - | - | - |
 ### GPU Requirements (under construction)
 
 1) Install Nvidia CUDA Toolkit 9.2 (Install hardware driver for cuda support)
-2) Download Nvidia cuDNN (DLL cudnn64_7.dll required for gpu processing)
+2) Download Nvidia cuDNN v7.1.4 for CUDA 9.2 (DLL cudnn64_7.dll required for gpu processing)
