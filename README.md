@@ -35,7 +35,7 @@ yoloWrapper.Initialize(new YoloConfiguration("yolov2-tiny-voc.cfg", "yolov2-tiny
 var items = yoloWrapper.ProcessImage(imageData);
 ```
 
-### Performance (processing of one image 1024x683)
+### Benchmark / Performance (processing of one image 1024x683)
 
 CPU | yolo v2 tiny voc | yolo v2  | yolo 9000 |
 --- | --- | --- | --- | 
@@ -53,3 +53,9 @@ NVIDIA GeForce GT 710 | 366 GFLOPS | - | - | - |
 NVIDIA GeForce GT 730 | 693 GFLOPS | - | - | - | 
 NVIDIA GeForce GT 1030 | 1098 GFLOPS | 23 ms | 64 ms| 180 ms | 
 NVIDIA GeForce GTX 1060 | 4372 GFLOPS | - | - | - | 
+
+
+### GPU Requirements (under construction)
+
+1) Install Nvidia CUDA Toolkit 9.2 (Install hardware driver for cuda support)
+2) Download Nvidia cuDNN (DLL cudnn64_7.dll required for gpu processing)
