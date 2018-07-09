@@ -1,7 +1,7 @@
 ﻿using Alturos.Yolo.Model;
+using Alturos.Yolo.TestUI.Model;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -20,10 +20,10 @@ namespace Alturos.Yolo.TestUI
             this.InitializeComponent();
             this.buttonSendImage.Enabled = false;
             this.Text = $"Alturos Yolo TestUI {Application.ProductVersion}";
+            this.dataGridViewFiles.AutoGenerateColumns = false;
 
-            var files = Directory.GetFiles(@".\Images");
-            //var files = Directory.GetFiles(@"C:\Users\tinoh\Desktop\Fotos iPhone");
-            this.dataGridViewFiles.DataSource = files.Select(o => new { Name = o }).ToList();
+            var imageInfos = new DirectoryImageReader().Analyze(@".\Images");
+            this.dataGridViewFiles.DataSource = imageInfos.ToList();
 
             var configurationDetector = new ConfigurationDetector();
             var config = configurationDetector.Detect();
@@ -41,19 +41,19 @@ namespace Alturos.Yolo.TestUI
             this._yoloWrapper.Dispose();
         }
 
-        private string GetCurrentImage()
+        private ImageInfo GetCurrentImage()
         {
-            var fileName = ((dynamic)this.dataGridViewFiles.CurrentRow.DataBoundItem).Name;
-            return fileName;
+            var item = this.dataGridViewFiles.CurrentRow?.DataBoundItem as ImageInfo;
+            return item;
         }
 
         private void dataGridViewFiles_SelectionChanged(object sender, EventArgs e)
         {
             var oldImage = this.pictureBox1.Image;
-            var fileName = this.GetCurrentImage();
-            if (fileName.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase))
+            var imageInfo = this.GetCurrentImage();
+            if (imageInfo.Name.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase))
             {
-                this.pictureBox1.Image = Image.FromFile(fileName);
+                this.pictureBox1.Image = Image.FromFile(imageInfo.Path);
             }
             oldImage?.Dispose();
         }
@@ -65,9 +65,9 @@ namespace Alturos.Yolo.TestUI
 
         private void DrawImage(List<YoloItem> items)
         {
-            var fileName = this.GetCurrentImage();
+            var imageInfo = this.GetCurrentImage();
             //Load the image(probably from your stream)
-            var image = Image.FromFile(fileName);
+            var image = Image.FromFile(imageInfo.Path);
 
             using (var canvas = Graphics.FromImage(image))
             {
@@ -124,8 +124,8 @@ namespace Alturos.Yolo.TestUI
         {
             var memoryTransfer = true;
 
-            var fileName = this.GetCurrentImage();
-            var imageData = File.ReadAllBytes(fileName);
+            var imageInfo = this.GetCurrentImage();
+            var imageData = File.ReadAllBytes(imageInfo.Path);
 
             var sw = new Stopwatch();
             sw.Start();
@@ -136,12 +136,12 @@ namespace Alturos.Yolo.TestUI
             }
             else
             {
-                items = this._yoloWrapper.Detect(fileName).ToList();
+                items = this._yoloWrapper.Detect(imageInfo.Path).ToList();
             }
             sw.Stop();
             this.toolStripStatusLabel1.Text = $"processing in {sw.Elapsed.TotalMilliseconds}ms";
 
-            this.dataGridView1.DataSource = items;
+            this.dataGridViewResult.DataSource = items;
             this.DrawImage(items);
         }
     }

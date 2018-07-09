@@ -28,18 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.buttonSendImage = new System.Windows.Forms.Button();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dataGridViewResult = new System.Windows.Forms.DataGridView();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.dataGridViewFiles = new System.Windows.Forms.DataGridView();
-            this.ColumnFileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.ColumnFileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnWidth = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnHeight = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResult)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFiles)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -59,19 +63,19 @@
             this.buttonSendImage.UseVisualStyleBackColor = true;
             this.buttonSendImage.Click += new System.EventHandler(this.buttonSendImage_Click);
             // 
-            // dataGridView1
+            // dataGridViewResult
             // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.AllowUserToResizeColumns = false;
-            this.dataGridView1.AllowUserToResizeRows = false;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(3, 16);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(697, 214);
-            this.dataGridView1.TabIndex = 1;
+            this.dataGridViewResult.AllowUserToAddRows = false;
+            this.dataGridViewResult.AllowUserToDeleteRows = false;
+            this.dataGridViewResult.AllowUserToResizeColumns = false;
+            this.dataGridViewResult.AllowUserToResizeRows = false;
+            this.dataGridViewResult.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewResult.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewResult.Location = new System.Drawing.Point(3, 16);
+            this.dataGridViewResult.Name = "dataGridViewResult";
+            this.dataGridViewResult.ReadOnly = true;
+            this.dataGridViewResult.Size = new System.Drawing.Size(697, 214);
+            this.dataGridViewResult.TabIndex = 1;
             // 
             // pictureBox1
             // 
@@ -91,29 +95,24 @@
             this.dataGridViewFiles.AllowUserToResizeRows = false;
             this.dataGridViewFiles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewFiles.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ColumnFileName});
+            this.ColumnFileName,
+            this.ColumnWidth,
+            this.ColumnHeight});
             this.dataGridViewFiles.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewFiles.Location = new System.Drawing.Point(3, 3);
             this.dataGridViewFiles.MultiSelect = false;
             this.dataGridViewFiles.Name = "dataGridViewFiles";
             this.dataGridViewFiles.ReadOnly = true;
             this.dataGridViewFiles.RowHeadersVisible = false;
+            this.dataGridViewFiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewFiles.Size = new System.Drawing.Size(294, 233);
             this.dataGridViewFiles.TabIndex = 3;
             this.dataGridViewFiles.SelectionChanged += new System.EventHandler(this.dataGridViewFiles_SelectionChanged);
             // 
-            // ColumnFileName
-            // 
-            this.ColumnFileName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnFileName.DataPropertyName = "Name";
-            this.ColumnFileName.HeaderText = "FileName";
-            this.ColumnFileName.Name = "ColumnFileName";
-            this.ColumnFileName.ReadOnly = true;
-            // 
             // groupBox1
             // 
             this.tableLayoutPanel1.SetColumnSpan(this.groupBox1, 2);
-            this.groupBox1.Controls.Add(this.dataGridView1);
+            this.groupBox1.Controls.Add(this.dataGridViewResult);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(3, 292);
             this.groupBox1.Name = "groupBox1";
@@ -178,6 +177,34 @@
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(91, 17);
             this.toolStripStatusLabel1.Text = "change by code";
             // 
+            // ColumnFileName
+            // 
+            this.ColumnFileName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnFileName.DataPropertyName = "Name";
+            this.ColumnFileName.HeaderText = "FileName";
+            this.ColumnFileName.Name = "ColumnFileName";
+            this.ColumnFileName.ReadOnly = true;
+            // 
+            // ColumnWidth
+            // 
+            this.ColumnWidth.DataPropertyName = "Width";
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ColumnWidth.DefaultCellStyle = dataGridViewCellStyle3;
+            this.ColumnWidth.HeaderText = "Width";
+            this.ColumnWidth.Name = "ColumnWidth";
+            this.ColumnWidth.ReadOnly = true;
+            this.ColumnWidth.Width = 70;
+            // 
+            // ColumnHeight
+            // 
+            this.ColumnHeight.DataPropertyName = "Height";
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ColumnHeight.DefaultCellStyle = dataGridViewCellStyle4;
+            this.ColumnHeight.HeaderText = "Height";
+            this.ColumnHeight.Name = "ColumnHeight";
+            this.ColumnHeight.ReadOnly = true;
+            this.ColumnHeight.Width = 70;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -188,7 +215,7 @@
             this.Name = "Main";
             this.Text = "change by code";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResult)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFiles)).EndInit();
             this.groupBox1.ResumeLayout(false);
@@ -205,16 +232,18 @@
         #endregion
 
         private System.Windows.Forms.Button buttonSendImage;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dataGridViewResult;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.DataGridView dataGridViewFiles;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnFileName;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnFileName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnWidth;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnHeight;
     }
 }
 
