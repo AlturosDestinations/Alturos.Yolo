@@ -9,7 +9,7 @@ namespace Alturos.Yolo
         {
             var files = this.GetYoloFiles();
             var yoloConfiguration = this.MapFiles(files);
-            var configValid = this.AreYoloFilesValid(yoloConfiguration);
+            var configValid = this.AreValidYoloFiles(yoloConfiguration);
 
             if (configValid)
             {
@@ -33,7 +33,7 @@ namespace Alturos.Yolo
             return new YoloConfiguration(configurationFile, weightsFile, namesFile);
         }
 
-        private bool AreYoloFilesValid(YoloConfiguration config)
+        private bool AreValidYoloFiles(YoloConfiguration config)
         {
             if (string.IsNullOrEmpty(config.ConfigFile) ||
                 string.IsNullOrEmpty(config.WeightsFile) ||

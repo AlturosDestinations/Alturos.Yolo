@@ -14,9 +14,12 @@
 	<releaseNotes>Increase performance, activate multi core support</releaseNotes>
   </metadata>
   <files>
+    <file src="readme.txt" target="" />
     <file src="Alturos.Yolo.targets" target="build\net461" />
-    <file src="dependencies\opencv_world340.dll" target="build\net461" />
-	<file src="dependencies\yolo_cpp_dll_cpu.dll" target="build\net461" />
-    <file src="dependencies\yolo_cpp_dll_gpu.dll" target="build\net461" />
+    <file src="dependencies\opencv_world340.dll" target="build\x64" />
+	<file src="dependencies\yolo_cpp_dll_cpu.dll" target="build\x64" />
+    <file src="dependencies\yolo_cpp_dll_gpu.dll" target="build\x64" />
+	<file src="dependencies\pthreadGC2.dll" target="build\x64" />
+	<file src="dependencies\pthreadVC2.dll" target="build\x64" />
   </files>
 </package>

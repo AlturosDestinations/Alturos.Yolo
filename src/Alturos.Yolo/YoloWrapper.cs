@@ -8,11 +8,11 @@ using System.Runtime.InteropServices;
 
 namespace Alturos.Yolo
 {
-    public class YoloWrapper
+    public class YoloWrapper : IDisposable
     {
         public const int MaxObjects = 1000;
-        private const string YoloLibraryCpu = "yolo_cpp_dll_cpu.dll";
-        private const string YoloLibraryGpu = "yolo_cpp_dll_gpu.dll";
+        private const string YoloLibraryCpu = @"x64\yolo_cpp_dll_cpu.dll";
+        private const string YoloLibraryGpu = @"x64\yolo_cpp_dll_gpu.dll";
         private Dictionary<int, string> _objectType = new Dictionary<int, string>();
         public DetectionSystem DetectionSystem = DetectionSystem.Unknown;
         public EnvironmentReport EnvironmentReport { get; private set; }
@@ -74,6 +74,11 @@ namespace Alturos.Yolo
 
         private void Initialize(string configurationFilename, string weightsFilename, string namesFilename, int gpu = 0)
         {
+            if (IntPtr.Size != 8)
+            {
+                throw new NotSupportedException("Only 64-bit process are supported");
+            }
+
             this.EnvironmentReport = this.GetEnvironmentReport();
             if (!this.EnvironmentReport.MicrosoftVisualCPlusPlus2017RedistributableExists)
             {
@@ -117,7 +122,7 @@ namespace Alturos.Yolo
                 }
             }
 
-            if (File.Exists("cudnn64_7.dll"))
+            if (File.Exists(@"x64\cudnn64_7.dll"))
             {
                 report.CudnnExists = true;
             }

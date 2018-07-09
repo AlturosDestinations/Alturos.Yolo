@@ -20,7 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -54,15 +54,23 @@
   <ItemGroup>
     <ContentWithTargetPath Include="dependencies\opencv_world340.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>opencv_world340.dll</TargetPath>
+      <TargetPath>x64\opencv_world340.dll</TargetPath>
     </ContentWithTargetPath>
     <ContentWithTargetPath Include="dependencies\yolo_cpp_dll_cpu.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>yolo_cpp_dll_cpu.dll</TargetPath>
+      <TargetPath>x64\yolo_cpp_dll_cpu.dll</TargetPath>
     </ContentWithTargetPath>
     <ContentWithTargetPath Include="dependencies\yolo_cpp_dll_gpu.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>yolo_cpp_dll_gpu.dll</TargetPath>
+      <TargetPath>x64\yolo_cpp_dll_gpu.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="dependencies\pthreadGC2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>x64\pthreadGC2.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="dependencies\pthreadVC2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>x64\pthreadVC2.dll</TargetPath>
     </ContentWithTargetPath>
   </ItemGroup>
   <ItemGroup />
