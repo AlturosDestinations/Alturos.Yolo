@@ -13,16 +13,19 @@ namespace Alturos.Yolo.TestUI
             var files = Directory.GetFiles(path);
             foreach (var file in files)
             {
-                var fileInfo = new FileInfo(file);
-                var resolution = this.GetImageResolution(file);
+                if (file.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) || file.EndsWith(".bmp", StringComparison.OrdinalIgnoreCase))
+                {
+                    var fileInfo = new FileInfo(file);
+                    var resolution = this.GetImageResolution(file);
 
-                var imageInfo = new ImageInfo();
-                imageInfo.Name = fileInfo.Name;
-                imageInfo.Path = file;
-                imageInfo.Width = resolution.Item1;
-                imageInfo.Height = resolution.Item2;
+                    var imageInfo = new ImageInfo();
+                    imageInfo.Name = fileInfo.Name;
+                    imageInfo.Path = file;
+                    imageInfo.Width = resolution.Item1;
+                    imageInfo.Height = resolution.Item2;
 
-                yield return imageInfo;
+                    yield return imageInfo;
+                }
             }
         }
 

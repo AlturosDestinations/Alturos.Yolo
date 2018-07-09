@@ -28,21 +28,21 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.buttonSendImage = new System.Windows.Forms.Button();
             this.dataGridViewResult = new System.Windows.Forms.DataGridView();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.dataGridViewFiles = new System.Windows.Forms.DataGridView();
+            this.ColumnFileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnWidth = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnHeight = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.ColumnFileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnWidth = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnHeight = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResult)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFiles)).BeginInit();
@@ -74,7 +74,7 @@
             this.dataGridViewResult.Location = new System.Drawing.Point(3, 16);
             this.dataGridViewResult.Name = "dataGridViewResult";
             this.dataGridViewResult.ReadOnly = true;
-            this.dataGridViewResult.Size = new System.Drawing.Size(697, 214);
+            this.dataGridViewResult.Size = new System.Drawing.Size(697, 175);
             this.dataGridViewResult.TabIndex = 1;
             // 
             // pictureBox1
@@ -82,7 +82,7 @@
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Location = new System.Drawing.Point(3, 16);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(397, 214);
+            this.pictureBox1.Size = new System.Drawing.Size(397, 253);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 2;
             this.pictureBox1.TabStop = false;
@@ -105,18 +105,47 @@
             this.dataGridViewFiles.ReadOnly = true;
             this.dataGridViewFiles.RowHeadersVisible = false;
             this.dataGridViewFiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewFiles.Size = new System.Drawing.Size(294, 233);
+            this.dataGridViewFiles.Size = new System.Drawing.Size(294, 272);
             this.dataGridViewFiles.TabIndex = 3;
             this.dataGridViewFiles.SelectionChanged += new System.EventHandler(this.dataGridViewFiles_SelectionChanged);
+            this.dataGridViewFiles.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridViewFiles_KeyDown);
+            // 
+            // ColumnFileName
+            // 
+            this.ColumnFileName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnFileName.DataPropertyName = "Name";
+            this.ColumnFileName.HeaderText = "FileName";
+            this.ColumnFileName.Name = "ColumnFileName";
+            this.ColumnFileName.ReadOnly = true;
+            // 
+            // ColumnWidth
+            // 
+            this.ColumnWidth.DataPropertyName = "Width";
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ColumnWidth.DefaultCellStyle = dataGridViewCellStyle1;
+            this.ColumnWidth.HeaderText = "Width";
+            this.ColumnWidth.Name = "ColumnWidth";
+            this.ColumnWidth.ReadOnly = true;
+            this.ColumnWidth.Width = 70;
+            // 
+            // ColumnHeight
+            // 
+            this.ColumnHeight.DataPropertyName = "Height";
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ColumnHeight.DefaultCellStyle = dataGridViewCellStyle2;
+            this.ColumnHeight.HeaderText = "Height";
+            this.ColumnHeight.Name = "ColumnHeight";
+            this.ColumnHeight.ReadOnly = true;
+            this.ColumnHeight.Width = 70;
             // 
             // groupBox1
             // 
             this.tableLayoutPanel1.SetColumnSpan(this.groupBox1, 2);
             this.groupBox1.Controls.Add(this.dataGridViewResult);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox1.Location = new System.Drawing.Point(3, 292);
+            this.groupBox1.Location = new System.Drawing.Point(3, 331);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(703, 233);
+            this.groupBox1.Size = new System.Drawing.Size(703, 194);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Result";
@@ -134,9 +163,9 @@
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 200F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(709, 528);
             this.tableLayoutPanel1.TabIndex = 5;
             // 
@@ -146,7 +175,7 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(303, 3);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(403, 233);
+            this.groupBox2.Size = new System.Drawing.Size(403, 272);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Preview";
@@ -156,7 +185,7 @@
             this.tableLayoutPanel1.SetColumnSpan(this.panel1, 2);
             this.panel1.Controls.Add(this.buttonSendImage);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(3, 242);
+            this.panel1.Location = new System.Drawing.Point(3, 281);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(703, 44);
             this.panel1.TabIndex = 4;
@@ -176,34 +205,6 @@
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(91, 17);
             this.toolStripStatusLabel1.Text = "change by code";
-            // 
-            // ColumnFileName
-            // 
-            this.ColumnFileName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnFileName.DataPropertyName = "Name";
-            this.ColumnFileName.HeaderText = "FileName";
-            this.ColumnFileName.Name = "ColumnFileName";
-            this.ColumnFileName.ReadOnly = true;
-            // 
-            // ColumnWidth
-            // 
-            this.ColumnWidth.DataPropertyName = "Width";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.ColumnWidth.DefaultCellStyle = dataGridViewCellStyle3;
-            this.ColumnWidth.HeaderText = "Width";
-            this.ColumnWidth.Name = "ColumnWidth";
-            this.ColumnWidth.ReadOnly = true;
-            this.ColumnWidth.Width = 70;
-            // 
-            // ColumnHeight
-            // 
-            this.ColumnHeight.DataPropertyName = "Height";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.ColumnHeight.DefaultCellStyle = dataGridViewCellStyle4;
-            this.ColumnHeight.HeaderText = "Height";
-            this.ColumnHeight.Name = "ColumnHeight";
-            this.ColumnHeight.ReadOnly = true;
-            this.ColumnHeight.Width = 70;
             // 
             // Main
             // 

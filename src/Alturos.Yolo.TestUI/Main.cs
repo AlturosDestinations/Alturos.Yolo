@@ -50,12 +50,17 @@ namespace Alturos.Yolo.TestUI
         private void dataGridViewFiles_SelectionChanged(object sender, EventArgs e)
         {
             var oldImage = this.pictureBox1.Image;
-            var imageInfo = this.GetCurrentImage();
-            if (imageInfo.Name.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase))
-            {
-                this.pictureBox1.Image = Image.FromFile(imageInfo.Path);
-            }
+            var imageInfo = this.GetCurrentImage();           
+            this.pictureBox1.Image = Image.FromFile(imageInfo.Path);            
             oldImage?.Dispose();
+        }
+
+        private void dataGridViewFiles_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Space)
+            {
+                this.Detect();
+            }
         }
 
         private void buttonSendImage_Click(object sender, EventArgs e)
@@ -122,6 +127,11 @@ namespace Alturos.Yolo.TestUI
 
         private void Detect()
         {
+            if (this._yoloWrapper == null)
+            {
+                return;
+            }
+
             var memoryTransfer = true;
 
             var imageInfo = this.GetCurrentImage();
