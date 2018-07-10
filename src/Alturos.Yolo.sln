@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alturos.Yolo.TestUI", "Altu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alturos.Yolo", "Alturos.Yolo\Alturos.Yolo.csproj", "{BFDB287F-7E23-4D44-B114-DF2E05C2CF04}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "yolo", "yolo\yolo.vcxproj", "{817434E9-212E-421B-AAA1-B39BB8ABFE03}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alturos.Yolo.TestConsole", "Alturos.Yolo.TestConsole\Alturos.Yolo.TestConsole.csproj", "{C6A638E4-40ED-4F73-8F78-B9465FBE475D}"
 EndProject
 Global
@@ -45,14 +43,6 @@ Global
 		{BFDB287F-7E23-4D44-B114-DF2E05C2CF04}.Release|x64.Build.0 = Release|Any CPU
 		{BFDB287F-7E23-4D44-B114-DF2E05C2CF04}.Release|x86.ActiveCfg = Release|Any CPU
 		{BFDB287F-7E23-4D44-B114-DF2E05C2CF04}.Release|x86.Build.0 = Release|Any CPU
-		{817434E9-212E-421B-AAA1-B39BB8ABFE03}.Debug|Any CPU.ActiveCfg = Release|x64
-		{817434E9-212E-421B-AAA1-B39BB8ABFE03}.Debug|x64.ActiveCfg = Debug|x64
-		{817434E9-212E-421B-AAA1-B39BB8ABFE03}.Debug|x64.Build.0 = Debug|x64
-		{817434E9-212E-421B-AAA1-B39BB8ABFE03}.Debug|x86.ActiveCfg = Debug|x64
-		{817434E9-212E-421B-AAA1-B39BB8ABFE03}.Release|Any CPU.ActiveCfg = Release|x64
-		{817434E9-212E-421B-AAA1-B39BB8ABFE03}.Release|x64.ActiveCfg = Release|x64
-		{817434E9-212E-421B-AAA1-B39BB8ABFE03}.Release|x64.Build.0 = Release|x64
-		{817434E9-212E-421B-AAA1-B39BB8ABFE03}.Release|x86.ActiveCfg = Release|x64
 		{C6A638E4-40ED-4F73-8F78-B9465FBE475D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C6A638E4-40ED-4F73-8F78-B9465FBE475D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6A638E4-40ED-4F73-8F78-B9465FBE475D}.Debug|x64.ActiveCfg = Debug|Any CPU
