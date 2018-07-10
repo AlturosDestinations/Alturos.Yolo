@@ -1,19 +1,27 @@
-Thanks for use the Alturos.Yolo package
+Thanks for using the Alturos.Yolo package
+----------------------------------------------------------------
 
 This package deliver all dependencies for cpu detection.
 
 If you need gpu detection please install cuda and cudnn.
-And copy the cudnn64_7.dll in the x64 directory.
-If all dependencies available Alturos.Yolo switch automatic in gpu mode.
+Nvidia CUDA Toolkit 9.2 (must be installed add a hardware driver for cuda support)
+Nvidia cuDNN v7.1.4 for CUDA 9.2 (DLL cudnn64_7.dll required for gpu processing)
+And copy the cudnn64_7.dll in the x64 directory. (%cudnn%\bin)
 
-For a eays start please install-package Alturos.YoloV2TinyVocData
+If all dependencies available Alturos.Yolo switch automatic in gpu mode.
+For a easy start please install-package Alturos.YoloV2TinyVocData (Yolo Pre-trained model)
 
 Example:
 
 var configurationDetector = new ConfigurationDetector();
 var config = configurationDetector.Detect();
-
 using (var yoloWrapper = new YoloWrapper(config))
 {
-	var result = yoloWrapper.Detect(@"image.jpg");
+	var items = yoloWrapper.Detect(@"image.jpg");
+	//items[0].Type -> "Person, Car, ..."
+	//items[0].Confidence -> 0.0 (low) -> 1.0 (high)
+	//items[0].X -> bounding box
+	//items[0].Y -> bounding box
+	//items[0].Width -> bounding box
+	//items[0].Height -> bounding box
 }
