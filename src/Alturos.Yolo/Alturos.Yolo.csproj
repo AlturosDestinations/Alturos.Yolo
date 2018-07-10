@@ -73,6 +73,8 @@
       <TargetPath>x64\pthreadVC2.dll</TargetPath>
     </ContentWithTargetPath>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="readme.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
