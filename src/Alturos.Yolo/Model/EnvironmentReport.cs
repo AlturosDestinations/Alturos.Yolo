@@ -8,5 +8,7 @@
         public bool CudaExists { get; set; }
         //Nvida cuDNN v7.1.4 for CUDA 9.2
         public bool CudnnExists { get; set; }
+        //Graphic device name
+        public string GraphicDeviceName { get; set; }
     }
 }

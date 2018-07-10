@@ -33,6 +33,9 @@ namespace Alturos.Yolo.TestUI
                 return;
             }
 
+            this.toolStripStatusLabel1.Text = string.Empty;
+            this.toolStripStatusLabel2.Text = string.Empty;
+
             Task.Run(() => this.Initialize(config));
         }
 
@@ -121,7 +124,7 @@ namespace Alturos.Yolo.TestUI
             this._yoloWrapper = new YoloWrapper(config.ConfigFile, config.WeightsFile, config.NamesFile, 0);
             sw.Stop();
 
-            this.statusStrip1.Invoke(new MethodInvoker(delegate () { this.toolStripStatusLabel1.Text = $"Initialize elapsed in {sw.Elapsed.TotalMilliseconds}ms DetectionSystem:{this._yoloWrapper.DetectionSystem}"; }));
+            this.statusStrip1.Invoke(new MethodInvoker(delegate () { this.toolStripStatusLabel1.Text = $"Initialize elapsed in {sw.Elapsed.TotalMilliseconds:0} ms DetectionSystem:{this._yoloWrapper.DetectionSystem} ({this._yoloWrapper.EnvironmentReport.GraphicDeviceName})"; }));
             this.buttonSendImage.Invoke(new MethodInvoker(delegate () { this.buttonSendImage.Enabled = true; }));
         }        
 
@@ -149,7 +152,7 @@ namespace Alturos.Yolo.TestUI
                 items = this._yoloWrapper.Detect(imageInfo.Path).ToList();
             }
             sw.Stop();
-            this.toolStripStatusLabel1.Text = $"processing in {sw.Elapsed.TotalMilliseconds}ms";
+            this.toolStripStatusLabel2.Text = $"image processed in {sw.Elapsed.TotalMilliseconds:0.00} ms";
 
             this.dataGridViewResult.DataSource = items;
             this.DrawImage(items);

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Alturos.Yolo
 {
@@ -46,6 +47,12 @@ namespace Alturos.Yolo
 
         [DllImport(YoloLibraryGpu, EntryPoint = "dispose")]
         internal static extern int DisposeYoloGpu();
+
+        [DllImport(YoloLibraryGpu, EntryPoint = "get_device_count")]
+        internal static extern int GetDeviceCount();
+
+        [DllImport(YoloLibraryGpu, EntryPoint = "get_device_name")]
+        internal static extern int GetDeviceName(int gpu, StringBuilder deviceName);
 
         #endregion
 
@@ -97,6 +104,16 @@ namespace Alturos.Yolo
                     InitializeYoloCpu(configurationFilename, weightsFilename, 0);
                     break;
                 case DetectionSystem.GPU:
+                    var deviceCount = GetDeviceCount();
+                    if (gpu > (deviceCount - 1))
+                    {
+                        throw new IndexOutOfRangeException("Graphic device index is out of range");
+                    }
+
+                    var deviceName = new StringBuilder(); //allocate memory for string
+                    GetDeviceName(gpu, deviceName);
+                    this.EnvironmentReport.GraphicDeviceName = deviceName.ToString();
+
                     InitializeYoloGpu(configurationFilename, weightsFilename, gpu);
                     break;
             }
