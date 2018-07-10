@@ -9,14 +9,18 @@ namespace Alturos.Yolo.TestConsole
     {
         static void Main(string[] args)
         {
-            var retrys = 100;
-
-            var yoloWrapper = new YoloWrapper("yolov2-tiny-voc.cfg", "yolov2-tiny-voc.weights", "voc.names");
-
             Console.WriteLine("Start yolo detection");
 
+            Console.WriteLine("Done, press enter for quit");
+            Console.ReadLine();
+        }
+
+        static void TestLogic1()
+        {
+            var yoloWrapper = new YoloWrapper("yolov2-tiny-voc.cfg", "yolov2-tiny-voc.weights", "voc.names");
             var files = Directory.GetFiles(@".\Images");
 
+            var retrys = 100;
             for (var i = 0; i < retrys; i++)
             {
                 foreach (var file in files)
@@ -29,6 +33,7 @@ namespace Alturos.Yolo.TestConsole
                     var items = yoloWrapper.Detect(imageData).ToList();
                     sw.Stop();
                     Console.WriteLine($"{fileInfo.Name} found {items.Count} results, elapsed {sw.Elapsed.TotalMilliseconds:0.00}ms");
+
                     if (items.Count > 0)
                     {
                         Console.WriteLine("------------------DETAILS-----------------");
@@ -42,9 +47,17 @@ namespace Alturos.Yolo.TestConsole
                     }
                 }
             }
+        }
 
-            Console.WriteLine("Done, press enter for quit");
-            Console.ReadLine();
+        static void TestLogic2()
+        {
+            var configurationDetector = new ConfigurationDetector();
+            var config = configurationDetector.Detect();
+
+            using (var yoloWrapper = new YoloWrapper(config))
+            {
+                var result = yoloWrapper.Detect(@"image.jpg");
+            }
         }
     }
 }
