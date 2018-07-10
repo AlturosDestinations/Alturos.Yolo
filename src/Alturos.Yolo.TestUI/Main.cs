@@ -71,7 +71,7 @@ namespace Alturos.Yolo.TestUI
             this.Detect();
         }
 
-        private void DrawImage(List<YoloItem> items)
+        private void DrawImage(List<YoloItem> items, YoloItem selectedItem = null)
         {
             var imageInfo = this.GetCurrentImage();
             //Load the image(probably from your stream)
@@ -88,8 +88,14 @@ namespace Alturos.Yolo.TestUI
                     var width = item.Width;
                     var height = item.Height;
 
+                    using (var overlayBrush = new SolidBrush(Color.FromArgb(150, 255, 255, 102)))
                     using (var pen = this.GetBrush(item.Confidence, image.Width))
                     {
+                        if (item.Equals(selectedItem))
+                        {
+                            canvas.FillRectangle(overlayBrush, x, y, width, height);
+                        }
+
                         canvas.DrawRectangle(pen, x, y, width, height);
                         canvas.Flush();
                     }
@@ -105,16 +111,16 @@ namespace Alturos.Yolo.TestUI
         {
             var size = width / 100;
 
-            if (confidence > 50)
+            if (confidence > 0.5)
             {
-                return new Pen(Brushes.DarkRed, size);
+                return new Pen(Brushes.GreenYellow, size);
             }
-            else if (confidence > 20 && confidence <= 50)
+            else if (confidence > 0.2 && confidence <= 0.5)
             {
                 return new Pen(Brushes.Orange, size);
             }
 
-            return new Pen(Brushes.GreenYellow, size);
+            return new Pen(Brushes.DarkRed, size);
         }
 
         private void Initialize(YoloConfiguration config)
@@ -156,6 +162,18 @@ namespace Alturos.Yolo.TestUI
 
             this.dataGridViewResult.DataSource = items;
             this.DrawImage(items);
+        }
+
+        private void dataGridViewResult_SelectionChanged(object sender, EventArgs e)
+        {
+            if (!this.dataGridViewResult.Focused)
+            {
+                return;
+            }
+
+            var items = this.dataGridViewResult.DataSource as List<YoloItem>;
+            var selectedItem = this.dataGridViewResult.CurrentRow?.DataBoundItem as YoloItem;
+            this.DrawImage(items, selectedItem);
         }
     }
 }
