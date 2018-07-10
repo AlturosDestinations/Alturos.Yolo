@@ -1,6 +1,6 @@
 # Alturos.Yolo
 
-In this project you will find the source code to compile yolo so it can be accessed through C#. Also you will find a C# wrapper project with some test programs.
+A C# wrapper project for using [AlexeyAB/darknet](https://github.com/AlexeyAB/darknet) dll project.
 
 Send an image to [yolo](https://github.com/pjreddie/darknet) and receive the position of the detected objects. Our project is meant to return the object-type and -position as processable data.
 
