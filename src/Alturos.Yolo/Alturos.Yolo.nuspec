@@ -9,17 +9,18 @@
     <description>$description$</description>
     <licenseUrl>https://github.com/AlturosDestinations/Alturos.Yolo/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/AlturosDestinations/Alturos.Yolo</projectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/AlturosDestinations/Alturos.Yolo/master/doc/logo.png</PackageIconUrl>
     <tags>yolo darknet yolo3 yolov3 yolo2 yolov2 objectdetection wrapper</tags>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-	<releaseNotes>Switch yolo core to AlexeyAB/darknet</releaseNotes>
+    <releaseNotes>Switch yolo core to AlexeyAB/darknet</releaseNotes>
   </metadata>
   <files>
     <file src="readme.txt" target="" />
     <file src="Alturos.Yolo.targets" target="build\net461" />
     <file src="dependencies\opencv_world340.dll" target="build\x64" />
-	<file src="dependencies\yolo_cpp_dll_cpu.dll" target="build\x64" />
+    <file src="dependencies\yolo_cpp_dll_cpu.dll" target="build\x64" />
     <file src="dependencies\yolo_cpp_dll_gpu.dll" target="build\x64" />
-	<file src="dependencies\pthreadGC2.dll" target="build\x64" />
-	<file src="dependencies\pthreadVC2.dll" target="build\x64" />
+    <file src="dependencies\pthreadGC2.dll" target="build\x64" />
+    <file src="dependencies\pthreadVC2.dll" target="build\x64" />
   </files>
 </package>
