@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 
 namespace Alturos.Yolo
@@ -16,7 +17,7 @@ namespace Alturos.Yolo
                 return yoloConfiguration;
             }
 
-            return null;
+            throw new FileNotFoundException("Cannot found pre-trained model, check config files (.cfg, .weights, .names)");
         }
 
         private string[] GetYoloFiles()
