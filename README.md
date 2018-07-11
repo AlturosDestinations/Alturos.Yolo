@@ -1,3 +1,5 @@
+![Alturos.Yolo](doc/logo-banner.png)
+
 # Alturos.Yolo
 
 A C# wrapper project for using [AlexeyAB/darknet](https://github.com/AlexeyAB/darknet) dll project.
