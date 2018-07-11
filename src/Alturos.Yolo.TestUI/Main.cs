@@ -56,6 +56,7 @@ namespace Alturos.Yolo.TestUI
             var imageInfo = this.GetCurrentImage();           
             this.pictureBox1.Image = Image.FromFile(imageInfo.Path);            
             oldImage?.Dispose();
+            this.dataGridViewResult.DataSource = null;
         }
 
         private void dataGridViewFiles_KeyDown(object sender, KeyEventArgs e)
