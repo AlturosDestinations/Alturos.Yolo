@@ -53,14 +53,14 @@ using (var yoloWrapper = new YoloWrapper(config))
 
 ### CPU
 
-CPU | yolo v2 tiny voc | yolo v2  | yolo 9000 |
+Processor | yolo v2 tiny voc | yolo v2 | yolo 9000 |
 --- | --- | --- | --- | 
 Intel i7 3770 (with OpenMP) | 557 ms | - | - | 
 Intel i7 3770 (without OpenMP) | 1155 ms | - | - | 
 
 ### GPU
 
-Graphic card | Single precision | yolo v2 tiny voc | yolo v2  | yolo 9000 |
+Graphic card | Single precision | yolo v2 tiny voc | yolo v2 | yolo 9000 |
 --- | --- | --- | --- | --- |
 NVIDIA Quadro K420 | 300 GFLOPS | 94 ms | 296 ms | 640 ms | 
 NVIDIA Quadro K620 | 768 GFLOPS | - | - | - | 
