@@ -42,7 +42,7 @@ using (var yoloWrapper = new YoloWrapper(config))
 - .NET Framework 4.6.1
 - [Microsoft Visual C++ 2017 Redistributable x64](https://go.microsoft.com/fwlink/?LinkId=746572)
 
-## GPU Requirements (optional)
+## GPU requirements (optional)
 1) [Install Nvidia CUDA Toolkit 9.2](https://developer.nvidia.com/cuda-downloads) (must be installed add a hardware driver for cuda support)
 2) [Download Nvidia cuDNN v7.1.4 for CUDA 9.2](https://developer.nvidia.com/rdp/cudnn-download) (DLL cudnn64_7.dll required for gpu processing)
 
@@ -60,12 +60,12 @@ Intel i7 3770 (without OpenMP) | 1155 ms | - | - |
 
 ### GPU
 
-Graphic card | Single precision | yolo v2 tiny voc | yolo v2 | yolo 9000 |
+Graphic card | Single precision | Memory | Slot | yolo v2 tiny voc | yolo v2 | yolo 9000 |
 --- | --- | --- | --- | --- |
-NVIDIA Quadro K420 | 300 GFLOPS | 94 ms | 296 ms | 640 ms | 
-NVIDIA Quadro K620 | 768 GFLOPS | - | - | - | 
-NVIDIA Quadro K1200 | 1151 GFLOPS | - | - | - | 
-NVIDIA GeForce GT 710 | 366 GFLOPS | - | - | - | 
-NVIDIA GeForce GT 730 | 693 GFLOPS | - | - | - | 
-NVIDIA GeForce GT 1030 | 1098 GFLOPS | 23 ms | 64 ms| 180 ms | 
-NVIDIA GeForce GTX 1060 | 4372 GFLOPS | - | - | - | 
+NVIDIA Quadro K420 | 300 GFLOPS | 2 GB | Single | 94 ms | 296 ms | 640 ms | 
+NVIDIA Quadro K620 | 768 GFLOPS | 2 GB | Single | - | - | - | 
+NVIDIA Quadro K1200 | 1151 GFLOPS | 4 GB | Single | - | - | - | 
+NVIDIA GeForce GT 710 | 366 GFLOPS | 2 GB | Single | - | - | - | 
+NVIDIA GeForce GT 730 | 693 GFLOPS | 2-4 GB | Single | - | - | - | 
+NVIDIA GeForce GT 1030 | 1098 GFLOPS | 2 GB | Single | 23 ms | 64 ms| 180 ms | 
+NVIDIA GeForce GTX 1060 | 4372 GFLOPS | 6 GB | Dual | - | - | - | 
