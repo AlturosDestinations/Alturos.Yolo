@@ -61,7 +61,7 @@ Intel i7 3770 (without OpenMP) | 1155 ms | - | - |
 ### GPU
 
 Graphic card | Single precision | Memory | Slot | yolo v2 tiny voc | yolo v2 | yolo 9000 |
---- | --- | --- | --- | --- |
+--- | --- | --- | --- | --- | --- | --- |
 NVIDIA Quadro K420 | 300 GFLOPS | 2 GB | Single | 94 ms | 296 ms | 640 ms | 
 NVIDIA Quadro K620 | 768 GFLOPS | 2 GB | Single | - | - | - | 
 NVIDIA Quadro K1200 | 1151 GFLOPS | 4 GB | Single | - | - | - | 
