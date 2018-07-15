@@ -17,7 +17,7 @@ namespace Alturos.Yolo
                 return yoloConfiguration;
             }
 
-            throw new FileNotFoundException("Cannot found pre-trained model, check config files (.cfg, .weights, .names)");
+            throw new FileNotFoundException("Cannot found pre-trained model, check all config files available (.cfg, .weights, .names)");
         }
 
         private string[] GetYoloFiles()
