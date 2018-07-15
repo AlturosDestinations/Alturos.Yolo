@@ -1,5 +1,7 @@
-Thanks for using the Alturos.Yolo package
+Thanks for using the Alturos.Yolo package (https://github.com/AlturosDestinations/Alturos.Yolo)
 ----------------------------------------------------------------
+Please star (★) this project on github!
+
 
 This package deliver all dependencies for cpu detection.
 
@@ -11,7 +13,8 @@ And copy the cudnn64_7.dll in the x64 directory. (%cudnn%\bin)
 If all dependencies available Alturos.Yolo switch automatic in gpu mode.
 For a easy start please install-package Alturos.YoloV2TinyVocData (Yolo Pre-trained model)
 
-Example:
+Example code:
+----------------------------------------------------------------
 
 var configurationDetector = new ConfigurationDetector();
 var config = configurationDetector.Detect();
