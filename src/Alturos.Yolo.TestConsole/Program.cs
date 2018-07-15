@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Alturos.Yolo.Model;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -11,6 +13,8 @@ namespace Alturos.Yolo.TestConsole
         {
             Console.WriteLine("Start yolo detection");
 
+            TestLogic1();
+
             Console.WriteLine("Done, press enter for quit");
             Console.ReadLine();
         }
@@ -19,34 +23,50 @@ namespace Alturos.Yolo.TestConsole
         {
             var yoloWrapper = new YoloWrapper("yolov2-tiny-voc.cfg", "yolov2-tiny-voc.weights", "voc.names");
             var files = Directory.GetFiles(@".\Images");
+            var imageResizer = new ImageResizer();
 
-            var retrys = 100;
-            for (var i = 0; i < retrys; i++)
+            var retrys = 3;
+
+            Console.WriteLine(string.Format("|{0,40}|{1,5}|{2,25}|{3,5}|{4,25}|{5,10}|", "Image", "items", "elapsed (ms)", "items", "elapsed (ms)", "diff (ms)"));
+
+            foreach (var file in files)
             {
-                foreach (var file in files)
+                for (var i = 0; i < retrys; i++)
                 {
                     var fileInfo = new FileInfo(file);
                     var imageData = File.ReadAllBytes(file);
 
-                    var sw = new Stopwatch();
-                    sw.Start();
-                    var items = yoloWrapper.Detect(imageData).ToList();
-                    sw.Stop();
-                    Console.WriteLine($"{fileInfo.Name} found {items.Count} results, elapsed {sw.Elapsed.TotalMilliseconds:0.00}ms");
+                    var result1 = ProcessResizeAfter(yoloWrapper, imageData);
+                    var result2 = ProcessResizeBefore(yoloWrapper, imageResizer, imageData);
+                    var diff = result1.Item3 - result2.Item3;
 
-                    if (items.Count > 0)
-                    {
-                        Console.WriteLine("------------------DETAILS-----------------");
-
-                        foreach (var item in items)
-                        {
-                            Console.WriteLine($"Type:{item.Type} Confidence:{item.Confidence:0.00}");
-                        }
-
-                        Console.WriteLine("------------------------------------------");
-                    }
+                    Console.WriteLine(string.Format("|{0,40}|{1,5}|{2,25}|{3,5}|{4,25}|{5,10}|", fileInfo.Name, result1.Item1.Count, result1.Item2, result2.Item1.Count, result2.Item2, diff.ToString("0.00")));
                 }
             }
+        }
+
+        static Tuple<List<YoloItem>, string, double> ProcessResizeAfter(YoloWrapper yoloWrapper, byte[] imageData)
+        {
+            var sw = new Stopwatch();
+            sw.Start();
+            var items = yoloWrapper.Detect(imageData).ToList();
+            sw.Stop();
+
+            return new Tuple<List<YoloItem>, string, double>(items, $"yolo & resize:{sw.Elapsed.TotalMilliseconds:0.00}", sw.Elapsed.TotalMilliseconds);
+        }
+
+        static Tuple<List<YoloItem>, string, double> ProcessResizeBefore(YoloWrapper yoloWrapper, ImageResizer imageResize, byte[] imageData)
+        {
+            var sw = new Stopwatch();
+            sw.Start();
+            imageData = imageResize.Resize(imageData, 416, 416);
+            sw.Stop();
+            var resizeElapsed = sw.Elapsed.TotalMilliseconds;
+            sw.Restart();
+            var items = yoloWrapper.Detect(imageData).ToList();
+            sw.Stop();
+
+            return new Tuple<List<YoloItem>, string, double>(items, $"resize:{resizeElapsed:0.00} yolo:{sw.Elapsed.TotalMilliseconds:0.00}", sw.Elapsed.TotalMilliseconds + resizeElapsed);
         }
 
         static void TestLogic2()
