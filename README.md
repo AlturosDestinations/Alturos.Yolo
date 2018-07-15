@@ -69,3 +69,13 @@ NVIDIA GeForce GT 710 | 366 GFLOPS | 2 GB | Single | - | - | - |
 NVIDIA GeForce GT 730 | 693 GFLOPS | 2-4 GB | Single | - | - | - | 
 NVIDIA GeForce GT 1030 | 1098 GFLOPS | 2 GB | Single | 23 ms | 64 ms| 180 ms | 
 NVIDIA GeForce GTX 1060 | 4372 GFLOPS | 6 GB | Dual | - | - | - | 
+
+
+## Pre-Trained Dataset
+Model | Cfg | Weights | Names |
+--- | --- | --- | --- |
+YOLOv3-416 | [yolov3.cfg](https://github.com/pjreddie/darknet/blob/master/cfg/yolov3.cfg) | [yolov3.weights](https://pjreddie.com/media/files/yolov3.weights) | [coco.names](https://github.com/pjreddie/darknet/blob/master/data/coco.names) |
+YOLOv3-tiny | [yolov3-tiny.cfg](https://github.com/pjreddie/darknet/blob/master/cfg/yolov3-tiny.cfg) | [yolov3.weights](https://pjreddie.com/media/files/yolov3.weights) | [coco.names](https://github.com/pjreddie/darknet/blob/master/data/coco.names) |
+YOLOv2 608x608 | [yolov2.cfg](https://github.com/pjreddie/darknet/blob/master/cfg/yolov2.cfg) | [yolov2.weights](https://pjreddie.com/media/files/yolov2.weights) | [coco.names](https://github.com/pjreddie/darknet/blob/master/data/coco.names) |
+Tiny YOLO | [yolov2-tiny.cfg](https://github.com/pjreddie/darknet/blob/master/cfg/yolov2-tiny.cfg) | [yolov2-tiny.weights](https://pjreddie.com/media/files/yolov2-tiny.weights) | [voc.names](https://github.com/pjreddie/darknet/blob/master/data/voc.names) |
+yolo9000 | [darknet9000.cfg](https://github.com/pjreddie/darknet/blob/master/cfg/darknet9000.cfg) | [yolo9000.weights](https://github.com/philipperemy/yolo-9000/tree/master/yolo9000-weights) | [9k.names](https://github.com/pjreddie/darknet/blob/master/data/9k.names) |
