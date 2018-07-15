@@ -13,13 +13,13 @@ namespace Alturos.Yolo.TestConsole
         {
             Console.WriteLine("Start yolo detection");
 
-            TestLogic1();
+            CheckPerformance();
 
             Console.WriteLine("Done, press enter for quit");
             Console.ReadLine();
         }
 
-        static void TestLogic1()
+        static void CheckPerformance()
         {
             var yoloWrapper = new YoloWrapper("yolov2-tiny-voc.cfg", "yolov2-tiny-voc.weights", "voc.names");
             var files = Directory.GetFiles(@".\Images");
@@ -27,7 +27,7 @@ namespace Alturos.Yolo.TestConsole
 
             var retrys = 3;
 
-            Console.WriteLine(string.Format("|{0,40}|{1,5}|{2,25}|{3,5}|{4,25}|{5,10}|", "Image", "items", "elapsed (ms)", "items", "elapsed (ms)", "diff (ms)"));
+            Console.WriteLine(string.Format("|{0,40}|{1,5}|{2,25}|{3,5}|{4,25}|{5,10}|{6,10}|", "Image", "items", "elapsed (ms)", "items", "elapsed (ms)", "diff (ms)", "faster"));
 
             foreach (var file in files)
             {
@@ -40,7 +40,7 @@ namespace Alturos.Yolo.TestConsole
                     var result2 = ProcessResizeBefore(yoloWrapper, imageResizer, imageData);
                     var diff = result1.Item3 - result2.Item3;
 
-                    Console.WriteLine(string.Format("|{0,40}|{1,5}|{2,25}|{3,5}|{4,25}|{5,10}|", fileInfo.Name, result1.Item1.Count, result1.Item2, result2.Item1.Count, result2.Item2, diff.ToString("0.00")));
+                    Console.WriteLine(string.Format("|{0,40}|{1,5}|{2,25}|{3,5}|{4,25}|{5,10}|{6,10}|", fileInfo.Name, result1.Item1.Count, result1.Item2, result2.Item1.Count, result2.Item2, diff.ToString("0.00"), diff > 0));
                 }
             }
         }
