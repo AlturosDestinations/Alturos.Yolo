@@ -11,7 +11,7 @@ Nvidia cuDNN v7.1.4 for CUDA 9.2 (DLL cudnn64_7.dll required for gpu processing)
 And copy the cudnn64_7.dll in the x64 directory. (%cudnn%\bin)
 
 If all dependencies available Alturos.Yolo switch automatic in gpu mode.
-For a easy start please install-package Alturos.YoloV2TinyVocData (Yolo Pre-trained model)
+For an easy start please install-package Alturos.YoloV2TinyVocData (Yolo Pre-trained model)
 
 Example code:
 ----------------------------------------------------------------
