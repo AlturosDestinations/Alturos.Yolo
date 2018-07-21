@@ -62,13 +62,20 @@ Intel i7 3770 (without OpenMP) | 1155 ms | - | - |
 
 Graphic card | Single precision | Memory | Slot | yolo v2 tiny voc | yolo v2 | yolo 9000 |
 --- | --- | --- | --- | --- | --- | --- |
-NVIDIA Quadro K420 | 300 GFLOPS | 2 GB | Single | 94 ms | 296 ms | 640 ms | 
-NVIDIA Quadro K620 | 768 GFLOPS | 2 GB | Single | - | - | - | 
-NVIDIA Quadro K1200 | 1151 GFLOPS | 4 GB | Single | - | - | - | 
-NVIDIA GeForce GT 710 | 366 GFLOPS | 2 GB | Single | - | - | - | 
-NVIDIA GeForce GT 730 | 693 GFLOPS | 2-4 GB | Single | - | - | - | 
-NVIDIA GeForce GT 1030 | 1098 GFLOPS | 2 GB | Single | 23 ms | 64 ms| 180 ms | 
-NVIDIA GeForce GTX 1060 | 4372 GFLOPS | 6 GB | Dual | - | - | - | 
+NVIDIA Quadro K420 | 300 GFLOPS | 2 GB | Single | 94 ms | 296 ms | 640 ms |
+NVIDIA Quadro K620 | 768 GFLOPS | 2 GB | Single | - | - | - |
+NVIDIA Quadro K1200 | 1151 GFLOPS | 4 GB | Single | - | - | - |
+NVIDIA Quadro P400 | 599 GFLOPS | 2 GB | Single | - | - | - |
+NVIDIA Quadro P600 | 1117 GFLOPS | 2 GB | Single | - | - | - |
+NVIDIA Quadro P620 | 1386 GFLOPS | 2 GB | Single | - | - | - |
+NVIDIA Quadro P1000 | 1862 GFLOPS | 4 GB | Single | - | - | - |
+NVIDIA Quadro P2000 | 3011 GFLOPS | 5 GB | Single | - | - | - |
+NVIDIA Quadro P4000 | 5304 GFLOPS | 8 GB | Single | - | - | - |
+NVIDIA Quadro P5000 | 8873 GFLOPS | 16 GB | Dual | - | - | - |
+NVIDIA GeForce GT 710 | 366 GFLOPS | 2 GB | Single | - | - | - |
+NVIDIA GeForce GT 730 | 693 GFLOPS | 2-4 GB | Single | - | - | - |
+NVIDIA GeForce GT 1030 | 1098 GFLOPS | 2 GB | Single | 23 ms | 64 ms| 180 ms |
+NVIDIA GeForce GTX 1060 | 4372 GFLOPS | 6 GB | Dual | - | - | - |
 
 
 ## Pre-Trained Dataset
