@@ -86,3 +86,7 @@ YOLOv3-tiny | [yolov3-tiny.cfg](https://github.com/pjreddie/darknet/blob/master/
 YOLOv2 608x608 | [yolov2.cfg](https://github.com/pjreddie/darknet/blob/master/cfg/yolov2.cfg) | [yolov2.weights](https://pjreddie.com/media/files/yolov2.weights) | [coco.names](https://github.com/pjreddie/darknet/blob/master/data/coco.names) |
 Tiny YOLO | [yolov2-tiny.cfg](https://github.com/pjreddie/darknet/blob/master/cfg/yolov2-tiny.cfg) | [yolov2-tiny.weights](https://pjreddie.com/media/files/yolov2-tiny.weights) | [voc.names](https://github.com/pjreddie/darknet/blob/master/data/voc.names) |
 yolo9000 | [darknet9000.cfg](https://github.com/pjreddie/darknet/blob/master/cfg/darknet9000.cfg) | [yolo9000.weights](https://github.com/philipperemy/yolo-9000/tree/master/yolo9000-weights) | [9k.names](https://github.com/pjreddie/darknet/blob/master/data/9k.names) |
+
+## Annotation Tool
+
+To marking bounded boxes of objects in images for training neural network you can use [VoTT](https://github.com/Microsoft/VoTT)
