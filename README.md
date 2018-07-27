@@ -2,13 +2,13 @@
 
 # Alturos.Yolo
 
-A state of the art real-time object detection system for C#. This project has CPU and GPU support, with GPU the detection works much faster. The primary goal of this project is an easy use of yolo, this package is available on nuget and you must only install two packages to start detection. In the background we are use the Windows Yolo version of [AlexeyAB/darknet](https://github.com/AlexeyAB/darknet). Send an image path or the byte array to [yolo](https://github.com/pjreddie/darknet) and receive the position of the detected objects. Our project is meant to return the object-type and -position as processable data.
+A state of the art real-time object detection system for C# (Visual Studio). This project has CPU and GPU support, with GPU the detection works much faster. The primary goal of this project is an easy use of yolo, this package is available on nuget and you must only install two packages to start detection. In the background we are use the Windows Yolo version of [AlexeyAB/darknet](https://github.com/AlexeyAB/darknet). Send an image path or the byte array to [yolo](https://github.com/pjreddie/darknet) and receive the position of the detected objects. Our project is meant to return the object-type and -position as processable data.
 
 ## nuget
 Quick install Alturos.Yolo over [nuget](https://www.nuget.org/packages/Alturos.Yolo)
 ```
-PM> install-package Alturos.Yolo (c# wrapper and c++ dlls)
-PM> install-package Alturos.YoloV2TinyVocData (Pre-Trained Dataset)
+PM> install-package Alturos.Yolo (c# wrapper and c++ dlls 22MB)
+PM> install-package Alturos.YoloV2TinyVocData (Pre-Trained Dataset 56MB)
 ```
 
 ## Example result
