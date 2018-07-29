@@ -91,10 +91,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\Images\Motorbike1.jpg">
+    <None Include="..\..\Images\Motorbike1.jpg">
       <Link>Images\Motorbike1.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Alturos.YoloV2TinyVocData.1.0.0\build\net46\Alturos.YoloV2TinyVocData.targets" Condition="Exists('..\packages\Alturos.YoloV2TinyVocData.1.0.0\build\net46\Alturos.YoloV2TinyVocData.targets')" />
