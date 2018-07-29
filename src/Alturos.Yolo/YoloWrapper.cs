@@ -159,17 +159,22 @@ namespace Alturos.Yolo
             return report;
         }
 
-        public IEnumerable<YoloItem> Detect(string filename)
+        public IEnumerable<YoloItem> Detect(string filepath)
         {
+            if (!File.Exists(filepath))
+            {
+                throw new FileNotFoundException("Cannot find the file", filepath);
+            }
+
             var container = new BboxContainer();
             var count = 0;
             switch (this.DetectionSystem)
             {
                 case DetectionSystem.CPU:
-                    count = DetectImageCpu(filename, ref container);
+                    count = DetectImageCpu(filepath, ref container);
                     break;
                 case DetectionSystem.GPU:
-                    count = DetectImageGpu(filename, ref container);
+                    count = DetectImageGpu(filepath, ref container);
                     break;
             }
 
