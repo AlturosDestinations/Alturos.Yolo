@@ -51,6 +51,7 @@
     <Compile Include="Model\YoloItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="YoloConfiguration.cs" />
+    <Compile Include="YoloTracking.cs" />
     <Compile Include="YoloWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
