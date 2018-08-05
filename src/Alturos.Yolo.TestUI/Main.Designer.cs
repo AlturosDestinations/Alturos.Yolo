@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.buttonSendImage = new System.Windows.Forms.Button();
@@ -44,6 +45,9 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.openFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResult)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFiles)).BeginInit();
@@ -52,6 +56,7 @@
             this.groupBox2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonSendImage
@@ -102,6 +107,7 @@
             this.ColumnFileName,
             this.ColumnWidth,
             this.ColumnHeight});
+            this.dataGridViewFiles.ContextMenuStrip = this.contextMenuStrip1;
             this.dataGridViewFiles.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewFiles.Location = new System.Drawing.Point(3, 3);
             this.dataGridViewFiles.MultiSelect = false;
@@ -217,6 +223,20 @@
             this.toolStripStatusLabel2.Size = new System.Drawing.Size(91, 17);
             this.toolStripStatusLabel2.Text = "change by code";
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openFolderToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 48);
+            // 
+            // openFolderToolStripMenuItem
+            // 
+            this.openFolderToolStripMenuItem.Name = "openFolderToolStripMenuItem";
+            this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openFolderToolStripMenuItem.Text = "&Open folder";
+            this.openFolderToolStripMenuItem.Click += new System.EventHandler(this.openFolderToolStripMenuItem_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -236,6 +256,7 @@
             this.panel1.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -257,6 +278,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnWidth;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnHeight;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem openFolderToolStripMenuItem;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
     }
 }
 

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 
 namespace Alturos.Yolo.TestUI
 {
@@ -10,22 +11,26 @@ namespace Alturos.Yolo.TestUI
     {
         public IEnumerable<ImageInfo> Analyze(string path)
         {
+            var allowedFileExtensions = new string[] { ".bmp", ".jpg", ".png" };
+
             var files = Directory.GetFiles(path);
             foreach (var file in files)
             {
-                if (file.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) || file.EndsWith(".bmp", StringComparison.OrdinalIgnoreCase))
+                if (!allowedFileExtensions.Any(o => file.EndsWith(o, StringComparison.OrdinalIgnoreCase)))
                 {
-                    var fileInfo = new FileInfo(file);
-                    var resolution = this.GetImageResolution(file);
-
-                    var imageInfo = new ImageInfo();
-                    imageInfo.Name = fileInfo.Name;
-                    imageInfo.Path = file;
-                    imageInfo.Width = resolution.Item1;
-                    imageInfo.Height = resolution.Item2;
-
-                    yield return imageInfo;
+                    continue;
                 }
+
+                var fileInfo = new FileInfo(file);
+                var resolution = this.GetImageResolution(file);
+
+                var imageInfo = new ImageInfo();
+                imageInfo.Name = fileInfo.Name;
+                imageInfo.Path = file;
+                imageInfo.Width = resolution.Item1;
+                imageInfo.Height = resolution.Item2;
+
+                yield return imageInfo;
             }
         }
 

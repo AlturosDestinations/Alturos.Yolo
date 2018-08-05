@@ -176,5 +176,18 @@ namespace Alturos.Yolo.TestUI
             var selectedItem = this.dataGridViewResult.CurrentRow?.DataBoundItem as YoloItem;
             this.DrawImage(items, selectedItem);
         }
+
+        private void openFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var dialogResult = this.folderBrowserDialog1.ShowDialog();
+            if (dialogResult != DialogResult.OK)
+            {
+                return;
+            }
+
+            
+            var imageInfos = new DirectoryImageReader().Analyze(this.folderBrowserDialog1.SelectedPath);
+            this.dataGridViewFiles.DataSource = imageInfos.ToList();
+        }
     }
 }
