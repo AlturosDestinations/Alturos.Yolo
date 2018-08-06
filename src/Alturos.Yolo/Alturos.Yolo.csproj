@@ -49,6 +49,7 @@
     <Compile Include="Model\BboxT.cs" />
     <Compile Include="Model\EnvironmentReport.cs" />
     <Compile Include="Model\YoloItem.cs" />
+    <Compile Include="Model\YoloTrackingItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="YoloConfiguration.cs" />
     <Compile Include="YoloTracking.cs" />
