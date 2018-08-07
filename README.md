@@ -90,3 +90,7 @@ yolo9000 | [darknet9000.cfg](https://github.com/pjreddie/darknet/blob/master/cfg
 ## Annotation Tool
 
 To marking bounded boxes of objects in images for training neural network you can use [VoTT](https://github.com/Microsoft/VoTT)
+
+## Debuging Gpu Tool
+
+Check graphic device usage C:\Program Files\NVIDIA Corporation\NVSMI>nvidia-smi
