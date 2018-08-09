@@ -94,3 +94,7 @@ To marking bounded boxes of objects in images for training neural network you ca
 ## Debuging Gpu Tool
 
 Check graphic device usage C:\Program Files\NVIDIA Corporation\NVSMI>nvidia-smi
+
+## Dataset of tagged images
+
+http://cocodataset.org/
