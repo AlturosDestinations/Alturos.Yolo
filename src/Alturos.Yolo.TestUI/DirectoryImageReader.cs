@@ -36,9 +36,16 @@ namespace Alturos.Yolo.TestUI
 
         private Tuple<int, int> GetImageResolution(string imagePath)
         {
-            using (var image = Image.FromFile(imagePath))
+            try
             {
-                return new Tuple<int, int>(image.Width, image.Height);
+                using (var image = Image.FromFile(imagePath))
+                {
+                    return new Tuple<int, int>(image.Width, image.Height);
+                }
+            }
+            catch (Exception)
+            {
+                return new Tuple<int, int>(0, 0);
             }
         }
     }
