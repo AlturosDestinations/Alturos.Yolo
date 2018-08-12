@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="ConfigurationDetector.cs" />
     <Compile Include="DetectionSystem.cs" />
+    <Compile Include="ImageAnalyzer.cs" />
     <Compile Include="ImageResizer.cs" />
     <Compile Include="Model\BboxContainer.cs" />
     <Compile Include="Model\BboxT.cs" />
