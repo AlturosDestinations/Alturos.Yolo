@@ -14,7 +14,10 @@ namespace Alturos.Yolo
         public const int MaxObjects = 1000;
         private const string YoloLibraryCpu = @"x64\yolo_cpp_dll_cpu.dll";
         private const string YoloLibraryGpu = @"x64\yolo_cpp_dll_gpu.dll";
+
         private Dictionary<int, string> _objectType = new Dictionary<int, string>();
+        private ImageAnalyzer _imageAnalyzer = new ImageAnalyzer();
+
         public DetectionSystem DetectionSystem = DetectionSystem.Unknown;
         public EnvironmentReport EnvironmentReport { get; private set; }
 
@@ -183,8 +186,12 @@ namespace Alturos.Yolo
 
         public IEnumerable<YoloItem> Detect(byte[] imageData)
         {
-            var container = new BboxContainer();
+            if (!this._imageAnalyzer.IsValidImageFormat(imageData))
+            {
+                throw new Exception("Invalid image data, wrong image format");
+            }
 
+            var container = new BboxContainer();
             var size = Marshal.SizeOf(imageData[0]) * imageData.Length;
             var pnt = Marshal.AllocHGlobal(size);
 
