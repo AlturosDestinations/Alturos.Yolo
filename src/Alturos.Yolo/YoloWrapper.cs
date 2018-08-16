@@ -181,6 +181,11 @@ namespace Alturos.Yolo
                     break;
             }
 
+            if (count == -1)
+            {
+                throw new NotImplementedException("c++ dll compiled incorrectly");
+            }
+
             return this.Convert(container);
         }
 
@@ -208,6 +213,11 @@ namespace Alturos.Yolo
                     case DetectionSystem.GPU:
                         count = DetectImageGpu(pnt, imageData.Length, ref container);
                         break;
+                }
+
+                if (count == -1)
+                {
+                    throw new NotImplementedException("c++ dll compiled incorrectly");
                 }
             }
             catch (Exception exception)
