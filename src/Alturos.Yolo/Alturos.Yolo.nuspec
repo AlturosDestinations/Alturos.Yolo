@@ -12,7 +12,7 @@
     <iconUrl>https://raw.githubusercontent.com/AlturosDestinations/Alturos.Yolo/master/doc/logo.png</iconUrl>
     <tags>yolo darknet yolo3 yolov3 yolo2 yolov2 objectdetection wrapper</tags>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <releaseNotes>Optimize cpu performance AVX2 support (new c++ dll libraries)</releaseNotes>
+    <releaseNotes>Optimize cpu performance, add msvcr100.dll</releaseNotes>
   </metadata>
   <files>
     <file src="readme.txt" target="" />
@@ -22,5 +22,6 @@
     <file src="dependencies\yolo_cpp_dll_gpu.dll" target="build\x64" />
     <file src="dependencies\pthreadGC2.dll" target="build\x64" />
     <file src="dependencies\pthreadVC2.dll" target="build\x64" />
+    <file src="dependencies\msvcr100.dll" target="build\x64" />
   </files>
 </package>

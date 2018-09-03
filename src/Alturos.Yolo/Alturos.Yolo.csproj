@@ -77,6 +77,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>x64\pthreadVC2.dll</TargetPath>
     </ContentWithTargetPath>
+    <ContentWithTargetPath Include="dependencies\msvcr100.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>x64\msvcr100.dll</TargetPath>
+    </ContentWithTargetPath>
   </ItemGroup>
   <ItemGroup>
     <None Include="readme.txt" />
