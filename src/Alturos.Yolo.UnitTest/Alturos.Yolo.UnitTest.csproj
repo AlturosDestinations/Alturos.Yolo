@@ -62,8 +62,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Images\Motorbike1.jpg">
-      <Link>Images\Motorbike1.jpg</Link>
+    <None Include="..\..\Images\Motorbike1.png">
+      <Link>Images\Motorbike1.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
