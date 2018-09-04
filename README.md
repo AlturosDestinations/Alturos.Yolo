@@ -49,11 +49,12 @@ using (var yoloWrapper = new YoloWrapper(config))
 ## Build requirements
 - Visual Studio 2017
 
-## Benchmark / Performance (processing speed, average of test images bird1, bird2, car1, motorbike1)
+## Benchmark / Performance
+Average processing speed of test images bird1.png, bird2.png, car1.png, motorbike1.png
 
 ### CPU
 
-Processor | yolo v2 tiny | yolo v3 | yolo 9000 |
+Processor | YOLOv2-tiny | YOLOv3 | yolo9000 |
 --- | --- | --- | --- | 
 Intel i7 3770 | 290 ms | 2380 ms | - | 
 Intel Xeon E5-1620 v3 | 207 ms | 4327 ms | - | 
@@ -61,7 +62,7 @@ Intel Xeon E3-1240 v6 | 182 ms | 3213 ms | - |
 
 ### GPU
 
-Graphic card | Single precision | Memory | Slot | yolo v2 tiny | yolo v3 | yolo 9000 |
+Graphic card | Single precision | Memory | Slot | YOLOv2-tiny | YOLOv3 | yolo9000 |
 --- | --- | --- | --- | --- | --- | --- |
 NVIDIA Quadro K420 | 300 GFLOPS | 2 GB | Single | - | - | - |
 NVIDIA Quadro K620 | 768 GFLOPS | 2 GB | Single | - | - | - |
