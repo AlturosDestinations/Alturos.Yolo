@@ -56,12 +56,14 @@ using (var yoloWrapper = new YoloWrapper(config))
 Processor | yolo v2 tiny | yolo v3 | yolo 9000 |
 --- | --- | --- | --- | 
 Intel i7 3770 | 290 ms | 2380 ms | - | 
+Intel Xeon E5-1620 v3 | 207 ms | 4327 ms | - | 
+Intel Xeon E3-1240 v6 | 182 ms | 3213 ms | - | 
 
 ### GPU
 
 Graphic card | Single precision | Memory | Slot | yolo v2 tiny | yolo v3 | yolo 9000 |
 --- | --- | --- | --- | --- | --- | --- |
-NVIDIA Quadro K420 | 300 GFLOPS | 2 GB | Single | 94 ms | - | 640 ms |
+NVIDIA Quadro K420 | 300 GFLOPS | 2 GB | Single | - | - | - |
 NVIDIA Quadro K620 | 768 GFLOPS | 2 GB | Single | - | - | - |
 NVIDIA Quadro K1200 | 1151 GFLOPS | 4 GB | Single | - | - | - |
 NVIDIA Quadro P400 | 599 GFLOPS | 2 GB | Single | - | - | - |
@@ -73,8 +75,8 @@ NVIDIA Quadro P4000 | 5304 GFLOPS | 8 GB | Single | - | - | - |
 NVIDIA Quadro P5000 | 8873 GFLOPS | 16 GB | Dual | - | - | - |
 NVIDIA GeForce GT 710 | 366 GFLOPS | 2 GB | Single | - | - | - |
 NVIDIA GeForce GT 730 | 693 GFLOPS | 2-4 GB | Single | - | - | - |
-NVIDIA GeForce GT 1030 | 1098 GFLOPS | 2 GB | Single | 40 ms | 170 ms | 180 ms |
-NVIDIA GeForce GTX 1060 | 4372 GFLOPS | 6 GB | Dual | - | - | - |
+NVIDIA GeForce GT 1030 | 1098 GFLOPS | 2 GB | Single | 40 ms | 170 ms | - |
+NVIDIA GeForce GTX 1060 | 4372 GFLOPS | 6 GB | Dual | 25 ms | 100 ms | - |
 
 
 ## Pre-Trained Dataset
