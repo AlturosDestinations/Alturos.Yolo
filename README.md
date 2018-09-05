@@ -11,13 +11,9 @@ PM> install-package Alturos.Yolo (c# wrapper and c++ dlls 22MB)
 PM> install-package Alturos.YoloV2TinyVocData (Pre-Trained Dataset 56MB)
 ```
 
-## Example result
+## Object Detection
 
-![object detection result](doc/objectdetection.jpg)
-
-Type | Confidence | X | Y | Width | Height |
---- | --- | --- | --- | --- | --- |
-motorbike | 44.71 | 1932 | 699 | 411 | 441 |
+![object detection result](doc/objectdetectionanimated.png)
 
 ## Example code
 
