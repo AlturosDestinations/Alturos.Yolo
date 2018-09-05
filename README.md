@@ -49,20 +49,22 @@ using (var yoloWrapper = new YoloWrapper(config))
 ## Build requirements
 - Visual Studio 2017
 
-## Benchmark / Performance (processing of one image 1024x683)
+## Benchmark / Performance
+Average processing speed of test images bird1.png, bird2.png, car1.png, motorbike1.png
 
 ### CPU
 
-Processor | yolo v2 tiny voc | yolo v2 | yolo 9000 |
+Processor | YOLOv2-tiny | YOLOv3 | yolo9000 |
 --- | --- | --- | --- | 
-Intel i7 3770 (with OpenMP) | 557 ms | - | - | 
-Intel i7 3770 (without OpenMP) | 1155 ms | - | - | 
+Intel i7 3770 | 290 ms | 2380 ms | - | 
+Intel Xeon E5-1620 v3 | 207 ms | 4327 ms | - | 
+Intel Xeon E3-1240 v6 | 182 ms | 3213 ms | - | 
 
 ### GPU
 
-Graphic card | Single precision | Memory | Slot | yolo v2 tiny voc | yolo v2 | yolo 9000 |
+Graphic card | Single precision | Memory | Slot | YOLOv2-tiny | YOLOv3 | yolo9000 |
 --- | --- | --- | --- | --- | --- | --- |
-NVIDIA Quadro K420 | 300 GFLOPS | 2 GB | Single | 94 ms | 296 ms | 640 ms |
+NVIDIA Quadro K420 | 300 GFLOPS | 2 GB | Single | - | - | - |
 NVIDIA Quadro K620 | 768 GFLOPS | 2 GB | Single | - | - | - |
 NVIDIA Quadro K1200 | 1151 GFLOPS | 4 GB | Single | - | - | - |
 NVIDIA Quadro P400 | 599 GFLOPS | 2 GB | Single | - | - | - |
@@ -74,8 +76,8 @@ NVIDIA Quadro P4000 | 5304 GFLOPS | 8 GB | Single | - | - | - |
 NVIDIA Quadro P5000 | 8873 GFLOPS | 16 GB | Dual | - | - | - |
 NVIDIA GeForce GT 710 | 366 GFLOPS | 2 GB | Single | - | - | - |
 NVIDIA GeForce GT 730 | 693 GFLOPS | 2-4 GB | Single | - | - | - |
-NVIDIA GeForce GT 1030 | 1098 GFLOPS | 2 GB | Single | 23 ms | 64 ms| 180 ms |
-NVIDIA GeForce GTX 1060 | 4372 GFLOPS | 6 GB | Dual | - | - | - |
+NVIDIA GeForce GT 1030 | 1098 GFLOPS | 2 GB | Single | 40 ms | 170 ms | - |
+NVIDIA GeForce GTX 1060 | 4372 GFLOPS | 6 GB | Dual | 25 ms | 100 ms | - |
 
 
 ## Pre-Trained Dataset
@@ -93,7 +95,7 @@ To marking bounded boxes of objects in images for training neural network you ca
 
 ## Debuging Gpu Tool
 
-Check graphic device usage C:\Program Files\NVIDIA Corporation\NVSMI>nvidia-smi
+Check graphic device usage `"%PROGRAMFILES%\NVIDIA Corporation\NVSMI\nvidia-smi.exe"`
 
 ## Dataset of tagged images
 
