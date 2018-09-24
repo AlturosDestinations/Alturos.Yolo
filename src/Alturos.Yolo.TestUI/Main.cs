@@ -38,7 +38,7 @@ namespace Alturos.Yolo.TestUI
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
-            this._yoloWrapper.Dispose();
+            this._yoloWrapper?.Dispose();
         }
 
         private void LoadAvailableConfigurations()
@@ -236,7 +236,7 @@ namespace Alturos.Yolo.TestUI
                 items = this._yoloWrapper.Detect(imageInfo.Path).ToList();
             }
             sw.Stop();
-            this.groupBoxResult.Text = $"Result (image processed in {sw.Elapsed.TotalMilliseconds:0.00} ms)";
+            this.groupBoxResult.Text = $"Result [ processed in {sw.Elapsed.TotalMilliseconds:0} ms ]";
 
             this.dataGridViewResult.DataSource = items;
             this.DrawBorder2Image(items);
