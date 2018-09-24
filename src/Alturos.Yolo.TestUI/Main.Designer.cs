@@ -29,10 +29,17 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.buttonSendImage = new System.Windows.Forms.Button();
             this.dataGridViewResult = new System.Windows.Forms.DataGridView();
+            this.ColumnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnConfidence = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnX = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnY = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnResultWidth = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnResultHeight = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.dataGridViewFiles = new System.Windows.Forms.DataGridView();
             this.ColumnFileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -40,13 +47,12 @@
             this.ColumnHeight = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBoxResult = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabelYoloInfo = new System.Windows.Forms.ToolStripStatusLabel();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.configurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,7 +60,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFiles)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.groupBoxResult.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -79,6 +85,13 @@
             this.dataGridViewResult.AllowUserToResizeColumns = false;
             this.dataGridViewResult.AllowUserToResizeRows = false;
             this.dataGridViewResult.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewResult.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ColumnType,
+            this.ColumnConfidence,
+            this.ColumnX,
+            this.ColumnY,
+            this.ColumnResultWidth,
+            this.ColumnResultHeight});
             this.dataGridViewResult.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewResult.Location = new System.Drawing.Point(3, 16);
             this.dataGridViewResult.MultiSelect = false;
@@ -88,6 +101,56 @@
             this.dataGridViewResult.Size = new System.Drawing.Size(697, 175);
             this.dataGridViewResult.TabIndex = 1;
             this.dataGridViewResult.SelectionChanged += new System.EventHandler(this.dataGridViewResult_SelectionChanged);
+            // 
+            // ColumnType
+            // 
+            this.ColumnType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnType.DataPropertyName = "Type";
+            this.ColumnType.HeaderText = "Type";
+            this.ColumnType.Name = "ColumnType";
+            this.ColumnType.ReadOnly = true;
+            // 
+            // ColumnConfidence
+            // 
+            this.ColumnConfidence.DataPropertyName = "Confidence";
+            dataGridViewCellStyle1.Format = "N3";
+            dataGridViewCellStyle1.NullValue = null;
+            this.ColumnConfidence.DefaultCellStyle = dataGridViewCellStyle1;
+            this.ColumnConfidence.HeaderText = "Confidence";
+            this.ColumnConfidence.Name = "ColumnConfidence";
+            this.ColumnConfidence.ReadOnly = true;
+            // 
+            // ColumnX
+            // 
+            this.ColumnX.DataPropertyName = "X";
+            this.ColumnX.HeaderText = "X";
+            this.ColumnX.Name = "ColumnX";
+            this.ColumnX.ReadOnly = true;
+            this.ColumnX.Width = 50;
+            // 
+            // ColumnY
+            // 
+            this.ColumnY.DataPropertyName = "Y";
+            this.ColumnY.HeaderText = "Y";
+            this.ColumnY.Name = "ColumnY";
+            this.ColumnY.ReadOnly = true;
+            this.ColumnY.Width = 50;
+            // 
+            // ColumnResultWidth
+            // 
+            this.ColumnResultWidth.DataPropertyName = "Width";
+            this.ColumnResultWidth.HeaderText = "Width";
+            this.ColumnResultWidth.Name = "ColumnResultWidth";
+            this.ColumnResultWidth.ReadOnly = true;
+            this.ColumnResultWidth.Width = 50;
+            // 
+            // ColumnResultHeight
+            // 
+            this.ColumnResultHeight.DataPropertyName = "Height";
+            this.ColumnResultHeight.HeaderText = "Height";
+            this.ColumnResultHeight.Name = "ColumnResultHeight";
+            this.ColumnResultHeight.ReadOnly = true;
+            this.ColumnResultHeight.Width = 50;
             // 
             // pictureBox1
             // 
@@ -134,8 +197,8 @@
             // ColumnWidth
             // 
             this.ColumnWidth.DataPropertyName = "Width";
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.ColumnWidth.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ColumnWidth.DefaultCellStyle = dataGridViewCellStyle2;
             this.ColumnWidth.HeaderText = "Width";
             this.ColumnWidth.Name = "ColumnWidth";
             this.ColumnWidth.ReadOnly = true;
@@ -144,8 +207,8 @@
             // ColumnHeight
             // 
             this.ColumnHeight.DataPropertyName = "Height";
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.ColumnHeight.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ColumnHeight.DefaultCellStyle = dataGridViewCellStyle3;
             this.ColumnHeight.HeaderText = "Height";
             this.ColumnHeight.Name = "ColumnHeight";
             this.ColumnHeight.ReadOnly = true;
@@ -165,17 +228,17 @@
             this.openFolderToolStripMenuItem.Text = "&Open folder";
             this.openFolderToolStripMenuItem.Click += new System.EventHandler(this.openFolderToolStripMenuItem_Click);
             // 
-            // groupBox1
+            // groupBoxResult
             // 
-            this.tableLayoutPanel1.SetColumnSpan(this.groupBox1, 2);
-            this.groupBox1.Controls.Add(this.dataGridViewResult);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox1.Location = new System.Drawing.Point(3, 307);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(703, 194);
-            this.groupBox1.TabIndex = 4;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Result";
+            this.tableLayoutPanel1.SetColumnSpan(this.groupBoxResult, 2);
+            this.groupBoxResult.Controls.Add(this.dataGridViewResult);
+            this.groupBoxResult.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBoxResult.Location = new System.Drawing.Point(3, 307);
+            this.groupBoxResult.Name = "groupBoxResult";
+            this.groupBoxResult.Size = new System.Drawing.Size(703, 194);
+            this.groupBoxResult.TabIndex = 4;
+            this.groupBoxResult.TabStop = false;
+            this.groupBoxResult.Text = "Result";
             // 
             // tableLayoutPanel1
             // 
@@ -184,7 +247,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.groupBox2, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.dataGridViewFiles, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.groupBox1, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.groupBoxResult, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 24);
@@ -220,8 +283,7 @@
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1,
-            this.toolStripStatusLabel2});
+            this.toolStripStatusLabelYoloInfo});
             this.statusStrip1.Location = new System.Drawing.Point(0, 528);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(709, 22);
@@ -230,16 +292,9 @@
             // 
             // toolStripStatusLabel1
             // 
-            this.toolStripStatusLabel1.Margin = new System.Windows.Forms.Padding(0, 3, 50, 2);
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(91, 17);
-            this.toolStripStatusLabel1.Text = "change by code";
-            // 
-            // toolStripStatusLabel2
-            // 
-            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(91, 17);
-            this.toolStripStatusLabel2.Text = "change by code";
+            this.toolStripStatusLabelYoloInfo.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabelYoloInfo.Size = new System.Drawing.Size(91, 17);
+            this.toolStripStatusLabelYoloInfo.Text = "change by code";
             // 
             // menuStrip1
             // 
@@ -273,7 +328,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFiles)).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
+            this.groupBoxResult.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
@@ -292,21 +347,26 @@
         private System.Windows.Forms.DataGridView dataGridViewResult;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.DataGridView dataGridViewFiles;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBoxResult;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelYoloInfo;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnFileName;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnWidth;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnHeight;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem openFolderToolStripMenuItem;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem configurationToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnConfidence;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnX;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnY;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnResultWidth;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnResultHeight;
     }
 }
 

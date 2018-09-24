@@ -23,11 +23,11 @@ namespace Alturos.Yolo.TestUI
             this.buttonSendImage.Enabled = false;
             this.menuStrip1.Visible = false;
 
-            this.toolStripStatusLabel1.Text = string.Empty;
-            this.toolStripStatusLabel2.Text = string.Empty;
+            this.toolStripStatusLabelYoloInfo.Text = string.Empty;
 
             this.Text = $"Alturos Yolo TestUI {Application.ProductVersion}";
             this.dataGridViewFiles.AutoGenerateColumns = false;
+            this.dataGridViewResult.AutoGenerateColumns = false;
 
             var imageInfos = new DirectoryImageReader().Analyze(@".\Images");
             this.dataGridViewFiles.DataSource = imageInfos.ToList();
@@ -79,7 +79,9 @@ namespace Alturos.Yolo.TestUI
             var imageInfo = this.GetCurrentImage();           
             this.pictureBox1.Image = Image.FromFile(imageInfo.Path);            
             oldImage?.Dispose();
+
             this.dataGridViewResult.DataSource = null;
+            this.groupBoxResult.Text = $"Result";
         }
 
         private void dataGridViewFiles_KeyDown(object sender, KeyEventArgs e)
@@ -203,7 +205,7 @@ namespace Alturos.Yolo.TestUI
                 {
                     detectionSystemDetail = $"({this._yoloWrapper.EnvironmentReport.GraphicDeviceName})";
                 }
-                this.toolStripStatusLabel1.Text = $"Initialize Yolo in {sw.Elapsed.TotalMilliseconds:0} ms - Detection System:{this._yoloWrapper.DetectionSystem} {detectionSystemDetail}";
+                this.toolStripStatusLabelYoloInfo.Text = $"Initialize Yolo in {sw.Elapsed.TotalMilliseconds:0} ms - Detection System:{this._yoloWrapper.DetectionSystem} {detectionSystemDetail}";
             });
 
             this.statusStrip1.Invoke(action);
@@ -234,7 +236,7 @@ namespace Alturos.Yolo.TestUI
                 items = this._yoloWrapper.Detect(imageInfo.Path).ToList();
             }
             sw.Stop();
-            this.toolStripStatusLabel2.Text = $"Image processed in {sw.Elapsed.TotalMilliseconds:0.00} ms";
+            this.groupBoxResult.Text = $"Result (image processed in {sw.Elapsed.TotalMilliseconds:0.00} ms)";
 
             this.dataGridViewResult.DataSource = items;
             this.DrawBorder2Image(items);
