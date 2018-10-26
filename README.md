@@ -89,7 +89,7 @@ yolo9000 | 448x448 | [darknet9000.cfg](https://github.com/pjreddie/darknet/blob/
 
 To marking bounded boxes of objects in images for training neural network you can use [VoTT](https://github.com/Microsoft/VoTT)
 
-## Debuging Gpu Tool
+## Debugging Gpu Tool
 
 Check graphic device usage `"%PROGRAMFILES%\NVIDIA Corporation\NVSMI\nvidia-smi.exe"`
 
