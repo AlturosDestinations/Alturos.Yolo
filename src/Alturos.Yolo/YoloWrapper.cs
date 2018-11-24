@@ -128,19 +128,37 @@ namespace Alturos.Yolo
             }
         }
 
+        private bool IsMicrosoftVisualCPlusPlus2017Available()
+        {
+            //Detect if Visual C++ Redistributable for Visual Studio is installed
+            //https://stackoverflow.com/questions/12206314/detect-if-visual-c-redistributable-for-visual-studio-2012-is-installed/34209692#34209692
+
+            using (var registryKey = Registry.ClassesRoot.OpenSubKey(@"Installer\Dependencies\,,amd64,14.0,bundle", false))
+            {
+                if (registryKey == null)
+                {
+                    return false;
+                }
+
+                var displayName = registryKey.GetValue("DisplayName") as string;
+                if (string.IsNullOrEmpty(displayName))
+                {
+                    return false;
+                }
+
+                if (displayName.StartsWith("Microsoft Visual C++ 2017 Redistributable (x64)", StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private EnvironmentReport GetEnvironmentReport()
         {
             var report = new EnvironmentReport();
-
-            //https://stackoverflow.com/questions/12206314/detect-if-visual-c-redistributable-for-visual-studio-2012-is-installed/34209692#34209692
-            using (var registryKey = Registry.ClassesRoot.OpenSubKey(@"Installer\Dependencies\,,amd64,14.0,bundle", false))
-            {
-                var displayName = registryKey.GetValue("DisplayName") as string;
-                if (displayName.StartsWith("Microsoft Visual C++ 2017 Redistributable (x64)", StringComparison.OrdinalIgnoreCase))
-                {
-                    report.MicrosoftVisualCPlusPlus2017RedistributableExists = true;
-                }
-            }
+            report.MicrosoftVisualCPlusPlus2017RedistributableExists = this.IsMicrosoftVisualCPlusPlus2017Available();
 
             if (File.Exists(@"x64\cudnn64_7.dll"))
             {
@@ -148,14 +166,8 @@ namespace Alturos.Yolo
             }
 
             var envirormentVariables = Environment.GetEnvironmentVariables(EnvironmentVariableTarget.Machine);
-            //if (envirormentVariables.Contains("cudnn"))
-            //{
-            //    //["CUDA_PATH"] = "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v9.2"
-            //}
-
             if (envirormentVariables.Contains("CUDA_PATH"))
             {
-                //var cudaVersion = envirormentVariables["CUDA_PATH"];
                 report.CudaExists = true;
             }
 
