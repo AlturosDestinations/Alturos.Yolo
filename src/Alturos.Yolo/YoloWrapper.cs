@@ -132,23 +132,31 @@ namespace Alturos.Yolo
         {
             //Detect if Visual C++ Redistributable for Visual Studio is installed
             //https://stackoverflow.com/questions/12206314/detect-if-visual-c-redistributable-for-visual-studio-2012-is-installed/34209692#34209692
-
-            using (var registryKey = Registry.ClassesRoot.OpenSubKey(@"Installer\Dependencies\,,amd64,14.0,bundle", false))
+            var checkKeys = new string[]
             {
-                if (registryKey == null)
-                {
-                    return false;
-                }
+                @"Installer\Dependencies\,,amd64,14.0,bundle",
+                @"Installer\Dependencies\VC,redist.x64,amd64,14.16,bundle",
+            };
 
-                var displayName = registryKey.GetValue("DisplayName") as string;
-                if (string.IsNullOrEmpty(displayName))
+            foreach (var checkKey in checkKeys)
+            {
+                using (var registryKey = Registry.ClassesRoot.OpenSubKey(checkKey, false))
                 {
-                    return false;
-                }
+                    if (registryKey == null)
+                    {
+                        continue;
+                    }
 
-                if (displayName.StartsWith("Microsoft Visual C++ 2017 Redistributable (x64)", StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
+                    var displayName = registryKey.GetValue("DisplayName") as string;
+                    if (string.IsNullOrEmpty(displayName))
+                    {
+                        continue;
+                    }
+
+                    if (displayName.StartsWith("Microsoft Visual C++ 2017 Redistributable (x64)", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
                 }
             }
 
