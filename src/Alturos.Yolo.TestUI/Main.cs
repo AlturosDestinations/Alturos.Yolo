@@ -193,9 +193,11 @@ namespace Alturos.Yolo.TestUI
                 this._yoloWrapper.Dispose();
             }
 
+            var useOnlyCpu = this.cpuToolStripMenuItem.Checked;
+
             var sw = new Stopwatch();
             sw.Start();
-            this._yoloWrapper = new YoloWrapper(config.ConfigFile, config.WeightsFile, config.NamesFile, 0);
+            this._yoloWrapper = new YoloWrapper(config.ConfigFile, config.WeightsFile, config.NamesFile, 0, useOnlyCpu);
             sw.Stop();
 
             var action = new MethodInvoker(delegate ()
@@ -205,7 +207,7 @@ namespace Alturos.Yolo.TestUI
                 {
                     detectionSystemDetail = $"({this._yoloWrapper.EnvironmentReport.GraphicDeviceName})";
                 }
-                this.toolStripStatusLabelYoloInfo.Text = $"Initialize Yolo in {sw.Elapsed.TotalMilliseconds:0} ms - Detection System:{this._yoloWrapper.DetectionSystem} {detectionSystemDetail}";
+                this.toolStripStatusLabelYoloInfo.Text = $"Initialize Yolo in {sw.Elapsed.TotalMilliseconds:0} ms - Detection System:{this._yoloWrapper.DetectionSystem} {detectionSystemDetail} Weights:{config.WeightsFile}";
             });
 
             this.statusStrip1.Invoke(action);
@@ -240,6 +242,11 @@ namespace Alturos.Yolo.TestUI
 
             this.dataGridViewResult.DataSource = items;
             this.DrawBorder2Image(items);
+        }
+
+        private void gpuToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.cpuToolStripMenuItem.Checked = !this.cpuToolStripMenuItem.Checked;
         }
     }
 }

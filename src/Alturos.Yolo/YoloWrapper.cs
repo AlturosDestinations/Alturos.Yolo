@@ -15,10 +15,10 @@ namespace Alturos.Yolo
         private const string YoloLibraryCpu = @"x64\yolo_cpp_dll_cpu.dll";
         private const string YoloLibraryGpu = @"x64\yolo_cpp_dll_gpu.dll";
 
-        private Dictionary<int, string> _objectType = new Dictionary<int, string>();
-        private ImageAnalyzer _imageAnalyzer = new ImageAnalyzer();
+        private readonly Dictionary<int, string> _objectType = new Dictionary<int, string>();
+        private readonly ImageAnalyzer _imageAnalyzer = new ImageAnalyzer();
 
-        public DetectionSystem DetectionSystem = DetectionSystem.Unknown;
+        public DetectionSystem DetectionSystem { get; private set; } = DetectionSystem.Unknown;
         public EnvironmentReport EnvironmentReport { get; private set; }
 
         #region DllImport Cpu
@@ -59,14 +59,14 @@ namespace Alturos.Yolo
 
         #endregion
 
-        public YoloWrapper(YoloConfiguration yoloConfiguration)
+        public YoloWrapper(YoloConfiguration yoloConfiguration, bool ignoreGpu = false)
         {
-            this.Initialize(yoloConfiguration.ConfigFile, yoloConfiguration.WeightsFile, yoloConfiguration.NamesFile, 0);
+            this.Initialize(yoloConfiguration.ConfigFile, yoloConfiguration.WeightsFile, yoloConfiguration.NamesFile, 0, ignoreGpu);
         }
 
-        public YoloWrapper(string configurationFilename, string weightsFilename, string namesFilename, int gpu = 0)
+        public YoloWrapper(string configurationFilename, string weightsFilename, string namesFilename, int gpu = 0, bool ignoreGpu = false)
         {
-            this.Initialize(configurationFilename, weightsFilename, namesFilename, gpu);
+            this.Initialize(configurationFilename, weightsFilename, namesFilename, gpu, ignoreGpu);
         }
 
         public void Dispose()
@@ -82,11 +82,11 @@ namespace Alturos.Yolo
             }
         }
 
-        private void Initialize(string configurationFilename, string weightsFilename, string namesFilename, int gpu = 0)
+        private void Initialize(string configurationFilename, string weightsFilename, string namesFilename, int gpu = 0, bool ignoreGpu = false)
         {
             if (IntPtr.Size != 8)
             {
-                throw new NotSupportedException("Only 64-bit process are supported");
+                throw new NotSupportedException("Only 64-bit processes are supported");
             }
 
             this.EnvironmentReport = this.GetEnvironmentReport();
@@ -96,7 +96,7 @@ namespace Alturos.Yolo
             }
 
             this.DetectionSystem = DetectionSystem.CPU;
-            if (this.EnvironmentReport.CudaExists && this.EnvironmentReport.CudnnExists)
+            if (!ignoreGpu && this.EnvironmentReport.CudaExists && this.EnvironmentReport.CudnnExists)
             {
                 this.DetectionSystem = DetectionSystem.GPU;
             }
@@ -203,7 +203,7 @@ namespace Alturos.Yolo
 
             if (count == -1)
             {
-                throw new NotImplementedException("c++ dll compiled incorrectly");
+                throw new NotImplementedException("C++ dll compiled incorrectly");
             }
 
             return this.Convert(container);
@@ -237,7 +237,7 @@ namespace Alturos.Yolo
 
                 if (count == -1)
                 {
-                    throw new NotImplementedException("c++ dll compiled incorrectly");
+                    throw new NotImplementedException("C++ dll compiled incorrectly");
                 }
             }
             catch (Exception exception)

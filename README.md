@@ -7,7 +7,7 @@ A state of the art real-time object detection system for C# (Visual Studio). Thi
 ## nuget
 Quick install Alturos.Yolo over [nuget](https://www.nuget.org/packages/Alturos.Yolo)
 ```
-PM> install-package Alturos.Yolo (c# wrapper and c++ dlls 22MB)
+PM> install-package Alturos.Yolo (C# wrapper and C++ dlls 22MB)
 PM> install-package Alturos.YoloV2TinyVocData (Pre-Trained Dataset 56MB)
 ```
 
@@ -39,8 +39,8 @@ using (var yoloWrapper = new YoloWrapper(config))
 - [Microsoft Visual C++ 2017 Redistributable x64](https://go.microsoft.com/fwlink/?LinkId=746572)
 
 ## GPU requirements (optional)
-1) [Install Nvidia CUDA Toolkit 9.2](https://developer.nvidia.com/cuda-downloads) (must be installed add a hardware driver for cuda support)
-2) [Download Nvidia cuDNN v7.1.4 for CUDA 9.2](https://developer.nvidia.com/rdp/cudnn-download) (DLL cudnn64_7.dll required for gpu processing)
+1) [Install Nvidia CUDA Toolkit 10.0](https://developer.nvidia.com/cuda-downloads) (must be installed add a hardware driver for cuda support)
+2) [Download Nvidia cuDNN v7.4.2.24 for CUDA 10.0](https://developer.nvidia.com/rdp/cudnn-download) (DLL cudnn64_7.dll required for gpu processing)
 
 ## Build requirements
 - Visual Studio 2017
@@ -72,7 +72,7 @@ NVIDIA Quadro P4000 | 5304 GFLOPS | 8 GB | Single | - | - | - |
 NVIDIA Quadro P5000 | 8873 GFLOPS | 16 GB | Dual | - | - | - |
 NVIDIA GeForce GT 710 | 366 GFLOPS | 2 GB | Single | - | - | - |
 NVIDIA GeForce GT 730 | 693 GFLOPS | 2-4 GB | Single | - | - | - |
-NVIDIA GeForce GT 1030 | 1098 GFLOPS | 2 GB | Single | 40 ms | 170 ms | - |
+NVIDIA GeForce GT 1030 | 1098 GFLOPS | 2 GB | Single | 40 ms | 160 ms | - |
 NVIDIA GeForce GTX 1060 | 4372 GFLOPS | 6 GB | Dual | 25 ms | 100 ms | - |
 
 
@@ -102,7 +102,7 @@ http://cocodataset.org/
     ├── Alturos.Yolo.dll              # C# yolo wrapper
     ├── x64/
     │   ├── yolo_cpp_dll_cpu.dll      # yolo runtime for cpu
-    │   ├── yolo_cpp_dll_gpu.dll      # yolo runtime fot gpu
+    │   ├── yolo_cpp_dll_gpu.dll      # yolo runtime for gpu
     │   ├── cudnn64_7.dll             # required by yolo_cpp_dll_gpu (optional only required for gpu processig)
     │   ├── opencv_world340.dll       # required by yolo_cpp_dll_xxx (process image as byte data detect_mat)
     │   ├── pthreadGC2.dll            # required by yolo_cpp_dll_xxx (POSIX Threads)
