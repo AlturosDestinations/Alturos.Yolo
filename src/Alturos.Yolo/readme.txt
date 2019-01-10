@@ -6,8 +6,8 @@ Please star (★) this project on github!
 This package deliver all dependencies for cpu detection.
 
 If you need gpu detection please install cuda and cudnn.
-Nvidia CUDA Toolkit 9.2 (must be installed add a hardware driver for cuda support)
-Nvidia cuDNN v7.1.4 for CUDA 9.2 (DLL cudnn64_7.dll required for gpu processing)
+Nvidia CUDA Toolkit 10.0 (must be installed add a hardware driver for cuda support)
+Nvidia cuDNN v7.4.2.24 for CUDA 10.0 (DLL cudnn64_7.dll required for gpu processing)
 And copy the cudnn64_7.dll in the x64 directory. (%cudnn%\bin)
 
 If all dependencies available Alturos.Yolo switch automatic in gpu mode.
