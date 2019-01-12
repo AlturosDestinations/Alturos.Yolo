@@ -77,6 +77,15 @@ NVIDIA GeForce GTX 1060 | 4372 GFLOPS | 6 GB | Dual | 25 ms | 100 ms | - |
 
 
 ## Pre-Trained Dataset
+
+You can download the datasets manually or integrate them automatically into the code.
+
+```cs
+//The download takes some time depending on the internet connection.
+var repository = new YoloPreTrainedDatasetRepository();
+await repository.DownloadDatasetAsync("YOLOv3", ".");
+```
+
 Model | Processing Resolution | Cfg | Weights | Names |
 --- | --- | --- | --- | --- |
 YOLOv3 | 608x608 | [yolov3.cfg](https://raw.githubusercontent.com/AlexeyAB/darknet/master/cfg/yolov3.cfg) | [yolov3.weights](https://pjreddie.com/media/files/yolov3.weights) | [coco.names](https://raw.githubusercontent.com/AlexeyAB/darknet/master/cfg/coco.names) |
