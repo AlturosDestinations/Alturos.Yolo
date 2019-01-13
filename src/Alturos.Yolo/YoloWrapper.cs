@@ -108,6 +108,11 @@ namespace Alturos.Yolo
                     break;
                 case DetectionSystem.GPU:
                     var deviceCount = GetDeviceCount();
+                    if (deviceCount == 0)
+                    {
+                        throw new NotSupportedException("No graphic device is available");
+                    }
+
                     if (gpu > (deviceCount - 1))
                     {
                         throw new IndexOutOfRangeException("Graphic device index is out of range");
