@@ -2,13 +2,13 @@
 
 # Alturos.Yolo
 
-A state of the art real-time object detection system for C# (Visual Studio). This project has CPU and GPU support, with GPU the detection works much faster. The primary goal of this project is an easy use of yolo, this package is available on nuget and you must only install two packages to start detection. In the background we are use the Windows Yolo version of [AlexeyAB/darknet](https://github.com/AlexeyAB/darknet). Send an image path or the byte array to [yolo](https://github.com/pjreddie/darknet) and receive the position of the detected objects. Our project is meant to return the object-type and -position as processable data.
+A state of the art real-time object detection system for C# (Visual Studio). This project has CPU and GPU support, with GPU the detection works much faster. The primary goal of this project is an easy use of yolo, this package is available on nuget and you must only install two packages to start detection. In the background we are use the Windows Yolo version of [AlexeyAB/darknet](https://github.com/AlexeyAB/darknet). Send an image path or the byte array to [yolo](https://github.com/pjreddie/darknet) and receive the position of the detected objects. Our project is meant to return the object-type and -position as processable data. This library supports [YoloV3 and YoloV2 Pre-Trained Datasets](#pre-trained-dataset)
 
 ## nuget
 Quick install Alturos.Yolo over [nuget](https://www.nuget.org/packages/Alturos.Yolo)
 ```
 PM> install-package Alturos.Yolo (C# wrapper and C++ dlls 22MB)
-PM> install-package Alturos.YoloV2TinyVocData (Pre-Trained Dataset 56MB)
+PM> install-package Alturos.YoloV2TinyVocData (YOLOv2-tiny Pre-Trained Dataset 56MB)
 ```
 
 ## Object Detection
@@ -17,12 +17,25 @@ PM> install-package Alturos.YoloV2TinyVocData (Pre-Trained Dataset 56MB)
 
 ## Example code
 
-### Detect the type and the position of an image
+### Detect the type and the position of an image (Automatic configuration)
 ```cs
 var configurationDetector = new ConfigurationDetector();
 var config = configurationDetector.Detect();
-//using (var yoloWrapper = new YoloWrapper("yolov2-tiny-voc.cfg", "yolov2-tiny-voc.weights", "voc.names"))
 using (var yoloWrapper = new YoloWrapper(config))
+{
+	var items = yoloWrapper.Detect(@"image.jpg");
+	//items[0].Type -> "Person, Car, ..."
+	//items[0].Confidence -> 0.0 (low) -> 1.0 (high)
+	//items[0].X -> bounding box
+	//items[0].Y -> bounding box
+	//items[0].Width -> bounding box
+	//items[0].Height -> bounding box
+}
+```
+
+### Detect the type and the position of an image (Manual configuration)
+```cs
+using (var yoloWrapper = new YoloWrapper("yolov2-tiny-voc.cfg", "yolov2-tiny-voc.weights", "voc.names"))
 {
 	var items = yoloWrapper.Detect(@"image.jpg");
 	//items[0].Type -> "Person, Car, ..."
@@ -101,6 +114,10 @@ To marking bounded boxes of objects in images for training neural network you ca
 ## Debugging Gpu Tool
 
 Check graphic device usage `"%PROGRAMFILES%\NVIDIA Corporation\NVSMI\nvidia-smi.exe"`
+
+## Troubleshooting
+
+If you have some error like `DllNotFoundException` use [dependencywalker](http://www.dependencywalker.com) to check all references are available for `yolo_cpp_dll_gpu.dll`
 
 ## Dataset of tagged images
 
