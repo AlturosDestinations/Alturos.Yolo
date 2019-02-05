@@ -53,7 +53,8 @@ using (var yoloWrapper = new YoloWrapper("yolov2-tiny-voc.cfg", "yolov2-tiny-voc
 
 ## GPU requirements (optional)
 1) [Install Nvidia CUDA Toolkit 10.0](https://developer.nvidia.com/cuda-downloads) (must be installed add a hardware driver for cuda support)
-2) [Download Nvidia cuDNN v7.4.2.24 for CUDA 10.0](https://developer.nvidia.com/rdp/cudnn-download) (DLL cudnn64_7.dll required for gpu processing)
+2) [Download Nvidia cuDNN v7.4.2.24 for CUDA 10.0](https://developer.nvidia.com/rdp/cudnn-download)
+3) Copy the `cudnn64_7.dll` from the output directory of point 2. into the `x64` folder of your project.
 
 ## Build requirements
 - Visual Studio 2017
