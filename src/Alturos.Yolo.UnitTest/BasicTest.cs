@@ -7,7 +7,7 @@ namespace Alturos.Yolo.UnitTest
     [TestClass]
     public class BasicTest
     {
-        private string _imagePath = @"..\..\..\..\Images\Motorbike1.png";
+        private readonly string _imagePath = @"..\..\..\..\Images\Motorbike1.png";
 
         [TestMethod]
         [ExpectedException(typeof(FileNotFoundException))]
