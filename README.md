@@ -52,9 +52,10 @@ using (var yoloWrapper = new YoloWrapper("yolov2-tiny-voc.cfg", "yolov2-tiny-voc
 - [Microsoft Visual C++ 2017 Redistributable x64](https://go.microsoft.com/fwlink/?LinkId=746572)
 
 ## GPU requirements (optional)
-1) [Install Nvidia CUDA Toolkit 10.0](https://developer.nvidia.com/cuda-downloads) (must be installed add a hardware driver for cuda support)
-2) [Download Nvidia cuDNN v7.4.2.24 for CUDA 10.0](https://developer.nvidia.com/rdp/cudnn-download)
-3) Copy the `cudnn64_7.dll` from the output directory of point 2. into the `x64` folder of your project.
+1) Install the latest Nvidia driver for your graphic device
+2) [Install Nvidia CUDA Toolkit 10.0](https://developer.nvidia.com/cuda-downloads) (must be installed add a hardware driver for cuda support)
+3) [Download Nvidia cuDNN v7.4.2.24 for CUDA 10.0](https://developer.nvidia.com/rdp/cudnn-download)
+4) Copy the `cudnn64_7.dll` from the output directory of point 2. into the `x64` folder of your project.
 
 ## Build requirements
 - Visual Studio 2017
@@ -119,6 +120,8 @@ Check graphic device usage `"%PROGRAMFILES%\NVIDIA Corporation\NVSMI\nvidia-smi.
 ## Troubleshooting
 
 If you have some error like `DllNotFoundException` use [dependencywalker](http://www.dependencywalker.com) to check all references are available for `yolo_cpp_dll_gpu.dll`
+
+If you have some error like `NotSupportedException` check if you use the latest Nvidia driver
 
 ## Dataset of tagged images
 
