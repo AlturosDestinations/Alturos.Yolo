@@ -188,30 +188,37 @@ namespace Alturos.Yolo.TestUI
 
         private void Initialize(YoloConfiguration config)
         {
-            if (this._yoloWrapper != null)
+            try
             {
-                this._yoloWrapper.Dispose();
-            }
-
-            var useOnlyCpu = this.cpuToolStripMenuItem.Checked;
-
-            var sw = new Stopwatch();
-            sw.Start();
-            this._yoloWrapper = new YoloWrapper(config.ConfigFile, config.WeightsFile, config.NamesFile, 0, useOnlyCpu);
-            sw.Stop();
-
-            var action = new MethodInvoker(delegate ()
-            {
-                var detectionSystemDetail = string.Empty;
-                if (!string.IsNullOrEmpty(this._yoloWrapper.EnvironmentReport.GraphicDeviceName))
+                if (this._yoloWrapper != null)
                 {
-                    detectionSystemDetail = $"({this._yoloWrapper.EnvironmentReport.GraphicDeviceName})";
+                    this._yoloWrapper.Dispose();
                 }
-                this.toolStripStatusLabelYoloInfo.Text = $"Initialize Yolo in {sw.Elapsed.TotalMilliseconds:0} ms - Detection System:{this._yoloWrapper.DetectionSystem} {detectionSystemDetail} Weights:{config.WeightsFile}";
-            });
 
-            this.statusStrip1.Invoke(action);
-            this.buttonSendImage.Invoke(new MethodInvoker(delegate () { this.buttonSendImage.Enabled = true; }));
+                var useOnlyCpu = this.cpuToolStripMenuItem.Checked;
+
+                var sw = new Stopwatch();
+                sw.Start();
+                this._yoloWrapper = new YoloWrapper(config.ConfigFile, config.WeightsFile, config.NamesFile, 0, useOnlyCpu);
+                sw.Stop();
+
+                var action = new MethodInvoker(delegate ()
+                {
+                    var detectionSystemDetail = string.Empty;
+                    if (!string.IsNullOrEmpty(this._yoloWrapper.EnvironmentReport.GraphicDeviceName))
+                    {
+                        detectionSystemDetail = $"({this._yoloWrapper.EnvironmentReport.GraphicDeviceName})";
+                    }
+                    this.toolStripStatusLabelYoloInfo.Text = $"Initialize Yolo in {sw.Elapsed.TotalMilliseconds:0} ms - Detection System:{this._yoloWrapper.DetectionSystem} {detectionSystemDetail} Weights:{config.WeightsFile}";
+                });
+
+                this.statusStrip1.Invoke(action);
+                this.buttonSendImage.Invoke(new MethodInvoker(delegate () { this.buttonSendImage.Enabled = true; }));
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show($"{nameof(Initialize)} - {exception}", "Error Initialize", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }        
 
         private void Detect()
