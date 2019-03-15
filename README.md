@@ -109,6 +109,8 @@ YOLOv2 | 608x608 | [yolov2.cfg](https://raw.githubusercontent.com/AlexeyAB/darkn
 YOLOv2-tiny | 416x416 | [yolov2-tiny.cfg](https://raw.githubusercontent.com/AlexeyAB/darknet/master/cfg/yolov2-tiny.cfg) | [yolov2-tiny.weights](https://pjreddie.com/media/files/yolov2-tiny.weights) | [voc.names](https://raw.githubusercontent.com/pjreddie/darknet/master/data/voc.names) |
 yolo9000 | 448x448 | [darknet9000.cfg](https://raw.githubusercontent.com/AlexeyAB/darknet/master/cfg/yolo9000.cfg) | [yolo9000.weights](https://github.com/philipperemy/yolo-9000/tree/master/yolo9000-weights) | [9k.names](https://raw.githubusercontent.com/AlexeyAB/darknet/master/cfg/9k.names) |
 
+yolo9000 require a `data` directory with this two files [coco9k.map](https://github.com/AlexeyAB/darknet/blob/master/data/coco9k.map) and [9k.tree](https://raw.githubusercontent.com/AlexeyAB/darknet/master/data/9k.tree). Merge files with this command `type xaa xab > yolo9000.weights`
+
 ## Annotation Tool
 
 To marking bounded boxes of objects in images for training neural network you can use [VoTT](https://github.com/Microsoft/VoTT)
