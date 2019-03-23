@@ -141,6 +141,7 @@ namespace Alturos.Yolo
             {
                 @"Installer\Dependencies\,,amd64,14.0,bundle",
                 @"Installer\Dependencies\VC,redist.x64,amd64,14.16,bundle",
+                @"Installer\Dependencies\VC,redist.x64,amd64,14.20,bundle",
             };
 
             foreach (var checkKey in checkKeys)
