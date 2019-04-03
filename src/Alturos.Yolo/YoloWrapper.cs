@@ -264,8 +264,21 @@ namespace Alturos.Yolo
             var yoloItems = new List<YoloItem>();
             foreach (var item in container.candidates.Where(o => o.h > 0 || o.w > 0))
             {
-                var objectType = this._objectType[(int)item.obj_id];
-                var yoloItem = new YoloItem() { X = (int)item.x, Y = (int)item.y, Height = (int)item.h, Width = (int)item.w, Confidence = item.prob, Type = objectType };
+                if (!this._objectType.TryGetValue((int)item.obj_id, out var objectType))
+                {
+                    objectType = "unknown key";
+                }
+
+                var yoloItem = new YoloItem
+                {
+                    X = (int)item.x,
+                    Y = (int)item.y,
+                    Height = (int)item.h,
+                    Width = (int)item.w,
+                    Confidence = item.prob,
+                    Type = objectType
+                };
+
                 yoloItems.Add(yoloItem);
             }
 

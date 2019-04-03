@@ -12,7 +12,7 @@
     <iconUrl>https://raw.githubusercontent.com/AlturosDestinations/Alturos.Yolo/master/doc/logo.png</iconUrl>
     <tags>yolo darknet yolo3 yolov3 yolo2 yolov2 objectdetection wrapper</tags>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <releaseNotes>Update C++ dlls</releaseNotes>
+    <releaseNotes>Update C++ dlls, optimize object type matching</releaseNotes>
   </metadata>
   <files>
     <file src="readme.txt" target="" />
