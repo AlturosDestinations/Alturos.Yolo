@@ -1,8 +1,8 @@
-﻿namespace Test.YoloLearningImage
+﻿namespace Alturos.Yolo.LearningImage
 {
-    public class YoloAnnotationInfo
+    public class AnnotationInfo
     {
-        public int ObjectClass { get; set; }
+        public int ObjectIndex { get; set; }
         public float CenterX { get; set; }
         public float CenterY { get; set; }
         public float Width { get; set; }

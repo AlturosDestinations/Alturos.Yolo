@@ -1,4 +1,4 @@
-﻿namespace Test.YoloLearningImage
+﻿namespace Alturos.Yolo.LearningImage
 {
     partial class Main
     {
@@ -30,10 +30,14 @@
         {
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.ColumnName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStripMain = new System.Windows.Forms.MenuStrip();
-            this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.allImagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectedImagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ColumnSelected = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.ColumnName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStripMain.SuspendLayout();
@@ -59,32 +63,32 @@
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ColumnSelected,
             this.ColumnName});
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
             this.dataGridView1.Size = new System.Drawing.Size(444, 530);
             this.dataGridView1.TabIndex = 1;
             this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
             // 
-            // ColumnName
-            // 
-            this.ColumnName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnName.DataPropertyName = "FileName";
-            this.ColumnName.HeaderText = "Name";
-            this.ColumnName.Name = "ColumnName";
-            this.ColumnName.ReadOnly = true;
-            // 
             // menuStripMain
             // 
             this.menuStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.loadToolStripMenuItem});
+            this.loadToolStripMenuItem,
+            this.exportToolStripMenuItem});
             this.menuStripMain.Location = new System.Drawing.Point(0, 0);
             this.menuStripMain.Name = "menuStripMain";
             this.menuStripMain.Size = new System.Drawing.Size(1334, 24);
             this.menuStripMain.TabIndex = 2;
             this.menuStripMain.Text = "menuStrip1";
+            // 
+            // loadToolStripMenuItem
+            // 
+            this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(45, 20);
+            this.loadToolStripMenuItem.Text = "Load";
+            this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
             // splitContainer
             // 
@@ -103,14 +107,46 @@
             this.splitContainer.SplitterDistance = 444;
             this.splitContainer.TabIndex = 3;
             // 
-            // loadToolStripMenuItem
+            // exportToolStripMenuItem
             // 
-            this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(45, 20);
-            this.loadToolStripMenuItem.Text = "Load";
-            this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
+            this.exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.allImagesToolStripMenuItem,
+            this.selectedImagesToolStripMenuItem});
+            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            this.exportToolStripMenuItem.Text = "Export";
             // 
-            // Form1
+            // allImagesToolStripMenuItem
+            // 
+            this.allImagesToolStripMenuItem.Name = "allImagesToolStripMenuItem";
+            this.allImagesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.allImagesToolStripMenuItem.Text = "All Images";
+            this.allImagesToolStripMenuItem.Click += new System.EventHandler(this.allImagesToolStripMenuItem_Click);
+            // 
+            // selectedImagesToolStripMenuItem
+            // 
+            this.selectedImagesToolStripMenuItem.Name = "selectedImagesToolStripMenuItem";
+            this.selectedImagesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.selectedImagesToolStripMenuItem.Text = "Selected Images";
+            this.selectedImagesToolStripMenuItem.Click += new System.EventHandler(this.selectedImagesToolStripMenuItem_Click);
+            // 
+            // ColumnSelected
+            // 
+            this.ColumnSelected.DataPropertyName = "Selected";
+            this.ColumnSelected.HeaderText = "";
+            this.ColumnSelected.Name = "ColumnSelected";
+            this.ColumnSelected.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.ColumnSelected.Width = 30;
+            // 
+            // ColumnName
+            // 
+            this.ColumnName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnName.DataPropertyName = "FileName";
+            this.ColumnName.HeaderText = "Name";
+            this.ColumnName.Name = "ColumnName";
+            this.ColumnName.ReadOnly = true;
+            // 
+            // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -118,7 +154,7 @@
             this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.menuStripMain);
             this.MainMenuStrip = this.menuStripMain;
-            this.Name = "Form1";
+            this.Name = "Main";
             this.Text = "Alturos.Yolo.LearningImage";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
@@ -137,10 +173,14 @@
 
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnName;
         private System.Windows.Forms.MenuStrip menuStripMain;
         private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
         private System.Windows.Forms.SplitContainer splitContainer;
+        private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem allImagesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem selectedImagesToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn ColumnSelected;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnName;
     }
 }
 

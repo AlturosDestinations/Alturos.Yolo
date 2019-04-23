@@ -1,6 +1,7 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Test.YoloLearningImage
+namespace Alturos.Yolo.LearningImage
 {
     public partial class Main : Form
     {
@@ -31,22 +32,90 @@ namespace Test.YoloLearningImage
                     var files = Directory.GetFiles(imagePath, "*.*", SearchOption.TopDirectoryOnly);
                     var items = files.Where(s => s.EndsWith(".png") || s.EndsWith(".jpg")).Select(o => new AnnotationImage { FilePath = o, FileName = new FileInfo(o).Name }).ToList();
 
-                    var sb = new StringBuilder();
-                    foreach (var item in items)
-                    {
-                        var boxes = this.GetBoxes(this.GetDataPath(item.FilePath));
-                        if (boxes.Length == 0)
-                        {
-                            continue;
-                        }
-
-                        sb.AppendLine(item.FilePath);
-                    }
-                    File.WriteAllText("train.txt", sb.ToString());
-
                     this.dataGridView1.DataSource = items;
                 }
             }
+        }
+
+        private void allImagesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var items = new List<AnnotationImage>();
+
+            foreach (DataGridViewRow row in this.dataGridView1.Rows)
+            {
+                var item = row.DataBoundItem as AnnotationImage;
+                items.Add(item);
+            }
+
+            this.Export(items);
+        }
+
+        private void selectedImagesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var items = new List<AnnotationImage>();
+
+            foreach (DataGridViewRow row in this.dataGridView1.Rows)
+            {
+                var item = row.DataBoundItem as AnnotationImage;
+                if (item.Selected) { items.Add(item); }
+            }
+
+            this.Export(items);
+        }
+
+        private void Export(List<AnnotationImage> images)
+        {
+            var exportDialog = new ExportDialog();
+
+            int boxCount = 0;
+            foreach (var image in images)
+            {
+                boxCount = Math.Max(boxCount, this.GetBoxes(this.GetDataPath(image.FilePath)).Length);
+            }
+            exportDialog.CreateObjectClasses(boxCount);
+
+            var dialogResult = exportDialog.ShowDialog();
+            if (dialogResult != DialogResult.OK)
+            {
+                return;
+            }
+
+            // Create folders
+            var dataPath = "data";
+            if (!Directory.Exists(dataPath))
+            {
+                Directory.CreateDirectory(dataPath);
+            }
+
+            var imagePath = Path.Combine(dataPath, "img");
+            if (!Directory.Exists(imagePath))
+            {
+                Directory.CreateDirectory(imagePath);
+            }
+
+            // Create list of objects
+            var sb = new StringBuilder();
+            foreach (var image in images)
+            {
+                var boxes = this.GetBoxes(this.GetDataPath(image.FilePath));
+                if (boxes.Length == 0)
+                {
+                    continue;
+                }
+
+                sb.AppendLine(image.FilePath);
+            }
+            File.WriteAllText(Path.Combine(dataPath, "train.txt"), sb.ToString());
+
+            // Copy image and info files
+            foreach (var image in images)
+            {
+                File.Copy(image.FilePath, Path.Combine(imagePath, image.FileName), true);
+                File.Copy(this.GetDataPath(image.FilePath), Path.Combine(imagePath, this.GetDataPath(image.FileName)), true);
+            }
+
+            // Open folder
+            Process.Start(dataPath);
         }
 
         private string[] GetColorCodes()
@@ -54,11 +123,16 @@ namespace Test.YoloLearningImage
             return new string[] { "#E3330E", "#48E10F", "#D40FE1", "#24ECE3", "#EC2470" };
         }
 
-        private YoloAnnotationInfo[] GetBoxes(string dataPath)
+        private AnnotationInfo[] GetBoxes(string dataPath)
         {
+            if (!File.Exists(dataPath))
+            {
+                return new AnnotationInfo[0];
+            }
+
             var data = File.ReadAllText(dataPath);
             var lines = data.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            var items = new List<YoloAnnotationInfo>();
+            var items = new List<AnnotationInfo>();
 
             foreach (var line in lines)
             {
@@ -73,7 +147,7 @@ namespace Test.YoloLearningImage
                 float.TryParse(parts[3], NumberStyles.Any, ci, out var width);
                 float.TryParse(parts[4], NumberStyles.Any, ci, out var heigth);
 
-                items.Add(new YoloAnnotationInfo { ObjectClass = index, CenterX = x, CenterY = y, Width = width, Height = heigth });
+                items.Add(new AnnotationInfo { ObjectIndex = index, CenterX = x, CenterY = y, Width = width, Height = heigth });
             }
 
             return items.ToArray();
@@ -107,7 +181,7 @@ namespace Test.YoloLearningImage
                     var x = (item.CenterX * image.Width) - (width / 2);
                     var y = (item.CenterY * image.Height) - (heigth / 2);
 
-                    var color = ColorTranslator.FromHtml(colorCodes[item.ObjectClass]);
+                    var color = ColorTranslator.FromHtml(colorCodes[item.ObjectIndex]);
                     var pen = new Pen(color, 3);
 
                     canvas.DrawRectangle(pen, x, y, width, heigth);
