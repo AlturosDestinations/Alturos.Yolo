@@ -28,106 +28,116 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.dataGridViewObjects = new System.Windows.Forms.DataGridView();
-            this.labelChoose = new System.Windows.Forms.Label();
+            this.labelChooseObjects = new System.Windows.Forms.Label();
             this.buttonExport = new System.Windows.Forms.Button();
-            this.ColumnSelected = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.ColumnId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewObjects)).BeginInit();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.labelChooseFiles = new System.Windows.Forms.Label();
+            this.annotationImageList = new Alturos.Yolo.LearningImage.CustomControls.AnnotationImageList();
+            this.objectClassList = new Alturos.Yolo.LearningImage.CustomControls.ObjectClassList();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // dataGridViewObjects
+            // labelChooseObjects
             // 
-            this.dataGridViewObjects.AllowUserToAddRows = false;
-            this.dataGridViewObjects.AllowUserToDeleteRows = false;
-            this.dataGridViewObjects.AllowUserToResizeColumns = false;
-            this.dataGridViewObjects.AllowUserToResizeRows = false;
-            this.dataGridViewObjects.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridViewObjects.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewObjects.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewObjects.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ColumnSelected,
-            this.ColumnId,
-            this.ColumnName});
-            this.dataGridViewObjects.Location = new System.Drawing.Point(12, 25);
-            this.dataGridViewObjects.Name = "dataGridViewObjects";
-            this.dataGridViewObjects.RowHeadersVisible = false;
-            this.dataGridViewObjects.Size = new System.Drawing.Size(351, 134);
-            this.dataGridViewObjects.TabIndex = 5;
-            // 
-            // labelChoose
-            // 
-            this.labelChoose.AutoSize = true;
-            this.labelChoose.Location = new System.Drawing.Point(12, 9);
-            this.labelChoose.Name = "labelChoose";
-            this.labelChoose.Size = new System.Drawing.Size(127, 13);
-            this.labelChoose.TabIndex = 4;
-            this.labelChoose.Text = "Choose objects to export:";
+            this.labelChooseObjects.AutoSize = true;
+            this.labelChooseObjects.Location = new System.Drawing.Point(3, 0);
+            this.labelChooseObjects.Name = "labelChooseObjects";
+            this.labelChooseObjects.Size = new System.Drawing.Size(237, 13);
+            this.labelChooseObjects.TabIndex = 4;
+            this.labelChooseObjects.Text = "Choose objects to export (Names can be edited):";
             // 
             // buttonExport
             // 
             this.buttonExport.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonExport.Location = new System.Drawing.Point(12, 165);
+            this.buttonExport.Location = new System.Drawing.Point(12, 405);
             this.buttonExport.Name = "buttonExport";
-            this.buttonExport.Size = new System.Drawing.Size(351, 41);
+            this.buttonExport.Size = new System.Drawing.Size(715, 41);
             this.buttonExport.TabIndex = 3;
             this.buttonExport.Text = "Export";
             this.buttonExport.UseVisualStyleBackColor = true;
             this.buttonExport.Click += new System.EventHandler(this.buttonExport_Click);
             // 
-            // ColumnSelected
+            // splitContainer1
             // 
-            this.ColumnSelected.DataPropertyName = "Selected";
-            this.ColumnSelected.FillWeight = 46.45733F;
-            this.ColumnSelected.HeaderText = "";
-            this.ColumnSelected.Name = "ColumnSelected";
-            this.ColumnSelected.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer1.Location = new System.Drawing.Point(12, 12);
+            this.splitContainer1.Name = "splitContainer1";
             // 
-            // ColumnId
+            // splitContainer1.Panel1
             // 
-            this.ColumnId.DataPropertyName = "Id";
-            this.ColumnId.FillWeight = 45.68528F;
-            this.ColumnId.HeaderText = "Id";
-            this.ColumnId.Name = "ColumnId";
-            this.ColumnId.ReadOnly = true;
-            this.ColumnId.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.splitContainer1.Panel1.Controls.Add(this.labelChooseFiles);
+            this.splitContainer1.Panel1.Controls.Add(this.annotationImageList);
             // 
-            // ColumnName
+            // splitContainer1.Panel2
             // 
-            this.ColumnName.DataPropertyName = "Name";
-            this.ColumnName.FillWeight = 207.8574F;
-            this.ColumnName.HeaderText = "Name";
-            this.ColumnName.Name = "ColumnName";
-            this.ColumnName.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.splitContainer1.Panel2.Controls.Add(this.objectClassList);
+            this.splitContainer1.Panel2.Controls.Add(this.labelChooseObjects);
+            this.splitContainer1.Size = new System.Drawing.Size(715, 387);
+            this.splitContainer1.SplitterDistance = 446;
+            this.splitContainer1.TabIndex = 6;
+            // 
+            // labelChooseFiles
+            // 
+            this.labelChooseFiles.AutoSize = true;
+            this.labelChooseFiles.Location = new System.Drawing.Point(3, 0);
+            this.labelChooseFiles.Name = "labelChooseFiles";
+            this.labelChooseFiles.Size = new System.Drawing.Size(111, 13);
+            this.labelChooseFiles.TabIndex = 6;
+            this.labelChooseFiles.Text = "Choose files to export:";
+            // 
+            // annotationImageList
+            // 
+            this.annotationImageList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.annotationImageList.ImageSelected = null;
+            this.annotationImageList.Location = new System.Drawing.Point(3, 16);
+            this.annotationImageList.Name = "annotationImageList";
+            this.annotationImageList.Size = new System.Drawing.Size(440, 368);
+            this.annotationImageList.TabIndex = 0;
+            // 
+            // objectClassList
+            // 
+            this.objectClassList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.objectClassList.Location = new System.Drawing.Point(6, 16);
+            this.objectClassList.Name = "objectClassList";
+            this.objectClassList.Size = new System.Drawing.Size(256, 368);
+            this.objectClassList.TabIndex = 5;
             // 
             // ExportDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(375, 218);
-            this.Controls.Add(this.dataGridViewObjects);
-            this.Controls.Add(this.labelChoose);
+            this.ClientSize = new System.Drawing.Size(739, 458);
+            this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.buttonExport);
             this.Name = "ExportDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Export";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewObjects)).EndInit();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel1.PerformLayout();
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.DataGridView dataGridViewObjects;
-        private System.Windows.Forms.Label labelChoose;
+        private System.Windows.Forms.Label labelChooseObjects;
         private System.Windows.Forms.Button buttonExport;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn ColumnSelected;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnId;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnName;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.Label labelChooseFiles;
+        private CustomControls.AnnotationImageList annotationImageList;
+        private CustomControls.ObjectClassList objectClassList;
     }
 }

@@ -1,16 +1,34 @@
-﻿using System;
+﻿using Alturos.Yolo.LearningImage.Contract;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 
 namespace Alturos.Yolo.LearningImage
 {
     public partial class ExportDialog : Form
     {
-        public List<ObjectClass> ObjectClasses { get; private set; }
+        private readonly IBoundingBoxReader _boundingBoxReader;
 
-        public ExportDialog()
+        public ExportDialog(IBoundingBoxReader boundingBoxReader)
         {
             this.InitializeComponent();
+
+            this._boundingBoxReader = boundingBoxReader;
+        }
+
+        public void CreateImages(List<AnnotationImage> images)
+        {
+            var newImages = new List<AnnotationImage>();
+            foreach (var image in images)
+            {
+                newImages.Add(new AnnotationImage(image));
+            }
+
+            this.annotationImageList.SetImages(newImages);
         }
 
         public void CreateObjectClasses(int count)
@@ -26,23 +44,132 @@ namespace Alturos.Yolo.LearningImage
                 });
             }
 
-            this.dataGridViewObjects.DataSource = items;
+            this.objectClassList.SetObjectClasses(items);
         }
 
         private void buttonExport_Click(object sender, EventArgs e)
         {
-            this.ObjectClasses = new List<ObjectClass>();
-            foreach (DataGridViewRow row in this.dataGridViewObjects.Rows)
+            this.Export();
+            this.Close();
+        }
+
+        private void Export()
+        {
+            // Create folders
+            var rootPath = DateTime.Now.ToString("yyyy-MM-dd hh-mm-ss");
+            if (!Directory.Exists(rootPath))
             {
-                var objectClass = row.DataBoundItem as ObjectClass;
-                if (objectClass.Selected)
-                {
-                    this.ObjectClasses.Add(objectClass);
-                }
+                Directory.CreateDirectory(rootPath);
             }
 
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            var dataPath = Path.Combine(rootPath, "data");
+            if (!Directory.Exists(dataPath))
+            {
+                Directory.CreateDirectory(dataPath);
+            }
+
+            var imagePath = Path.Combine(dataPath, "img");
+            if (!Directory.Exists(imagePath))
+            {
+                Directory.CreateDirectory(imagePath);
+            }
+
+            // Copy images and create file lists
+            this.CreateFiles(dataPath, imagePath);
+
+            // Create meta data
+            this.CreateMetaData(dataPath);
+
+            // Open folder
+            Process.Start(dataPath);
+        }
+
+        /// <summary>
+        /// Creates the images, the annotation info and a list for every object listing each image that features it
+        /// </summary>
+        private void CreateFiles(string dataPath, string imagePath)
+        {
+            var images = this.annotationImageList.GetSelected();
+            var objectClasses = this.objectClassList.GetSelected();
+
+            var stringBuilderDict = new Dictionary<int, StringBuilder>();
+            foreach (var objectClass in objectClasses)
+            {
+                stringBuilderDict[objectClass.Id] = new StringBuilder();
+            }
+
+            var usedFileNames = new List<string>();
+
+            foreach (var image in images)
+            {
+                var boxes = this._boundingBoxReader.GetBoxes(this._boundingBoxReader.GetDataPath(image.FilePath)).ToList();
+                boxes.RemoveAll(box => !objectClasses.Select(objectClass => objectClass.Id).Contains(box.ObjectIndex));
+
+                if (boxes.Count == 0)
+                {
+                    continue;
+                }
+
+                var newFileName = image.FileName;
+                while (usedFileNames.Contains(newFileName))
+                {
+                    newFileName = Path.GetFileNameWithoutExtension(image.FileName) + "(1)" + Path.GetExtension(image.FileName);
+                }
+
+                var newFilePath = Path.Combine(imagePath, newFileName);
+                var newDataPath = Path.Combine(imagePath, this._boundingBoxReader.GetDataPath(newFileName));
+
+                for (var i = 0; i < boxes.Count; i++)
+                {
+                    if (boxes[i] != null)
+                    {
+                        stringBuilderDict[boxes[i].ObjectIndex].AppendLine(Path.GetFullPath(newFilePath));
+                    }
+                }
+
+                // Copy files
+                File.Copy(image.FilePath, newFilePath, true);
+                File.Copy(this._boundingBoxReader.GetDataPath(image.FilePath), newDataPath, true);
+
+                usedFileNames.Add(image.FileName);
+            }
+
+            // Write object lists to file
+            foreach (var objectClass in objectClasses)
+            {
+                File.WriteAllText(Path.Combine(dataPath, $"{objectClass.Name}.txt"), stringBuilderDict[objectClass.Id].ToString());
+            }
+        }
+
+        /// <summary>
+        /// Creates the obj.names and obj.data files
+        /// </summary>
+        private void CreateMetaData(string dataPath)
+        {
+            var objectNames = this.objectClassList.GetSelected().Select(o => o.Name).ToArray();
+
+            var namesFile = "obj.names";
+            var dataFile = "obj.data";
+
+            // Create obj.names
+            var namesBuilder = new StringBuilder();
+            foreach (var name in objectNames)
+            {
+                namesBuilder.AppendLine(name);
+            }
+            File.WriteAllText(Path.Combine(dataPath, $"{namesFile}"), namesBuilder.ToString());
+
+            // Create obj.data
+            var relativeFolder = new DirectoryInfo(dataPath).Name;
+
+            var dataBuilder = new StringBuilder();
+            dataBuilder.AppendLine($"classes = {objectNames.Length}");
+            foreach (var name in objectNames)
+            {
+                dataBuilder.AppendLine($"{name} = {relativeFolder}/{name}.txt");
+            }
+            dataBuilder.AppendLine($"names = {relativeFolder}/{namesFile}");
+            File.WriteAllText(Path.Combine(dataPath, $"{dataFile}"), dataBuilder.ToString());
         }
     }
 }

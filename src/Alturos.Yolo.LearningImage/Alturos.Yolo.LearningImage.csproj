@@ -56,6 +56,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnnotationImage.cs" />
+    <Compile Include="AnnotationFolder.cs" />
+    <Compile Include="Contract\IBoundingBoxReader.cs" />
+    <Compile Include="Contract\YoloReader.cs" />
+    <Compile Include="CustomControls\AnnotationFolderList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CustomControls\AnnotationFolderList.Designer.cs">
+      <DependentUpon>AnnotationFolderList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\ObjectClassList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CustomControls\ObjectClassList.Designer.cs">
+      <DependentUpon>ObjectClassList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\AnnotationImageList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CustomControls\AnnotationImageList.Designer.cs">
+      <DependentUpon>AnnotationImageList.cs</DependentUpon>
+    </Compile>
     <Compile Include="ExportDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,6 +93,15 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AnnotationInfo.cs" />
+    <EmbeddedResource Include="CustomControls\ObjectClassList.resx">
+      <DependentUpon>ObjectClassList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CustomControls\AnnotationImageList.resx">
+      <DependentUpon>AnnotationImageList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CustomControls\AnnotationFolderList.resx">
+      <DependentUpon>AnnotationFolderList.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ExportDialog.resx">
       <DependentUpon>ExportDialog.cs</DependentUpon>
     </EmbeddedResource>

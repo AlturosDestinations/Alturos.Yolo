@@ -28,49 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.menuStripMain = new System.Windows.Forms.MenuStrip();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.allImagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectedImagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ColumnSelected = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.ColumnName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.annotationImageList = new Alturos.Yolo.LearningImage.CustomControls.AnnotationImageList();
+            this.annotationFolderList = new Alturos.Yolo.LearningImage.CustomControls.AnnotationFolderList();
             this.menuStripMain.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
-            this.splitContainer.Panel1.SuspendLayout();
-            this.splitContainer.Panel2.SuspendLayout();
-            this.splitContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(886, 530);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ColumnSelected,
-            this.ColumnName});
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 0);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(444, 530);
-            this.dataGridView1.TabIndex = 1;
-            this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
             // 
             // menuStripMain
             // 
@@ -90,23 +60,6 @@
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
-            // splitContainer
-            // 
-            this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer.Location = new System.Drawing.Point(0, 24);
-            this.splitContainer.Name = "splitContainer";
-            // 
-            // splitContainer.Panel1
-            // 
-            this.splitContainer.Panel1.Controls.Add(this.dataGridView1);
-            // 
-            // splitContainer.Panel2
-            // 
-            this.splitContainer.Panel2.Controls.Add(this.pictureBox1);
-            this.splitContainer.Size = new System.Drawing.Size(1334, 530);
-            this.splitContainer.SplitterDistance = 444;
-            this.splitContainer.TabIndex = 3;
-            // 
             // exportToolStripMenuItem
             // 
             this.exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -119,68 +72,96 @@
             // allImagesToolStripMenuItem
             // 
             this.allImagesToolStripMenuItem.Name = "allImagesToolStripMenuItem";
-            this.allImagesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.allImagesToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.allImagesToolStripMenuItem.Text = "All Images";
             this.allImagesToolStripMenuItem.Click += new System.EventHandler(this.allImagesToolStripMenuItem_Click);
             // 
             // selectedImagesToolStripMenuItem
             // 
             this.selectedImagesToolStripMenuItem.Name = "selectedImagesToolStripMenuItem";
-            this.selectedImagesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.selectedImagesToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.selectedImagesToolStripMenuItem.Text = "Selected Images";
             this.selectedImagesToolStripMenuItem.Click += new System.EventHandler(this.selectedImagesToolStripMenuItem_Click);
             // 
-            // ColumnSelected
+            // pictureBox1
             // 
-            this.ColumnSelected.DataPropertyName = "Selected";
-            this.ColumnSelected.HeaderText = "";
-            this.ColumnSelected.Name = "ColumnSelected";
-            this.ColumnSelected.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.ColumnSelected.Width = 30;
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox1.Location = new System.Drawing.Point(703, 3);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(628, 524);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
             // 
-            // ColumnName
+            // tableLayoutPanel1
             // 
-            this.ColumnName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnName.DataPropertyName = "FileName";
-            this.ColumnName.HeaderText = "Name";
-            this.ColumnName.Name = "ColumnName";
-            this.ColumnName.ReadOnly = true;
+            this.tableLayoutPanel1.ColumnCount = 3;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 350F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 350F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.annotationImageList, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.pictureBox1, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.annotationFolderList, 0, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 24);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1334, 530);
+            this.tableLayoutPanel1.TabIndex = 3;
+            // 
+            // annotationImageList
+            // 
+            this.annotationImageList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.annotationImageList.ImageSelected = null;
+            this.annotationImageList.Location = new System.Drawing.Point(353, 3);
+            this.annotationImageList.Name = "annotationImageList";
+            this.annotationImageList.Size = new System.Drawing.Size(344, 524);
+            this.annotationImageList.TabIndex = 0;
+            // 
+            // annotationFolderList
+            // 
+            this.annotationFolderList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.annotationFolderList.Location = new System.Drawing.Point(3, 3);
+            this.annotationFolderList.Name = "annotationFolderList";
+            this.annotationFolderList.Size = new System.Drawing.Size(344, 524);
+            this.annotationFolderList.TabIndex = 1;
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1334, 554);
-            this.Controls.Add(this.splitContainer);
+            this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.menuStripMain);
             this.MainMenuStrip = this.menuStripMain;
             this.Name = "Main";
             this.Text = "Alturos.Yolo.LearningImage";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.menuStripMain.ResumeLayout(false);
             this.menuStripMain.PerformLayout();
-            this.splitContainer.Panel1.ResumeLayout(false);
-            this.splitContainer.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
-            this.splitContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.MenuStrip menuStripMain;
         private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
-        private System.Windows.Forms.SplitContainer splitContainer;
         private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem allImagesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem selectedImagesToolStripMenuItem;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn ColumnSelected;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnName;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private CustomControls.AnnotationImageList annotationImageList;
+        private CustomControls.AnnotationFolderList annotationFolderList;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     }
 }
 
