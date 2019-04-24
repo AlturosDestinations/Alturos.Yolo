@@ -10,7 +10,7 @@ namespace Alturos.Yolo.LearningImage
 
         public ExportDialog()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         public void CreateObjectClasses(int count)

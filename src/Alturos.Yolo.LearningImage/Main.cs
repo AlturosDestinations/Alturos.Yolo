@@ -47,7 +47,7 @@ namespace Alturos.Yolo.LearningImage
                 items.Add(item);
             }
 
-            this.Export(items);
+            this.Export(items.ToArray());
         }
 
         private void selectedImagesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -60,17 +60,21 @@ namespace Alturos.Yolo.LearningImage
                 if (item.Selected) { items.Add(item); }
             }
 
-            this.Export(items);
+            this.Export(items.ToArray());
         }
 
-        private void Export(List<AnnotationImage> images)
+        private void Export(AnnotationImage[] images)
         {
             var exportDialog = new ExportDialog();
 
             int boxCount = 0;
             foreach (var image in images)
             {
-                boxCount = Math.Max(boxCount, this.GetBoxes(this.GetDataPath(image.FilePath)).Length);
+                var boxes = this.GetBoxes(this.GetDataPath(image.FilePath));
+                foreach (var box in boxes)
+                {
+                    boxCount = Math.Max(boxCount, box.ObjectIndex + 1);
+                }
             }
             exportDialog.CreateObjectClasses(boxCount);
 
@@ -81,7 +85,13 @@ namespace Alturos.Yolo.LearningImage
             }
 
             // Create folders
-            var dataPath = "data";
+            var rootPath = DateTime.Now.ToString("yyyy-MM-dd hh-mm-ss");
+            if (!Directory.Exists(rootPath))
+            {
+                Directory.CreateDirectory(rootPath);
+            }
+
+            var dataPath = Path.Combine(rootPath, "data");
             if (!Directory.Exists(dataPath))
             {
                 Directory.CreateDirectory(dataPath);
@@ -93,29 +103,83 @@ namespace Alturos.Yolo.LearningImage
                 Directory.CreateDirectory(imagePath);
             }
 
-            // Create list of objects
-            var sb = new StringBuilder();
+            // Copy images and create file lists
+            CreateFiles(dataPath, imagePath, images, exportDialog.ObjectClasses.ToArray());
+
+            // Create meta data
+            CreateMetaData(dataPath, exportDialog.ObjectClasses.Select(o => o.Name).ToArray());
+
+            // Open folder
+            Process.Start(dataPath);
+        }
+
+        /// <summary>
+        /// Creates the images, the annotation info and a list for every object listing each image that features it
+        /// </summary>
+        private void CreateFiles(string dataPath, string imagePath, AnnotationImage[] images, ObjectClass[] objectClasses)
+        {
+            var stringBuilderDict = new Dictionary<int, StringBuilder>();
+            foreach (var objectClass in objectClasses)
+            {
+                stringBuilderDict[objectClass.Id] = new StringBuilder();
+            }
+
             foreach (var image in images)
             {
-                var boxes = this.GetBoxes(this.GetDataPath(image.FilePath));
-                if (boxes.Length == 0)
+                var boxes = this.GetBoxes(this.GetDataPath(image.FilePath)).ToList();
+                boxes.RemoveAll(box => !objectClasses.Select(objectClass => objectClass.Id).Contains(box.ObjectIndex));
+
+                if (boxes.Count == 0)
                 {
                     continue;
                 }
 
-                sb.AppendLine(image.FilePath);
-            }
-            File.WriteAllText(Path.Combine(dataPath, "train.txt"), sb.ToString());
+                for (var i = 0; i < boxes.Count; i++) {
+                    if (boxes[i] != null)
+                    {
+                        stringBuilderDict[boxes[i].ObjectIndex].AppendLine(image.FilePath);
+                    }
+                }
 
-            // Copy image and info files
-            foreach (var image in images)
-            {
+                // Copy files
                 File.Copy(image.FilePath, Path.Combine(imagePath, image.FileName), true);
                 File.Copy(this.GetDataPath(image.FilePath), Path.Combine(imagePath, this.GetDataPath(image.FileName)), true);
             }
 
-            // Open folder
-            Process.Start(dataPath);
+            // Write object lists to file
+            foreach (var objectClass in objectClasses)
+            {
+                File.WriteAllText(Path.Combine(dataPath, $"{objectClass.Name}.txt"), stringBuilderDict[objectClass.Id].ToString());
+            }
+        }
+
+        /// <summary>
+        /// Creates the obj.names and obj.data files
+        /// </summary>
+        private void CreateMetaData(string dataPath, string[] objectNames)
+        {
+            var namesFile = "obj.names";
+            var dataFile = "obj.data";
+
+            // Create obj.names
+            var namesBuilder = new StringBuilder();
+            foreach (var name in objectNames)
+            {
+                namesBuilder.AppendLine(name);
+            }
+            File.WriteAllText(Path.Combine(dataPath, $"{namesFile}"), namesBuilder.ToString());
+
+            // Create obj.data
+            var relativeFolder = new DirectoryInfo(dataPath).Name;
+
+            var dataBuilder = new StringBuilder();
+            dataBuilder.AppendLine($"classes = {objectNames.Length}");
+            foreach (var name in objectNames)
+            {
+                dataBuilder.AppendLine($"{name} = {relativeFolder}/{name}.txt");
+            }
+            dataBuilder.AppendLine($"names = {relativeFolder}/{namesFile}");
+            File.WriteAllText(Path.Combine(dataPath, $"{dataFile}"), dataBuilder.ToString());
         }
 
         private string[] GetColorCodes()
@@ -155,8 +219,8 @@ namespace Alturos.Yolo.LearningImage
 
         private string GetDataPath(string imagePath)
         {
-            var fileInfo = new FileInfo(imagePath);
-            return Path.Combine(fileInfo.DirectoryName, $"{Path.GetFileNameWithoutExtension(fileInfo.Name)}.txt");
+            var dataPath = Path.ChangeExtension(imagePath, "txt");
+            return dataPath;
         }
 
         private Image DrawBoxes(string imagePath)
