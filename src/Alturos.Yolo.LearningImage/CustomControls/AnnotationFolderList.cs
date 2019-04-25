@@ -1,4 +1,6 @@
-﻿using Microsoft.WindowsAPICodePack.Dialogs;
+﻿using Alturos.Yolo.LearningImage.Contract;
+using Alturos.Yolo.LearningImage.Model;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,10 +13,17 @@ namespace Alturos.Yolo.LearningImage.CustomControls
     {
         public Action<AnnotationFolder> FolderSelected { get; set; }
 
+        private IBoundingBoxReader _boundingBoxReader;
+
         public AnnotationFolderList()
         {
             this.InitializeComponent();
             this.dataGridView1.AutoGenerateColumns = false;
+        }
+
+        public void Initialize(IBoundingBoxReader boundingBoxReader)
+        {
+            this._boundingBoxReader = boundingBoxReader;
         }
 
         public AnnotationImage[] GetAll()
@@ -72,7 +81,11 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             foreach (var path in paths)
             {
                 var files = Directory.GetFiles(path, "*.*", SearchOption.TopDirectoryOnly);
-                var items = files.Where(s => s.EndsWith(".png") || s.EndsWith(".jpg")).Select(o => new AnnotationImage { FilePath = o, FileName = new FileInfo(o).Name }).ToList();
+                var items = files.Where(s => s.EndsWith(".png") || s.EndsWith(".jpg")).Select(o => new AnnotationImage {
+                    FilePath = o,
+                    FileName = new FileInfo(o).Name,
+                    BoundingBoxes = this._boundingBoxReader.GetBoxes(this._boundingBoxReader.GetDataPath(o)).ToList()
+                }).ToList();
                 
                 if (items.Count == 0)
                 {

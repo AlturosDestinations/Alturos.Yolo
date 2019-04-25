@@ -1,8 +1,10 @@
-﻿namespace Alturos.Yolo.LearningImage.Contract
+﻿using Alturos.Yolo.LearningImage.Model;
+
+namespace Alturos.Yolo.LearningImage.Contract
 {
     public interface IBoundingBoxReader
     {
-        AnnotationInfo[] GetBoxes(string dataPath);
+        AnnotationBoundingBox[] GetBoxes(string dataPath);
         string GetDataPath(string imagePath);
     }
 }

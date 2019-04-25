@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Alturos.Yolo.LearningImage
+namespace Alturos.Yolo.LearningImage.Model
 {
     public class AnnotationFolder
     {

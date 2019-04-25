@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Alturos.Yolo.LearningImage.Model;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Alturos.Yolo.LearningImage.Model;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -7,16 +8,16 @@ namespace Alturos.Yolo.LearningImage.Contract
 {
     public class YoloReader : IBoundingBoxReader
     {
-        public AnnotationInfo[] GetBoxes(string dataPath)
+        public AnnotationBoundingBox[] GetBoxes(string dataPath)
         {
             if (!File.Exists(dataPath))
             {
-                return new AnnotationInfo[0];
+                return new AnnotationBoundingBox[0];
             }
 
             var data = File.ReadAllText(dataPath);
             var lines = data.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            var items = new List<AnnotationInfo>();
+            var items = new List<AnnotationBoundingBox>();
 
             foreach (var line in lines)
             {
@@ -31,7 +32,7 @@ namespace Alturos.Yolo.LearningImage.Contract
                 float.TryParse(parts[3], NumberStyles.Any, ci, out var width);
                 float.TryParse(parts[4], NumberStyles.Any, ci, out var heigth);
 
-                items.Add(new AnnotationInfo { ObjectIndex = index, CenterX = x, CenterY = y, Width = width, Height = heigth });
+                items.Add(new AnnotationBoundingBox { ObjectIndex = index, CenterX = x, CenterY = y, Width = width, Height = heigth });
             }
 
             return items.ToArray();

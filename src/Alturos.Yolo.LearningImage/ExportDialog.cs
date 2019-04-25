@@ -1,4 +1,5 @@
 ﻿using Alturos.Yolo.LearningImage.Contract;
+using Alturos.Yolo.LearningImage.Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,13 +12,9 @@ namespace Alturos.Yolo.LearningImage
 {
     public partial class ExportDialog : Form
     {
-        private readonly IBoundingBoxReader _boundingBoxReader;
-
-        public ExportDialog(IBoundingBoxReader boundingBoxReader)
+        public ExportDialog()
         {
             this.InitializeComponent();
-
-            this._boundingBoxReader = boundingBoxReader;
         }
 
         public void CreateImages(List<AnnotationImage> images)
@@ -102,7 +99,7 @@ namespace Alturos.Yolo.LearningImage
 
             foreach (var image in images)
             {
-                var boxes = this._boundingBoxReader.GetBoxes(this._boundingBoxReader.GetDataPath(image.FilePath)).ToList();
+                var boxes = image.BoundingBoxes;
                 boxes.RemoveAll(box => !objectClasses.Select(objectClass => objectClass.Id).Contains(box.ObjectIndex));
 
                 if (boxes.Count == 0)
@@ -117,7 +114,6 @@ namespace Alturos.Yolo.LearningImage
                 }
 
                 var newFilePath = Path.Combine(imagePath, newFileName);
-                var newDataPath = Path.Combine(imagePath, this._boundingBoxReader.GetDataPath(newFileName));
 
                 for (var i = 0; i < boxes.Count; i++)
                 {
@@ -127,9 +123,11 @@ namespace Alturos.Yolo.LearningImage
                     }
                 }
 
-                // Copy files
+                // Copy image
                 File.Copy(image.FilePath, newFilePath, true);
-                File.Copy(this._boundingBoxReader.GetDataPath(image.FilePath), newDataPath, true);
+
+                //Create bounding boxes
+                this.CreateBoundingBoxes(image.BoundingBoxes, Path.ChangeExtension(newFilePath, "txt"));
 
                 usedFileNames.Add(image.FileName);
             }
@@ -170,6 +168,25 @@ namespace Alturos.Yolo.LearningImage
             }
             dataBuilder.AppendLine($"names = {relativeFolder}/{namesFile}");
             File.WriteAllText(Path.Combine(dataPath, $"{dataFile}"), dataBuilder.ToString());
+        }
+
+        /// <summary>
+        /// Writes the bounding boxes to a file
+        /// </summary>
+        private void CreateBoundingBoxes(List<AnnotationBoundingBox> boundingBoxes, string filePath)
+        {
+            var sb = new StringBuilder();
+            foreach (var box in boundingBoxes)
+            {
+                sb.Append(box.ObjectIndex).Append(" ");
+                sb.Append(box.CenterX).Append(" ");
+                sb.Append(box.CenterY).Append(" ");
+                sb.Append(box.Width).Append(" ");
+                sb.Append(box.Height).Append(" ");
+                sb.AppendLine();
+            }
+
+            File.WriteAllText(filePath, sb.ToString());
         }
     }
 }

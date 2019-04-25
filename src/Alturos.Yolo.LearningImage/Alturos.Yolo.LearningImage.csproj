@@ -42,6 +42,9 @@
     <Reference Include="Microsoft.WindowsAPICodePack.ShellExtensions, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.WindowsAPICodePack-Shell.1.1.0.0\lib\Microsoft.WindowsAPICodePack.ShellExtensions.dll</HintPath>
     </Reference>
+    <Reference Include="SimpleInjector, Version=4.5.1.0, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
+      <HintPath>..\packages\SimpleInjector.4.5.1\lib\net45\SimpleInjector.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -55,8 +58,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnnotationImage.cs" />
-    <Compile Include="AnnotationFolder.cs" />
+    <Compile Include="Model\AnnotationImage.cs" />
+    <Compile Include="Model\AnnotationFolder.cs" />
     <Compile Include="Contract\IBoundingBoxReader.cs" />
     <Compile Include="Contract\YoloReader.cs" />
     <Compile Include="CustomControls\AnnotationFolderList.cs">
@@ -64,6 +67,12 @@
     </Compile>
     <Compile Include="CustomControls\AnnotationFolderList.Designer.cs">
       <DependentUpon>AnnotationFolderList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\AnnotationImageControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CustomControls\AnnotationImageControl.Designer.cs">
+      <DependentUpon>AnnotationImageControl.cs</DependentUpon>
     </Compile>
     <Compile Include="CustomControls\ObjectClassList.cs">
       <SubType>UserControl</SubType>
@@ -92,7 +101,10 @@
     <Compile Include="ObjectClass.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="AnnotationInfo.cs" />
+    <Compile Include="Model\AnnotationBoundingBox.cs" />
+    <EmbeddedResource Include="CustomControls\AnnotationImageControl.resx">
+      <DependentUpon>AnnotationImageControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CustomControls\ObjectClassList.resx">
       <DependentUpon>ObjectClassList.cs</DependentUpon>
     </EmbeddedResource>

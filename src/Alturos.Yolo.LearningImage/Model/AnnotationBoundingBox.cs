@@ -1,6 +1,6 @@
-﻿namespace Alturos.Yolo.LearningImage
+﻿namespace Alturos.Yolo.LearningImage.Model
 {
-    public class AnnotationInfo
+    public class AnnotationBoundingBox
     {
         public int ObjectIndex { get; set; }
         public float CenterX { get; set; }
