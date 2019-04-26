@@ -25,7 +25,7 @@ namespace Alturos.Yolo.LearningImage
         {
             _container = new Container();
 
-            _container.Register<IBoundingBoxReader, YoloReader>(Lifestyle.Singleton);
+            _container.Register<IBoundingBoxReader, YoloBoundingBoxReader>(Lifestyle.Singleton);
 
             _container.Verify();
         }

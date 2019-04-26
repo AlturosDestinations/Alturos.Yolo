@@ -30,15 +30,19 @@
         {
             this.menuStripMain = new System.Windows.Forms.MenuStrip();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fromPCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fromAmazonS3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.allImagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectedImagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.annotationFolderList = new Alturos.Yolo.LearningImage.CustomControls.AnnotationFolderList();
+            this.panelImageList = new System.Windows.Forms.Panel();
             this.annotationImageList = new Alturos.Yolo.LearningImage.CustomControls.AnnotationImageList();
+            this.annotationPackageList = new Alturos.Yolo.LearningImage.CustomControls.AnnotationPackageList();
             this.annotationImageControl = new Alturos.Yolo.LearningImage.CustomControls.AnnotationImageControl();
             this.menuStripMain.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            this.panelImageList.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStripMain
@@ -54,10 +58,26 @@
             // 
             // loadToolStripMenuItem
             // 
+            this.loadToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fromPCToolStripMenuItem,
+            this.fromAmazonS3ToolStripMenuItem});
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
             this.loadToolStripMenuItem.Size = new System.Drawing.Size(45, 20);
             this.loadToolStripMenuItem.Text = "Load";
-            this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
+            // 
+            // fromPCToolStripMenuItem
+            // 
+            this.fromPCToolStripMenuItem.Name = "fromPCToolStripMenuItem";
+            this.fromPCToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.fromPCToolStripMenuItem.Text = "From PC";
+            this.fromPCToolStripMenuItem.Click += new System.EventHandler(this.fromPCToolStripMenuItem_Click);
+            // 
+            // fromAmazonS3ToolStripMenuItem
+            // 
+            this.fromAmazonS3ToolStripMenuItem.Name = "fromAmazonS3ToolStripMenuItem";
+            this.fromAmazonS3ToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.fromAmazonS3ToolStripMenuItem.Text = "From Amazon S3";
+            this.fromAmazonS3ToolStripMenuItem.Click += new System.EventHandler(this.fromAmazonS3ToolStripMenuItem_Click);
             // 
             // exportToolStripMenuItem
             // 
@@ -88,8 +108,8 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 350F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 350F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.annotationFolderList, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.annotationImageList, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.panelImageList, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.annotationPackageList, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.annotationImageControl, 2, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 24);
@@ -99,29 +119,36 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1334, 530);
             this.tableLayoutPanel1.TabIndex = 3;
             // 
-            // annotationFolderList
+            // panelImageList
             // 
-            this.annotationFolderList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.annotationFolderList.FolderSelected = null;
-            this.annotationFolderList.Location = new System.Drawing.Point(3, 3);
-            this.annotationFolderList.Name = "annotationFolderList";
-            this.annotationFolderList.Size = new System.Drawing.Size(344, 524);
-            this.annotationFolderList.TabIndex = 1;
-            this.annotationFolderList.Load += new System.EventHandler(this.annotationFolderList_Load);
+            this.panelImageList.Controls.Add(this.annotationImageList);
+            this.panelImageList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelImageList.Location = new System.Drawing.Point(353, 3);
+            this.panelImageList.Name = "panelImageList";
+            this.panelImageList.Size = new System.Drawing.Size(344, 524);
+            this.panelImageList.TabIndex = 4;
             // 
             // annotationImageList
             // 
-            this.annotationImageList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.annotationImageList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.annotationImageList.ImageSelected = null;
-            this.annotationImageList.Location = new System.Drawing.Point(353, 3);
+            this.annotationImageList.Location = new System.Drawing.Point(0, 0);
             this.annotationImageList.Name = "annotationImageList";
             this.annotationImageList.Size = new System.Drawing.Size(344, 524);
             this.annotationImageList.TabIndex = 0;
             this.annotationImageList.Load += new System.EventHandler(this.annotationImageList_Load);
+            // 
+            // annotationPackageList
+            // 
+            this.annotationPackageList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.annotationPackageList.FolderSelected = null;
+            this.annotationPackageList.Location = new System.Drawing.Point(3, 3);
+            this.annotationPackageList.Name = "annotationPackageList";
+            this.annotationPackageList.Size = new System.Drawing.Size(344, 524);
+            this.annotationPackageList.TabIndex = 1;
+            this.annotationPackageList.Load += new System.EventHandler(this.annotationPackageList_Load);
             // 
             // annotationImageControl
             // 
@@ -147,6 +174,7 @@
             this.menuStripMain.ResumeLayout(false);
             this.menuStripMain.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.panelImageList.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -159,9 +187,12 @@
         private System.Windows.Forms.ToolStripMenuItem allImagesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem selectedImagesToolStripMenuItem;
         private CustomControls.AnnotationImageList annotationImageList;
-        private CustomControls.AnnotationFolderList annotationFolderList;
+        private CustomControls.AnnotationPackageList annotationPackageList;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private CustomControls.AnnotationImageControl annotationImageControl;
+        private System.Windows.Forms.ToolStripMenuItem fromPCToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fromAmazonS3ToolStripMenuItem;
+        private System.Windows.Forms.Panel panelImageList;
     }
 }
 

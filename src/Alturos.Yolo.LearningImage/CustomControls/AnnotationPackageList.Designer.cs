@@ -1,6 +1,6 @@
 ﻿namespace Alturos.Yolo.LearningImage.CustomControls
 {
-    partial class AnnotationFolderList
+    partial class AnnotationPackageList
     {
         /// <summary> 
         /// Required designer variable.
@@ -60,17 +60,17 @@
             // ColumnName
             // 
             this.ColumnName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnName.DataPropertyName = "DirectoryName";
+            this.ColumnName.DataPropertyName = "DisplayName";
             this.ColumnName.HeaderText = "Name";
             this.ColumnName.Name = "ColumnName";
             this.ColumnName.ReadOnly = true;
             // 
-            // AnnotationFolderList
+            // AnnotationPackageList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataGridView1);
-            this.Name = "AnnotationFolderList";
+            this.Name = "AnnotationPackageList";
             this.Size = new System.Drawing.Size(550, 300);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);

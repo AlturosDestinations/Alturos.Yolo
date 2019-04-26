@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Alturos.Yolo.LearningImage.Contract
 {
-    public class YoloReader : IBoundingBoxReader
+    public class YoloBoundingBoxReader : IBoundingBoxReader
     {
         public AnnotationBoundingBox[] GetBoxes(string dataPath)
         {

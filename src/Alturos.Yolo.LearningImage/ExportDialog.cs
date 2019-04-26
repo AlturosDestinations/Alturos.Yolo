@@ -107,11 +107,13 @@ namespace Alturos.Yolo.LearningImage
                     continue;
                 }
 
-                var newFileName = image.FileName;
+                var newFileName = Path.GetFileName(image.FilePath);
                 while (usedFileNames.Contains(newFileName))
                 {
-                    newFileName = Path.GetFileNameWithoutExtension(image.FileName) + "(1)" + Path.GetExtension(image.FileName);
+                    newFileName = Path.GetFileNameWithoutExtension(image.FilePath) + "(1)" + Path.GetExtension(image.FilePath);
                 }
+
+                usedFileNames.Add(newFileName);
 
                 var newFilePath = Path.Combine(imagePath, newFileName);
 
@@ -128,8 +130,6 @@ namespace Alturos.Yolo.LearningImage
 
                 //Create bounding boxes
                 this.CreateBoundingBoxes(image.BoundingBoxes, Path.ChangeExtension(newFilePath, "txt"));
-
-                usedFileNames.Add(image.FileName);
             }
 
             // Write object lists to file

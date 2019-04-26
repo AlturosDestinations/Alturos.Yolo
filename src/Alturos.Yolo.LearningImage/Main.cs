@@ -19,41 +19,53 @@ namespace Alturos.Yolo.LearningImage
 
         #region Initialization and Cleanup
 
-        private void annotationFolderList_Load(object sender, EventArgs e)
+        private void annotationPackageList_Load(object sender, EventArgs e)
         {
-            this.annotationFolderList.Initialize(this._boundingBoxReader);
-            this.annotationFolderList.FolderSelected += this.FolderSelected;
+            this.annotationPackageList.FolderSelected += this.FolderSelected;
         }
 
         private void annotationImageList_Load(object sender, EventArgs e)
         {
             this.annotationImageList.ImageSelected += this.ImageSelected;
+            this.annotationImageList.ExtractionRequested += this.ExtractionRequested;
         }
 
         private void Main_FormClosed(object sender, FormClosedEventArgs e)
         {
-            this.annotationFolderList.FolderSelected -= FolderSelected;
-            this.annotationImageList.ImageSelected -= ImageSelected;
+            this.annotationPackageList.FolderSelected -= this.FolderSelected;
+            this.annotationImageList.ImageSelected -= this.ImageSelected;
+            this.annotationImageList.ExtractionRequested -= this.ExtractionRequested;
         }
 
         #endregion
 
         #region Load and Export
 
-        private void loadToolStripMenuItem_Click(object sender, EventArgs e)
+        private void fromAmazonS3ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.annotationFolderList.LoadFolders();
+            this.LoadPackages(new AmazonS3PackageProvider());
+        }
+
+        private void fromPCToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.LoadPackages(new WindowsFileSystemPackageProvider());
+        }
+
+        private void LoadPackages(IAnnotationPackageProvider annotationPackageProvider)
+        {
+            this.annotationPackageList.Initialize(this._boundingBoxReader, annotationPackageProvider);
+            this.annotationPackageList.LoadPackages();
         }
 
         private void allImagesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var items = this.annotationFolderList.GetAll();
+            var items = this.annotationPackageList.GetAll();
             this.Export(items);
         }
 
         private void selectedImagesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var items = this.annotationFolderList.GetSelected();
+            var items = this.annotationPackageList.GetSelected();
             this.Export(items);
         }
 
@@ -80,14 +92,35 @@ namespace Alturos.Yolo.LearningImage
 
         #region Delegate Callbacks
 
-        private void FolderSelected(AnnotationFolder folder)
+        private void FolderSelected(AnnotationPackage package)
         {
-            this.annotationImageList.SetImages(folder.Images);
+            if (package.Extracted)
+            {
+                if (package.Images == null)
+                {
+                    this.annotationPackageList.OpenPackage(package);
+                }
+
+                this.annotationImageList.SetImages(package.Images);
+            }
+            else
+            {
+                this.annotationImageList.SetImages(null);
+                this.annotationImageList.ShowExtractionWarning(package);
+            }
         }
 
         private void ImageSelected(AnnotationImage image)
         {
             this.annotationImageControl.SetImage(image);
+        }
+
+        private void ExtractionRequested(AnnotationPackage package)
+        {
+            this.annotationPackageList.UnzipPackage(package);
+
+            // Select folder to apply the images after extraction
+            this.FolderSelected(package);
         }
 
         #endregion
