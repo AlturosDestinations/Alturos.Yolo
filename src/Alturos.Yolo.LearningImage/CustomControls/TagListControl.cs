@@ -57,7 +57,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
                             var tag = row[kvp.Key].ToString();
                             if (!string.IsNullOrEmpty(tag))
                             {
-                                package.Info.GetType().GetProperty(tag).SetValue(package.Info, kvp.Value);
+                                package.Info.GetType().GetProperty(kvp.Value)?.SetValue(package.Info, tag);
                             }
                         }
                     }
@@ -67,6 +67,10 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
         public void SetTags(AnnotationPackageInfo info)
         {
+            if (info == null)
+            {
+                return;
+            }
             var properties = info.GetType().GetProperties();
             this.dataGridView1.DataSource = properties.Select(o => new { Key = o.Name, Value = o.GetValue(o) });
         }

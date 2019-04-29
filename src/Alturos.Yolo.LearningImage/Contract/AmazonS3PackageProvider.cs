@@ -2,6 +2,7 @@
 using Amazon;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
+using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.S3;
 using Amazon.S3.IO;
 using Amazon.S3.Model;
@@ -22,48 +23,39 @@ namespace Alturos.Yolo.LearningImage.Contract
         private readonly IAmazonDynamoDB _dynamoDbClient;
         private readonly string _bucketName;
         private readonly string _extractionFolder;
-        private readonly string _accessKeyId;
-        private readonly string _secretAccessKey;
         private readonly Dictionary<string, double> _uploadPercentages;
 
         public AmazonS3PackageProvider()
         {
-            this._accessKeyId = ConfigurationManager.AppSettings["accessKeyId"];
-            this._secretAccessKey = ConfigurationManager.AppSettings["secretAccessKey"];
+            var accessKeyId = ConfigurationManager.AppSettings["accessKeyId"];
+            var secretAccessKey = ConfigurationManager.AppSettings["secretAccessKey"];
 
             this._bucketName = ConfigurationManager.AppSettings["bucketName"];
             this._extractionFolder = ConfigurationManager.AppSettings["extractionFolder"];
 
-            this._client = new AmazonS3Client(this._accessKeyId, this._secretAccessKey, RegionEndpoint.EUWest1);
-            this._dynamoDbClient = new AmazonDynamoDBClient(this._accessKeyId, this._secretAccessKey, RegionEndpoint.EUWest1);
+            this._client = new AmazonS3Client(accessKeyId, secretAccessKey, RegionEndpoint.EUWest1);
+            this._dynamoDbClient = new AmazonDynamoDBClient(accessKeyId, secretAccessKey, RegionEndpoint.EUWest1);
 
             this._uploadPercentages = new Dictionary<string, double>();
         }
 
         public AnnotationPackage[] GetPackages()
         {
-            var packageInfos = new List<S3FileInfo>();
+            // Retrieve unannotated metadata
+            var context = new DynamoDBContext(this._dynamoDbClient);
 
-            var packages = new List<AnnotationPackage>();
+            var results1 = context.Scan<AnnotationPackageInfo>(new ScanCondition("IsAnnotated", ScanOperator.IsNull));
+            var results2 = context.Scan<AnnotationPackageInfo>(new ScanCondition("IsAnnotated", ScanOperator.Equal, false));
 
-            var dir = new S3DirectoryInfo(this._client, this._bucketName);
-            foreach (var file in dir.GetFiles())
-            {
-                packageInfos.Add(file);
+            var packageInfos = results1.Union(results2).ToList();
 
-                var package = new AnnotationPackage
-                {
-                    Extracted = false,
-                    PackagePath = file.Name,
-                    DisplayName = Path.GetFileNameWithoutExtension(file.Name),
-                };
-
-                var context = new DynamoDBContext(this._dynamoDbClient);
-                var info = context.Load<AnnotationPackageInfo>(file.Name);
-                package.Info = info;
-
-                packages.Add(package);
-            }
+            // Create packages
+            var packages = packageInfos.Select(o => new AnnotationPackage {
+                Extracted = false,
+                PackagePath = o.Id,
+                DisplayName = Path.GetFileNameWithoutExtension(o.Id),
+                Info = o
+            }).ToList();
 
             return packages.ToArray();
         }
@@ -106,6 +98,8 @@ namespace Alturos.Yolo.LearningImage.Contract
 
         private async Task UploadAsync(AnnotationPackage package)
         {
+            package.Info.IsAnnotated = true;
+
             var uploadRequest = new TransferUtilityUploadRequest
             {
                 BucketName = this._bucketName,
