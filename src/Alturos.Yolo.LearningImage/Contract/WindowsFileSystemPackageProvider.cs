@@ -12,7 +12,7 @@ namespace Alturos.Yolo.LearningImage.Contract
     {
         public bool IsSyncing { get; set; }
 
-        public List<AnnotationPackage> GetPackages()
+        public AnnotationPackage[] GetPackages()
         {
             using (var openFolderDialog = new CommonOpenFileDialog())
             {
@@ -36,10 +36,10 @@ namespace Alturos.Yolo.LearningImage.Contract
                         });
                     }
 
-                    return packages;
+                    return packages.ToArray();
                 }
 
-                return new List<AnnotationPackage>();
+                return new AnnotationPackage[0];
             }
         }
 
@@ -48,7 +48,7 @@ namespace Alturos.Yolo.LearningImage.Contract
             return package;
         }
 
-        public Task SyncPackages(List<AnnotationPackage> packages)
+        public Task SyncPackages(AnnotationPackage[] packages)
         {
             throw new System.NotImplementedException();
         }

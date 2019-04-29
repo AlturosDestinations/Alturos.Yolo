@@ -4,9 +4,9 @@ using System.Windows.Forms;
 
 namespace Alturos.Yolo.LearningImage.CustomControls
 {
-    public partial class ObjectClassList : UserControl
+    public partial class ObjectClassListControl : UserControl
     {
-        public ObjectClassList()
+        public ObjectClassListControl()
         {
             this.InitializeComponent();
             this.dataGridView1.AutoGenerateColumns = false;

@@ -9,26 +9,55 @@ using System.Windows.Forms;
 
 namespace Alturos.Yolo.LearningImage.CustomControls
 {
-    public partial class AnnotationPackageList : UserControl
+    public partial class AnnotationPackageListControl : UserControl
     {
         public Action<AnnotationPackage> FolderSelected { get; set; }
 
         private IBoundingBoxReader _boundingBoxReader;
         private IAnnotationPackageProvider _annotationPackageProvider;
 
-        public AnnotationPackageList()
+        public AnnotationPackageListControl()
         {
             this.InitializeComponent();
             this.dataGridView1.AutoGenerateColumns = false;
         }
 
-        public void Initialize(IBoundingBoxReader boundingBoxReader, IAnnotationPackageProvider annotationPackageProvider)
+        public void Setup(IBoundingBoxReader boundingBoxReader, IAnnotationPackageProvider annotationPackageProvider)
         {
             this._boundingBoxReader = boundingBoxReader;
             this._annotationPackageProvider = annotationPackageProvider;
         }
 
-        public AnnotationImage[] GetAll()
+        public AnnotationPackage[] GetAllPackages()
+        {
+            var items = new List<AnnotationPackage>();
+
+            foreach (DataGridViewRow row in this.dataGridView1.Rows)
+            {
+                var package = row.DataBoundItem as AnnotationPackage;
+                items.Add(package);
+            }
+
+            return items.ToArray();
+        }
+
+        public AnnotationPackage[] GetSelectedPackages()
+        {
+            var items = new List<AnnotationPackage>();
+
+            foreach (DataGridViewRow row in this.dataGridView1.Rows)
+            {
+                var package = row.DataBoundItem as AnnotationPackage;
+                if (package.Selected)
+                {
+                    items.Add(package);
+                }
+            }
+
+            return items.ToArray();
+        }
+
+        public AnnotationImage[] GetAllImages()
         {
             var items = new List<AnnotationImage>();
 
@@ -44,7 +73,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             return items.ToArray();
         }
 
-        public AnnotationImage[] GetSelected()
+        public AnnotationImage[] GetSelectedImages()
         {
             var items = new List<AnnotationImage>();
 

@@ -25,7 +25,7 @@ namespace Alturos.Yolo.LearningImage
                 newImages.Add(new AnnotationImage(image));
             }
 
-            this.annotationImageList.SetImages(newImages);
+            this.annotationImageListControl.SetImages(newImages);
         }
 
         public void CreateObjectClasses(int count)
@@ -41,7 +41,7 @@ namespace Alturos.Yolo.LearningImage
                 });
             }
 
-            this.objectClassList.SetObjectClasses(items);
+            this.objectClassListControl.SetObjectClasses(items);
         }
 
         private void buttonExport_Click(object sender, EventArgs e)
@@ -86,8 +86,8 @@ namespace Alturos.Yolo.LearningImage
         /// </summary>
         private void CreateFiles(string dataPath, string imagePath)
         {
-            var images = this.annotationImageList.GetSelected();
-            var objectClasses = this.objectClassList.GetSelected();
+            var images = this.annotationImageListControl.GetSelected();
+            var objectClasses = this.objectClassListControl.GetSelected();
 
             var stringBuilderDict = new Dictionary<int, StringBuilder>();
             foreach (var objectClass in objectClasses)
@@ -144,7 +144,7 @@ namespace Alturos.Yolo.LearningImage
         /// </summary>
         private void CreateMetaData(string dataPath)
         {
-            var objectNames = this.objectClassList.GetSelected().Select(o => o.Name).ToArray();
+            var objectNames = this.objectClassListControl.GetSelected().Select(o => o.Name).ToArray();
 
             var namesFile = "obj.names";
             var dataFile = "obj.data";

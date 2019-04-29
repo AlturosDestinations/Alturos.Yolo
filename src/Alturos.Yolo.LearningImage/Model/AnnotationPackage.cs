@@ -9,7 +9,7 @@ namespace Alturos.Yolo.LearningImage.Model
         public string PackagePath { get; set; }
         public string DisplayName { get; set; }
         public List<AnnotationImage> Images { get; set; }
-        public Dictionary<string, string> Tags { get; set; }
+        public AnnotationPackageInfo Info { get; set; }
 
         public AnnotationPackage() {
             this.Selected = true;

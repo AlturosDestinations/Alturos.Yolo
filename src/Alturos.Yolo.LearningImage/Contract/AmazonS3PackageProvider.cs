@@ -1,12 +1,15 @@
 ﻿using Alturos.Yolo.LearningImage.Model;
 using Amazon;
+using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.DataModel;
 using Amazon.S3;
 using Amazon.S3.IO;
+using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
-using System.IO.Compression;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Alturos.Yolo.LearningImage.Contract
@@ -16,45 +19,53 @@ namespace Alturos.Yolo.LearningImage.Contract
         public bool IsSyncing { get; set; }
 
         private readonly IAmazonS3 _client;
+        private readonly IAmazonDynamoDB _dynamoDbClient;
         private readonly string _bucketName;
         private readonly string _extractionFolder;
+        private readonly string _accessKeyId;
+        private readonly string _secretAccessKey;
         private readonly Dictionary<string, double> _uploadPercentages;
 
         public AmazonS3PackageProvider()
         {
-            var accessKeyId = ConfigurationManager.AppSettings["accessKeyId"];
-            var secretAccessKey = ConfigurationManager.AppSettings["secretAccessKey"];
+            this._accessKeyId = ConfigurationManager.AppSettings["accessKeyId"];
+            this._secretAccessKey = ConfigurationManager.AppSettings["secretAccessKey"];
 
             this._bucketName = ConfigurationManager.AppSettings["bucketName"];
             this._extractionFolder = ConfigurationManager.AppSettings["extractionFolder"];
 
-            this._client = new AmazonS3Client(accessKeyId, secretAccessKey, RegionEndpoint.EUWest1);
+            this._client = new AmazonS3Client(this._accessKeyId, this._secretAccessKey, RegionEndpoint.EUWest1);
+            this._dynamoDbClient = new AmazonDynamoDBClient(this._accessKeyId, this._secretAccessKey, RegionEndpoint.EUWest1);
 
             this._uploadPercentages = new Dictionary<string, double>();
         }
 
-        public List<AnnotationPackage> GetPackages()
+        public AnnotationPackage[] GetPackages()
         {
             var packageInfos = new List<S3FileInfo>();
+
+            var packages = new List<AnnotationPackage>();
 
             var dir = new S3DirectoryInfo(this._client, this._bucketName);
             foreach (var file in dir.GetFiles())
             {
                 packageInfos.Add(file);
-            }
 
-            var packages = new List<AnnotationPackage>();
-            foreach (var packageInfo in packageInfos)
-            {
-                packages.Add(new AnnotationPackage
+                var package = new AnnotationPackage
                 {
                     Extracted = false,
-                    PackagePath = packageInfo.Name,
-                    DisplayName = Path.GetFileNameWithoutExtension(packageInfo.Name),
-                });
+                    PackagePath = file.Name,
+                    DisplayName = Path.GetFileNameWithoutExtension(file.Name),
+                };
+
+                var context = new DynamoDBContext(this._dynamoDbClient);
+                var info = context.Load<AnnotationPackageInfo>(file.Name);
+                package.Info = info;
+
+                packages.Add(package);
             }
 
-            return packages;
+            return packages.ToArray();
         }
 
         public AnnotationPackage DownloadPackage(AnnotationPackage package)
@@ -70,14 +81,13 @@ namespace Alturos.Yolo.LearningImage.Contract
             var zipFilePath = Path.Combine(this._extractionFolder, file.Name);
             var fileInfo = file.CopyToLocal(zipFilePath, true);
 
-            package.Extracted = false;
             package.PackagePath = fileInfo.FullName;
             package.DisplayName = Path.GetFileNameWithoutExtension(fileInfo.FullName);
 
             return package;
         }
 
-        public async Task SyncPackages(List<AnnotationPackage> packages)
+        public async Task SyncPackages(AnnotationPackage[] packages)
         {
             this.IsSyncing = true;
             this._uploadPercentages.Clear();
@@ -86,7 +96,7 @@ namespace Alturos.Yolo.LearningImage.Contract
             foreach (var package in packages)
             {
                 this._uploadPercentages[package.PackagePath] = 0;
-                tasks.Add(Task.Run(() => UploadAsync(package)));
+                tasks.Add(Task.Run(() => this.UploadAsync(package)));
             }
 
             await Task.WhenAll(tasks);
@@ -107,6 +117,9 @@ namespace Alturos.Yolo.LearningImage.Contract
             using (var fileTransferUtility = new TransferUtility(this._client))
             {
                 await fileTransferUtility.UploadAsync(uploadRequest);
+
+                var context = new DynamoDBContext(this._dynamoDbClient);
+                context.Save(package.Info);
             }
 
             uploadRequest.UploadProgressEvent -= this.UploadRequest_UploadProgressEvent;

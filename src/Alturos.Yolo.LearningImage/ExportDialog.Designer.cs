@@ -32,8 +32,8 @@
             this.buttonExport = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.labelChooseFiles = new System.Windows.Forms.Label();
-            this.annotationImageList = new Alturos.Yolo.LearningImage.CustomControls.AnnotationImageList();
-            this.objectClassList = new Alturos.Yolo.LearningImage.CustomControls.ObjectClassList();
+            this.annotationImageListControl = new Alturos.Yolo.LearningImage.CustomControls.AnnotationImageListControl();
+            this.objectClassListControl = new Alturos.Yolo.LearningImage.CustomControls.ObjectClassListControl();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -72,11 +72,11 @@
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.labelChooseFiles);
-            this.splitContainer1.Panel1.Controls.Add(this.annotationImageList);
+            this.splitContainer1.Panel1.Controls.Add(this.annotationImageListControl);
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.objectClassList);
+            this.splitContainer1.Panel2.Controls.Add(this.objectClassListControl);
             this.splitContainer1.Panel2.Controls.Add(this.labelChooseObjects);
             this.splitContainer1.Size = new System.Drawing.Size(715, 387);
             this.splitContainer1.SplitterDistance = 446;
@@ -91,26 +91,27 @@
             this.labelChooseFiles.TabIndex = 6;
             this.labelChooseFiles.Text = "Choose files to export:";
             // 
-            // annotationImageList
+            // annotationImageListControl
             // 
-            this.annotationImageList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.annotationImageListControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.annotationImageList.ImageSelected = null;
-            this.annotationImageList.Location = new System.Drawing.Point(3, 16);
-            this.annotationImageList.Name = "annotationImageList";
-            this.annotationImageList.Size = new System.Drawing.Size(440, 368);
-            this.annotationImageList.TabIndex = 0;
+            this.annotationImageListControl.ExtractionRequested = null;
+            this.annotationImageListControl.ImageSelected = null;
+            this.annotationImageListControl.Location = new System.Drawing.Point(3, 16);
+            this.annotationImageListControl.Name = "annotationImageListControl";
+            this.annotationImageListControl.Size = new System.Drawing.Size(440, 368);
+            this.annotationImageListControl.TabIndex = 0;
             // 
-            // objectClassList
+            // objectClassListControl
             // 
-            this.objectClassList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.objectClassListControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.objectClassList.Location = new System.Drawing.Point(6, 16);
-            this.objectClassList.Name = "objectClassList";
-            this.objectClassList.Size = new System.Drawing.Size(256, 368);
-            this.objectClassList.TabIndex = 5;
+            this.objectClassListControl.Location = new System.Drawing.Point(6, 16);
+            this.objectClassListControl.Name = "objectClassListControl";
+            this.objectClassListControl.Size = new System.Drawing.Size(256, 368);
+            this.objectClassListControl.TabIndex = 5;
             // 
             // ExportDialog
             // 
@@ -137,7 +138,7 @@
         private System.Windows.Forms.Button buttonExport;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Label labelChooseFiles;
-        private CustomControls.AnnotationImageList annotationImageList;
-        private CustomControls.ObjectClassList objectClassList;
+        private CustomControls.AnnotationImageListControl annotationImageListControl;
+        private CustomControls.ObjectClassListControl objectClassListControl;
     }
 }

@@ -8,9 +8,9 @@ namespace Alturos.Yolo.LearningImage.Contract
     {
         bool IsSyncing { get; set; }
 
-        List<AnnotationPackage> GetPackages();
+        AnnotationPackage[] GetPackages();
         AnnotationPackage DownloadPackage(AnnotationPackage package);
-        Task SyncPackages(List<AnnotationPackage> packages);
+        Task SyncPackages(AnnotationPackage[] packages);
         double GetSyncProgress();
     }
 }

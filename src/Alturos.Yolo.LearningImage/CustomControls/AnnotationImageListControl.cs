@@ -5,14 +5,14 @@ using System.Windows.Forms;
 
 namespace Alturos.Yolo.LearningImage.CustomControls
 {
-    public partial class AnnotationImageList : UserControl
+    public partial class AnnotationImageListControl : UserControl
     {
         private AnnotationPackage _packageToExtract;
 
         public Action<AnnotationImage> ImageSelected { get; set; }
         public Action<AnnotationPackage> ExtractionRequested { get; set; }
 
-        public AnnotationImageList()
+        public AnnotationImageListControl()
         {
             this.InitializeComponent();
             this.dataGridView1.AutoGenerateColumns = false;

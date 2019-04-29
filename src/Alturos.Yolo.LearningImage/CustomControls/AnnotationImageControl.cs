@@ -68,7 +68,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-
+            //TODO
         }
 
         #endregion
