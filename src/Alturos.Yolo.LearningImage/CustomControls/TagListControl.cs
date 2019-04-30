@@ -52,6 +52,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
                             continue;
                         }
 
+                        package.Info = new AnnotationPackageInfo();
                         foreach (var kvp in indexTagDict)
                         {
                             var tag = row[kvp.Key].ToString();
@@ -71,8 +72,9 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             {
                 return;
             }
+
             var properties = info.GetType().GetProperties();
-            this.dataGridView1.DataSource = properties.Select(o => new { Key = o.Name, Value = o.GetValue(o) });
+            this.dataGridView1.DataSource = properties.Select(o => new { Key = o.Name, Value = o.GetValue(info) }).ToList();
         }
     }
 }

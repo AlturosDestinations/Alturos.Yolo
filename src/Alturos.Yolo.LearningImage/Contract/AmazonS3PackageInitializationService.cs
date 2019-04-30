@@ -6,7 +6,6 @@ using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.S3;
 using Amazon.S3.IO;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Threading;

@@ -15,11 +15,6 @@ namespace Alturos.Yolo.LearningImage
             this._boundingBoxReader = boundingBoxReader;
 
             this.InitializeComponent();
-
-            var t = new AmazonS3PackageInitializationService();
-            t.AddMissingInfos();
-            t.AddMissingInfos();
-
         }
 
         #region Initialization and Cleanup
