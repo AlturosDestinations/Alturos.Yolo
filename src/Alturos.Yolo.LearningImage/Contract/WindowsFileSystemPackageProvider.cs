@@ -43,6 +43,11 @@ namespace Alturos.Yolo.LearningImage.Contract
             }
         }
 
+        public AnnotationPackage RefreshPackage(AnnotationPackage package)
+        {
+            return package;
+        }
+
         public AnnotationPackage DownloadPackage(AnnotationPackage package)
         {
             return package;

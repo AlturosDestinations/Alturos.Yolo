@@ -12,13 +12,13 @@ using System.Threading;
 
 namespace Alturos.Yolo.LearningImage.Contract
 {
-    public class AmazonS3PackageInitializationService
+    public class AmazonPackageInitializationService
     {
         private readonly string _bucketName;
         private readonly AmazonS3Client _client;
         private readonly AmazonDynamoDBClient _dynamoDbClient;
 
-        public AmazonS3PackageInitializationService()
+        public AmazonPackageInitializationService()
         {
             var accessKeyId = ConfigurationManager.AppSettings["accessKeyId"];
             var secretAccessKey = ConfigurationManager.AppSettings["secretAccessKey"];

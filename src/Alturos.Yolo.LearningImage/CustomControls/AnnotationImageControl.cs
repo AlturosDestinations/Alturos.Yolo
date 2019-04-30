@@ -17,7 +17,14 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         {
             var oldImage = this.pictureBox1.Image;
 
-            this.pictureBox1.Image = this.DrawBoxes(image);
+            if (image == null)
+            {
+                this.pictureBox1.Image = null;
+            }
+            else
+            {
+                this.pictureBox1.Image = this.DrawBoxes(image);
+            }
 
             if (oldImage != null)
             {

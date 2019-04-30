@@ -2,6 +2,7 @@
 using Alturos.Yolo.LearningImage.Model;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Alturos.Yolo.LearningImage
@@ -9,6 +10,8 @@ namespace Alturos.Yolo.LearningImage
     public partial class Main : Form
     {
         private readonly IBoundingBoxReader _boundingBoxReader;
+
+        private IAnnotationPackageProvider _annotationPackageProvider;
 
         public Main(IBoundingBoxReader boundingBoxReader)
         {
@@ -41,35 +44,42 @@ namespace Alturos.Yolo.LearningImage
 
         #region Load and Sync
 
-        private void fromAmazonS3ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void fromAmazonToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.LoadPackages(new AmazonS3PackageProvider());
+            this._annotationPackageProvider = new AmazonPackageProvider();
+            this.LoadPackages();
         }
 
         private void fromPCToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.LoadPackages(new WindowsFileSystemPackageProvider());
+            this._annotationPackageProvider = new WindowsFileSystemPackageProvider();
+            this.LoadPackages();
         }
 
-        private void LoadPackages(IAnnotationPackageProvider annotationPackageProvider)
+        private void LoadPackages()
         {
-            this.annotationPackageListControl.Setup(this._boundingBoxReader, annotationPackageProvider);
+            this.annotationPackageListControl.Setup(this._boundingBoxReader, this._annotationPackageProvider);
             this.annotationPackageListControl.LoadPackages();
+
+            this.syncToolStripMenuItem.Enabled = true;
+            this.exportToolStripMenuItem.Enabled = true;
         }
 
-        private void toAmazonS3ToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void syncToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.SyncPackages(new AmazonS3PackageProvider());
-        }
+            var packages = this.annotationPackageListControl.GetSelectedPackages().Where(o => o.Extracted).ToArray();
+            if (packages.Length > 0)
+            {
+                var syncForm = new SyncForm(this._annotationPackageProvider);
+                syncForm.Show();
 
-        private void SyncPackages(IAnnotationPackageProvider annotationPackageProvider)
-        {
-            annotationPackageProvider.SyncPackages(this.annotationPackageListControl.GetAllPackages());
+                await syncForm.Sync(packages);
+            }
         }
 
         #endregion
 
-        #region Export and Tags
+        #region Export
 
         private void allImagesToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -102,18 +112,20 @@ namespace Alturos.Yolo.LearningImage
             exportDialog.Show();
         }
 
-        private void applyFromExcelSheetToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var packages = this.annotationPackageListControl.GetAllPackages();
-            this.tagListControl.LoadFromExcel(packages);
-        }
-
         #endregion
 
         #region Delegate Callbacks
 
         private void FolderSelected(AnnotationPackage package)
         {
+            if (package == null)
+            {
+                this.annotationImageListControl.SetImages(null);
+                this.annotationImageControl.SetImage(null);
+
+                return;
+            }
+
             if (package.Extracted)
             {
                 if (package.Images == null)
@@ -126,6 +138,8 @@ namespace Alturos.Yolo.LearningImage
             else
             {
                 this.annotationImageListControl.SetImages(null);
+                this.annotationImageControl.SetImage(null);
+
                 this.annotationImageListControl.ShowExtractionWarning(package);
             }
 
@@ -139,10 +153,11 @@ namespace Alturos.Yolo.LearningImage
 
         private void ExtractionRequested(AnnotationPackage package)
         {
-            this.annotationPackageListControl.UnzipPackage(package);
+            var downloadedPackage = this._annotationPackageProvider.DownloadPackage(package);
+            this.annotationPackageListControl.UnzipPackage(downloadedPackage);
 
             // Select folder to apply the images after extraction
-            this.FolderSelected(package);
+            this.FolderSelected(downloadedPackage);
         }
 
         #endregion

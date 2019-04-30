@@ -31,12 +31,11 @@
             this.menuStripMain = new System.Windows.Forms.MenuStrip();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fromPCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fromAmazonS3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fromAmazonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.syncToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.allImagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectedImagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tagsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.applyFromExcelSheetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panelImageList = new System.Windows.Forms.Panel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -44,8 +43,6 @@
             this.tagListControl = new Alturos.Yolo.LearningImage.CustomControls.TagListControl();
             this.annotationPackageListControl = new Alturos.Yolo.LearningImage.CustomControls.AnnotationPackageListControl();
             this.annotationImageControl = new Alturos.Yolo.LearningImage.CustomControls.AnnotationImageControl();
-            this.syncToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toAmazonS3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripMain.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panelImageList.SuspendLayout();
@@ -60,8 +57,7 @@
             this.menuStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.loadToolStripMenuItem,
             this.syncToolStripMenuItem,
-            this.exportToolStripMenuItem,
-            this.tagsToolStripMenuItem});
+            this.exportToolStripMenuItem});
             this.menuStripMain.Location = new System.Drawing.Point(0, 0);
             this.menuStripMain.Name = "menuStripMain";
             this.menuStripMain.Size = new System.Drawing.Size(1334, 24);
@@ -72,7 +68,7 @@
             // 
             this.loadToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fromPCToolStripMenuItem,
-            this.fromAmazonS3ToolStripMenuItem});
+            this.fromAmazonToolStripMenuItem});
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
             this.loadToolStripMenuItem.Size = new System.Drawing.Size(45, 20);
             this.loadToolStripMenuItem.Text = "&Load";
@@ -84,18 +80,27 @@
             this.fromPCToolStripMenuItem.Text = "From &PC";
             this.fromPCToolStripMenuItem.Click += new System.EventHandler(this.fromPCToolStripMenuItem_Click);
             // 
-            // fromAmazonS3ToolStripMenuItem
+            // fromAmazonToolStripMenuItem
             // 
-            this.fromAmazonS3ToolStripMenuItem.Name = "fromAmazonS3ToolStripMenuItem";
-            this.fromAmazonS3ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.fromAmazonS3ToolStripMenuItem.Text = "From &Amazon S3";
-            this.fromAmazonS3ToolStripMenuItem.Click += new System.EventHandler(this.fromAmazonS3ToolStripMenuItem_Click);
+            this.fromAmazonToolStripMenuItem.Name = "fromAmazonToolStripMenuItem";
+            this.fromAmazonToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.fromAmazonToolStripMenuItem.Text = "From &Amazon Cloud Storage";
+            this.fromAmazonToolStripMenuItem.Click += new System.EventHandler(this.fromAmazonToolStripMenuItem_Click);
+            // 
+            // syncToolStripMenuItem
+            // 
+            this.syncToolStripMenuItem.Enabled = false;
+            this.syncToolStripMenuItem.Name = "syncToolStripMenuItem";
+            this.syncToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.syncToolStripMenuItem.Text = "Sync";
+            this.syncToolStripMenuItem.Click += new System.EventHandler(this.syncToolStripMenuItem_Click);
             // 
             // exportToolStripMenuItem
             // 
             this.exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.allImagesToolStripMenuItem,
             this.selectedImagesToolStripMenuItem});
+            this.exportToolStripMenuItem.Enabled = false;
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
             this.exportToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.exportToolStripMenuItem.Text = "&Export";
@@ -103,31 +108,16 @@
             // allImagesToolStripMenuItem
             // 
             this.allImagesToolStripMenuItem.Name = "allImagesToolStripMenuItem";
-            this.allImagesToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.allImagesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.allImagesToolStripMenuItem.Text = "&All Images";
             this.allImagesToolStripMenuItem.Click += new System.EventHandler(this.allImagesToolStripMenuItem_Click);
             // 
             // selectedImagesToolStripMenuItem
             // 
             this.selectedImagesToolStripMenuItem.Name = "selectedImagesToolStripMenuItem";
-            this.selectedImagesToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.selectedImagesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.selectedImagesToolStripMenuItem.Text = "&Selected Images";
             this.selectedImagesToolStripMenuItem.Click += new System.EventHandler(this.selectedImagesToolStripMenuItem_Click);
-            // 
-            // tagsToolStripMenuItem
-            // 
-            this.tagsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.applyFromExcelSheetToolStripMenuItem});
-            this.tagsToolStripMenuItem.Name = "tagsToolStripMenuItem";
-            this.tagsToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
-            this.tagsToolStripMenuItem.Text = "&Tags";
-            // 
-            // applyFromExcelSheetToolStripMenuItem
-            // 
-            this.applyFromExcelSheetToolStripMenuItem.Name = "applyFromExcelSheetToolStripMenuItem";
-            this.applyFromExcelSheetToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
-            this.applyFromExcelSheetToolStripMenuItem.Text = "&Apply from Excel Sheet";
-            this.applyFromExcelSheetToolStripMenuItem.Click += new System.EventHandler(this.applyFromExcelSheetToolStripMenuItem_Click);
             // 
             // tableLayoutPanel1
             // 
@@ -215,21 +205,6 @@
             this.annotationImageControl.Size = new System.Drawing.Size(628, 524);
             this.annotationImageControl.TabIndex = 2;
             // 
-            // syncToolStripMenuItem
-            // 
-            this.syncToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toAmazonS3ToolStripMenuItem});
-            this.syncToolStripMenuItem.Name = "syncToolStripMenuItem";
-            this.syncToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.syncToolStripMenuItem.Text = "Sync";
-            // 
-            // toAmazonS3ToolStripMenuItem
-            // 
-            this.toAmazonS3ToolStripMenuItem.Name = "toAmazonS3ToolStripMenuItem";
-            this.toAmazonS3ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.toAmazonS3ToolStripMenuItem.Text = "To &Amazon S3";
-            this.toAmazonS3ToolStripMenuItem.Click += new System.EventHandler(this.toAmazonS3ToolStripMenuItem_Click);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -265,14 +240,11 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private CustomControls.AnnotationImageControl annotationImageControl;
         private System.Windows.Forms.ToolStripMenuItem fromPCToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem fromAmazonS3ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fromAmazonToolStripMenuItem;
         private System.Windows.Forms.Panel panelImageList;
-        private System.Windows.Forms.ToolStripMenuItem tagsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem applyFromExcelSheetToolStripMenuItem;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private CustomControls.TagListControl tagListControl;
         private System.Windows.Forms.ToolStripMenuItem syncToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem toAmazonS3ToolStripMenuItem;
     }
 }
 

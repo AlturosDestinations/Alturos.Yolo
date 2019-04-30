@@ -5,8 +5,8 @@ using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.S3;
 using Amazon.S3.IO;
-using Amazon.S3.Model;
 using Amazon.S3.Transfer;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Alturos.Yolo.LearningImage.Contract
 {
-    public class AmazonS3PackageProvider : IAnnotationPackageProvider
+    public class AmazonPackageProvider : IAnnotationPackageProvider
     {
         public bool IsSyncing { get; set; }
 
@@ -25,7 +25,7 @@ namespace Alturos.Yolo.LearningImage.Contract
         private readonly string _extractionFolder;
         private readonly Dictionary<string, double> _uploadPercentages;
 
-        public AmazonS3PackageProvider()
+        public AmazonPackageProvider()
         {
             var accessKeyId = ConfigurationManager.AppSettings["accessKeyId"];
             var secretAccessKey = ConfigurationManager.AppSettings["secretAccessKey"];
@@ -57,7 +57,25 @@ namespace Alturos.Yolo.LearningImage.Contract
                 Info = o
             }).ToList();
 
+            // Get local folder if the package was already downloaded
+            foreach (var package in packages)
+            {
+                var path = Path.Combine(this._extractionFolder, Path.GetFileNameWithoutExtension(package.DisplayName));
+                if (Directory.Exists(path))
+                {
+                    package.Extracted = true;
+                    package.PackagePath = path;
+                }
+            }
+
             return packages.ToArray();
+        }
+
+        public AnnotationPackage RefreshPackage(AnnotationPackage package)
+        {
+            package.Extracted = false;
+            package.PackagePath = $"{package.DisplayName}.zip";
+            return this.DownloadPackage(package);
         }
 
         public AnnotationPackage DownloadPackage(AnnotationPackage package)
@@ -98,8 +116,6 @@ namespace Alturos.Yolo.LearningImage.Contract
 
         private async Task UploadAsync(AnnotationPackage package)
         {
-            package.Info.IsAnnotated = true;
-
             var uploadRequest = new TransferUtilityUploadRequest
             {
                 BucketName = this._bucketName,
@@ -110,7 +126,14 @@ namespace Alturos.Yolo.LearningImage.Contract
 
             using (var fileTransferUtility = new TransferUtility(this._client))
             {
-                await fileTransferUtility.UploadAsync(uploadRequest);
+                try
+                {
+                    await fileTransferUtility.UploadAsync(uploadRequest);
+                }
+                catch (Exception exception)
+                {
+
+                }
 
                 var context = new DynamoDBContext(this._dynamoDbClient);
                 context.Save(package.Info);

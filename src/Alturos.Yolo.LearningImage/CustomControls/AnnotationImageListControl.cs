@@ -71,5 +71,27 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             ExtractionRequested?.Invoke(this._packageToExtract);
             this.panelExtractNotification.Hide();
         }
+
+        private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow row in this.dataGridView1.Rows)
+            {
+                var package = row.DataBoundItem as AnnotationImage;
+                package.Selected = true;
+            }
+
+            this.dataGridView1.Refresh();
+        }
+
+        private void deselectAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow row in this.dataGridView1.Rows)
+            {
+                var package = row.DataBoundItem as AnnotationImage;
+                package.Selected = false;
+            }
+
+            this.dataGridView1.Refresh();
+        }
     }
 }

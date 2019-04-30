@@ -2,6 +2,7 @@
 using Alturos.Yolo.LearningImage.Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -96,8 +97,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
         public void UnzipPackage(AnnotationPackage package)
         {
-            var downloadedPackage = this._annotationPackageProvider.DownloadPackage(package);
-            var zipFilePath = downloadedPackage.PackagePath;
+            var zipFilePath = package.PackagePath;
 
             var extractedPackagePath = Path.Combine(Path.GetDirectoryName(zipFilePath), Path.GetFileNameWithoutExtension(zipFilePath));
             if (Directory.Exists(extractedPackagePath))
@@ -105,11 +105,11 @@ namespace Alturos.Yolo.LearningImage.CustomControls
                 Directory.Delete(extractedPackagePath, true);
             }
 
-            ZipFile.ExtractToDirectory(downloadedPackage.PackagePath, extractedPackagePath);
+            ZipFile.ExtractToDirectory(package.PackagePath, extractedPackagePath);
             File.Delete(zipFilePath);
 
-            downloadedPackage.Extracted = true;
-            downloadedPackage.PackagePath = extractedPackagePath;
+            package.Extracted = true;
+            package.PackagePath = extractedPackagePath;
         }
 
         public void OpenPackage(AnnotationPackage package)
@@ -138,6 +138,62 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)
         {
             var package = this.dataGridView1.CurrentRow.DataBoundItem as AnnotationPackage;
+            this.FolderSelected?.Invoke(package);
+        }
+
+        private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow row in this.dataGridView1.Rows)
+            {
+                var package = row.DataBoundItem as AnnotationPackage;
+                package.Selected = true;
+            }
+
+            this.dataGridView1.Refresh();
+        }
+
+        private void deselectAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow row in this.dataGridView1.Rows)
+            {
+                var package = row.DataBoundItem as AnnotationPackage;
+                package.Selected = false;
+            }
+
+            this.dataGridView1.Refresh();
+        }
+
+        private void redownloadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.FolderSelected?.Invoke(null);
+
+            var package = this.dataGridView1.Rows[this.dataGridView1.CurrentCell.RowIndex].DataBoundItem as AnnotationPackage;
+
+            var downloadedPackage = this._annotationPackageProvider.RefreshPackage(package);
+            this.UnzipPackage(downloadedPackage);
+
+            downloadedPackage.Images = null;
+            this.FolderSelected?.Invoke(downloadedPackage);
+        }
+
+        private void dataGridView1_DoubleClick(object sender, EventArgs e)
+        {
+            var package = this.dataGridView1.CurrentRow?.DataBoundItem as AnnotationPackage;
+            if (package == null)
+            {
+                return;
+            }
+
+            if (!package.Extracted)
+            {
+                return;
+            }
+
+            var arguments = $@"""{package.PackagePath}"" C:\Users\kneluk\Documents\GitHub\Yolo_mark\x64\Release\data\train.txt C:\Users\kneluk\Documents\GitHub\Yolo_mark\x64\Release\data\obj.names";
+            var process = Process.Start(@"C:\Users\kneluk\Documents\GitHub\Yolo_mark\x64\Release\yolo_mark.exe", arguments);
+            process.WaitForExit();
+
+            package.Images = null;
             this.FolderSelected?.Invoke(package);
         }
     }

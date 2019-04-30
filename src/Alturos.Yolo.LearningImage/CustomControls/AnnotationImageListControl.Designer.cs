@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.ColumnSelected = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.ColumnName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -35,9 +36,13 @@
             this.panelExtractNotification = new System.Windows.Forms.Panel();
             this.buttonExtract = new System.Windows.Forms.Button();
             this.labelNotification = new System.Windows.Forms.Label();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.selectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deselectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.panelExtractNotification.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridView1
@@ -48,6 +53,7 @@
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnSelected,
             this.ColumnName});
+            this.dataGridView1.ContextMenuStrip = this.contextMenuStrip1;
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(3, 16);
             this.dataGridView1.Name = "dataGridView1";
@@ -104,6 +110,7 @@
             this.buttonExtract.TabIndex = 1;
             this.buttonExtract.Text = "Extract";
             this.buttonExtract.UseVisualStyleBackColor = true;
+            this.buttonExtract.Click += new System.EventHandler(this.buttonExtract_Click);
             // 
             // labelNotification
             // 
@@ -117,17 +124,40 @@
             this.labelNotification.Text = "Extract this file to view its contents.";
             this.labelNotification.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // AnnotationImageList
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.selectAllToolStripMenuItem,
+            this.deselectAllToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(136, 48);
+            // 
+            // selectAllToolStripMenuItem
+            // 
+            this.selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
+            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.selectAllToolStripMenuItem.Text = "&Select All";
+            this.selectAllToolStripMenuItem.Click += new System.EventHandler(this.selectAllToolStripMenuItem_Click);
+            // 
+            // deselectAllToolStripMenuItem
+            // 
+            this.deselectAllToolStripMenuItem.Name = "deselectAllToolStripMenuItem";
+            this.deselectAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.deselectAllToolStripMenuItem.Text = "&Deselect All";
+            this.deselectAllToolStripMenuItem.Click += new System.EventHandler(this.deselectAllToolStripMenuItem_Click);
+            // 
+            // AnnotationImageListControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.groupBox1);
-            this.Name = "AnnotationImageList";
+            this.Name = "AnnotationImageListControl";
             this.Size = new System.Drawing.Size(317, 300);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.panelExtractNotification.ResumeLayout(false);
             this.panelExtractNotification.PerformLayout();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -141,5 +171,8 @@
         private System.Windows.Forms.Panel panelExtractNotification;
         private System.Windows.Forms.Button buttonExtract;
         private System.Windows.Forms.Label labelNotification;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem selectAllToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deselectAllToolStripMenuItem;
     }
 }
