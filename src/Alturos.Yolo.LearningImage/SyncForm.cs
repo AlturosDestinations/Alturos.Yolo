@@ -43,6 +43,11 @@ namespace Alturos.Yolo.LearningImage
 
             _ = Task.Run(() => this._annotationPackageProvider.SyncPackages(zippedPackages.ToArray()));
 
+            while (!this._annotationPackageProvider.IsSyncing)
+            {
+                await Task.Delay(100);
+            }
+
             while (this._annotationPackageProvider.IsSyncing)
             {
                 var progress = this._annotationPackageProvider.GetSyncProgress();
@@ -57,6 +62,12 @@ namespace Alturos.Yolo.LearningImage
         public AnnotationPackage ZipPackage(AnnotationPackage package)
         {
             var zipFilePath = Path.Combine(package.PackagePath, @"..\", $"{package.DisplayName}.zip");
+
+            if (File.Exists(zipFilePath))
+            {
+                File.Delete(zipFilePath);
+            }
+
             ZipFile.CreateFromDirectory(package.PackagePath, zipFilePath);
 
             var zippedPackage = new AnnotationPackage(package)

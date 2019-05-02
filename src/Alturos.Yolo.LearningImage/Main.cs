@@ -1,6 +1,7 @@
 ﻿using Alturos.Yolo.LearningImage.Contract;
 using Alturos.Yolo.LearningImage.Model;
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -70,6 +71,35 @@ namespace Alturos.Yolo.LearningImage
             var packages = this.annotationPackageListControl.GetSelectedPackages().Where(o => o.Extracted).ToArray();
             if (packages.Length > 0)
             {
+                // Check file size
+                long fileSize = 0;
+
+                foreach (var package in packages)
+                {
+                    var attr = File.GetAttributes(package.PackagePath);
+                    if (attr.HasFlag(FileAttributes.Directory))
+                    {
+                        var directoryInfo = new DirectoryInfo(package.PackagePath);
+                        fileSize += directoryInfo.EnumerateFiles().Sum(file => file.Length);
+                    }
+                    else
+                    {
+                        fileSize = new FileInfo(package.PackagePath).Length;
+                    }
+                }
+
+                // Warn user if he's about to upload a gazillion of files
+                var megaBytes = Math.Round(((double)fileSize) / (1024 * 1024), 2);
+                if (megaBytes > 100)
+                {
+                    var dialogResult = MessageBox.Show($"You're about to upload {megaBytes} MB! Are you sure you want to proceed?", $"Uploading {packages.Length} packages", MessageBoxButtons.YesNo);
+                    if (dialogResult != DialogResult.Yes)
+                    {
+                        return;
+                    }
+                }
+
+                // Proceed with syncing
                 var syncForm = new SyncForm(this._annotationPackageProvider);
                 syncForm.Show();
 
