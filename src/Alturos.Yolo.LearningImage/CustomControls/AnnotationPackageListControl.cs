@@ -97,10 +97,61 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         public void LoadPackages()
         {
             var packages = this._annotationPackageProvider.GetPackages();
+
+            foreach (var package in packages)
+            {
+                if (package.Extracted && package.Images == null)
+                {
+                    this.OpenPackage(package);
+                }
+            }
+
             if (packages?.Length > 0)
             {
                 this.dataGridView1.DataSource = packages;
             }
+        }
+
+        public void OpenPackage(AnnotationPackage package)
+        {
+            if (!package.Extracted)
+            {
+                return;
+            }
+
+            var files = Directory.GetFiles(package.PackagePath, "*.*", SearchOption.TopDirectoryOnly);
+            var items = files.Where(s => s.EndsWith(".png") || s.EndsWith(".jpg")).Select(o => new AnnotationImage
+            {
+                FilePath = o,
+                DisplayName = new FileInfo(o).Name,
+                BoundingBoxes = this._boundingBoxReader.GetBoxes(this._boundingBoxReader.GetDataPath(o)).ToList()
+            }).ToList();
+
+            if (items.Count == 0)
+            {
+                return;
+            }
+
+            package.Images = items;
+            this.UpdateAnnotationStatus(package);
+        }
+
+        public void UpdateAnnotationStatus(AnnotationPackage package)
+        {
+            // Check if package is annotated or not. 50% of images require to be annotated
+            var annotatedImageCount = 0;
+            var requiredPercentage = 50;
+
+            foreach (var image in package.Images)
+            {
+                if (image.BoundingBoxes?.Count > 0)
+                {
+                    annotatedImageCount++;
+                }
+            }
+
+            package.Info.AnnotationPercentage = annotatedImageCount / ((double)package.Images.Count) * 100;
+            package.Info.IsAnnotated = package.Info.AnnotationPercentage >= requiredPercentage;
         }
 
         public void UnzipPackage(AnnotationPackage package)
@@ -142,29 +193,6 @@ namespace Alturos.Yolo.LearningImage.CustomControls
                     File.WriteAllText(dataPath, sb.ToString());
                 }
             }
-        }
-
-        public void OpenPackage(AnnotationPackage package)
-        {
-            if (!package.Extracted)
-            {
-                return;
-            }
-
-            var files = Directory.GetFiles(package.PackagePath, "*.*", SearchOption.TopDirectoryOnly);
-            var items = files.Where(s => s.EndsWith(".png") || s.EndsWith(".jpg")).Select(o => new AnnotationImage
-            {
-                FilePath = o,
-                DisplayName = new FileInfo(o).Name,
-                BoundingBoxes = this._boundingBoxReader.GetBoxes(this._boundingBoxReader.GetDataPath(o)).ToList()
-            }).ToList();
-
-            if (items.Count == 0)
-            {
-                return;
-            }
-
-            package.Images = items;
         }
 
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)
@@ -237,24 +265,6 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
             package.Images = null;
             this.FolderSelected?.Invoke(package);
-        }
-
-        public void UpdateAnnotationStatus(AnnotationPackage package)
-        {
-            // Check if package is annotated or not. 50% of images require to be annotated
-            var annotatedImageCount = 0;
-            var requiredPercentage = 50;
-
-            foreach (var image in package.Images)
-            {
-                if (image.BoundingBoxes?.Count > 0)
-                {
-                    annotatedImageCount++;
-                }
-            }
-
-            package.Info.AnnotationPercentage = annotatedImageCount / ((double)package.Images.Count) * 100;
-            package.Info.IsAnnotated = package.Info.AnnotationPercentage >= requiredPercentage;
         }
 
         private void dataGridView1_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)

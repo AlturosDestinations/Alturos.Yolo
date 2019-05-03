@@ -61,12 +61,12 @@ namespace Alturos.Yolo.LearningImage.Contract
 
         public Task SyncPackages(AnnotationPackage[] packages)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public double GetSyncProgress()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
     }

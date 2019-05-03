@@ -128,7 +128,6 @@ namespace Alturos.Yolo.LearningImage
                     this.annotationPackageListControl.OpenPackage(package);
                 }
 
-                this.annotationPackageListControl.UpdateAnnotationStatus(package);
                 this.annotationImageListControl.SetImages(package.Images);
             }
             else
