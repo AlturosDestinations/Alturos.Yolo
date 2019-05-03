@@ -9,6 +9,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Alturos.Yolo.LearningImage.CustomControls
@@ -177,7 +178,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
                 System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
 
-                foreach (var imageDto in package.Info.ImageDtos)
+                foreach (var imageDto in package.Info.ImageDtos.Where(o => o.BoundingBoxes?.Count > 0))
                 {
                     var sb = new StringBuilder();
                     foreach (var boundingBox in imageDto.BoundingBoxes)
@@ -236,17 +237,17 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             this.FolderSelected?.Invoke(downloadedPackage);
         }
 
-        private void annotateToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void annotateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.AnnotatePackage();
+            await this.AnnotatePackage();
         }
 
-        private void dataGridView1_DoubleClick(object sender, EventArgs e)
+        private async void dataGridView1_DoubleClick(object sender, EventArgs e)
         {
-            this.AnnotatePackage();
+            await this.AnnotatePackage();
         }
 
-        private void AnnotatePackage()
+        private async Task AnnotatePackage()
         {
             var package = this.dataGridView1.CurrentRow?.DataBoundItem as AnnotationPackage;
             if (package == null)
@@ -265,6 +266,18 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
             package.Images = null;
             this.FolderSelected?.Invoke(package);
+
+            if (package.Info.IsAnnotated)
+            {
+                var dialogResult = MessageBox.Show("Do you want to sync the package now?", "Sync", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    var syncForm = new SyncForm(this._annotationPackageProvider);
+                    syncForm.Show();
+
+                    await syncForm.Sync(new AnnotationPackage[] { package });
+                }
+            }
         }
 
         private void dataGridView1_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)

@@ -10,8 +10,6 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 {
     public partial class AnnotationImageControl : UserControl
     {
-        private List<ObjectClass> _objectClasses;
-
         public AnnotationImageControl()
         {
             this.InitializeComponent();
@@ -27,47 +25,54 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             }
             else
             {
-                this.pictureBox1.Image = this.DrawBoxes(image);
+                this.pictureBox1.Image = this.DrawBoxes(image, objectClasses);
             }
 
             if (oldImage != null)
             {
                 oldImage.Dispose();
             }
-
-            this._objectClasses = objectClasses;
         }
 
-        private Image DrawBoxes(AnnotationImage image)
+        private Image DrawBoxes(AnnotationImage image, List<ObjectClass> objectClasses)
         {
             var colorCodes = this.GetColorCodes();
 
             var items = image.BoundingBoxes;
 
-            var bitmap = new Bitmap(image.FilePath);
+            var originalBitmap = new Bitmap(image.FilePath);
+            var bitmap = new Bitmap(originalBitmap, 1024, 576);
+            originalBitmap.Dispose();
+
             using (var canvas = Graphics.FromImage(bitmap))
             {
                 foreach (var item in items)
                 {
                     var width = item.Width * bitmap.Width;
-                    var heigth = item.Height * bitmap.Height;
+                    var height = item.Height * bitmap.Height;
                     var x = (item.CenterX * bitmap.Width) - (width / 2);
-                    var y = (item.CenterY * bitmap.Height) - (heigth / 2);
+                    var y = (item.CenterY * bitmap.Height) - (height / 2);
 
                     var color = ColorTranslator.FromHtml(colorCodes[item.ObjectIndex]);
                     var pen = new Pen(color, 3);
 
-                    var objectClass = this._objectClasses?.FirstOrDefault(o => o.Id == item.ObjectIndex);
+                    canvas.DrawRectangle(pen, x, y, width, height);
+
+                    var objectClass = objectClasses?.FirstOrDefault(o => o.Id == item.ObjectIndex);
                     if (objectClass != null)
                     {
                         using (var brush = new SolidBrush(color))
-                        using (var font = new Font("Arial", 24))
+                        using (var bgBrush = new SolidBrush(Color.FromArgb(128, 255, 255, 255)))
+                        using (var font = new Font("Arial", 20))
                         {
-                            canvas.DrawString($"{objectClass.Id} {objectClass.Name}", font, brush, new PointF(x + 4, y + 4));
+                            var text = $"{objectClass.Id} {objectClass.Name}";
+                            var point = new PointF(x + 4, y + 4);
+                            var size = canvas.MeasureString(text, font);
+
+                            canvas.FillRectangle(bgBrush, point.X, point.Y, size.Width, size.Height);
+                            canvas.DrawString(text, font, brush, point);
                         }
                     }
-
-                    canvas.DrawRectangle(pen, x, y, width, heigth);
                 }
 
                 canvas.Flush();
