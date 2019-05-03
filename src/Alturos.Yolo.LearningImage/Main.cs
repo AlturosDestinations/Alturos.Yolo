@@ -1,6 +1,8 @@
 ﻿using Alturos.Yolo.LearningImage.Contract;
 using Alturos.Yolo.LearningImage.Model;
 using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,14 +13,22 @@ namespace Alturos.Yolo.LearningImage
     public partial class Main : Form
     {
         private readonly IBoundingBoxReader _boundingBoxReader;
-
-        private IAnnotationPackageProvider _annotationPackageProvider;
+        private readonly IAnnotationPackageProvider _annotationPackageProvider;
+        private readonly List<ObjectClass> _objectClasses;
 
         public Main(IBoundingBoxReader boundingBoxReader)
         {
             this._boundingBoxReader = boundingBoxReader;
 
+            var startupForm = new StartupForm();
+            startupForm.ShowDialog();
+
+            this._annotationPackageProvider = startupForm.AnnotationPackageProvider;
+            this._objectClasses = startupForm.ObjectClasses;
+
             this.InitializeComponent();
+
+            this.LoadPackages();
         }
 
         #region Initialization and Cleanup
@@ -37,6 +47,7 @@ namespace Alturos.Yolo.LearningImage
         private void Main_FormClosed(object sender, FormClosedEventArgs e)
         {
             this.annotationPackageListControl.FolderSelected -= this.FolderSelected;
+
             this.annotationImageListControl.ImageSelected -= this.ImageSelected;
             this.annotationImageListControl.ExtractionRequested -= this.ExtractionRequested;
         }
@@ -45,15 +56,8 @@ namespace Alturos.Yolo.LearningImage
 
         #region Load and Sync
 
-        private void fromAmazonToolStripMenuItem_Click(object sender, EventArgs e)
+        private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this._annotationPackageProvider = new AmazonPackageProvider();
-            this.LoadPackages();
-        }
-
-        private void fromPCToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this._annotationPackageProvider = new WindowsFileSystemPackageProvider();
             this.LoadPackages();
         }
 
@@ -71,34 +75,6 @@ namespace Alturos.Yolo.LearningImage
             var packages = this.annotationPackageListControl.GetSelectedPackages().Where(o => o.Extracted).ToArray();
             if (packages.Length > 0)
             {
-                // Check file size
-                long fileSize = 0;
-
-                foreach (var package in packages)
-                {
-                    var attr = File.GetAttributes(package.PackagePath);
-                    if (attr.HasFlag(FileAttributes.Directory))
-                    {
-                        var directoryInfo = new DirectoryInfo(package.PackagePath);
-                        fileSize += directoryInfo.EnumerateFiles().Sum(file => file.Length);
-                    }
-                    else
-                    {
-                        fileSize = new FileInfo(package.PackagePath).Length;
-                    }
-                }
-
-                // Warn user if he's about to upload a gazillion of files
-                var megaBytes = Math.Round(((double)fileSize) / (1024 * 1024), 2);
-                if (megaBytes > 100)
-                {
-                    var dialogResult = MessageBox.Show($"You're about to upload {megaBytes} MB! Are you sure you want to proceed?", $"Uploading {packages.Length} packages", MessageBoxButtons.YesNo);
-                    if (dialogResult != DialogResult.Yes)
-                    {
-                        return;
-                    }
-                }
-
                 // Proceed with syncing
                 var syncForm = new SyncForm(this._annotationPackageProvider);
                 syncForm.Show();
@@ -127,18 +103,7 @@ namespace Alturos.Yolo.LearningImage
         {
             var exportDialog = new ExportDialog();
             exportDialog.CreateImages(images.ToList());
-
-            int boxCount = 0;
-            foreach (var image in images)
-            {
-                var boxes = image.BoundingBoxes;
-                foreach (var box in boxes)
-                {
-                    boxCount = Math.Max(boxCount, box.ObjectIndex + 1);
-                }
-            }
-            exportDialog.CreateObjectClasses(boxCount);
-
+            exportDialog.SetObjectClasses(this._objectClasses);
             exportDialog.Show();
         }
 
@@ -151,7 +116,7 @@ namespace Alturos.Yolo.LearningImage
             if (package == null)
             {
                 this.annotationImageListControl.SetImages(null);
-                this.annotationImageControl.SetImage(null);
+                this.annotationImageControl.SetImage(null, null);
 
                 return;
             }
@@ -163,22 +128,26 @@ namespace Alturos.Yolo.LearningImage
                     this.annotationPackageListControl.OpenPackage(package);
                 }
 
+                this.annotationPackageListControl.UpdateAnnotationStatus(package);
                 this.annotationImageListControl.SetImages(package.Images);
             }
             else
             {
                 this.annotationImageListControl.SetImages(null);
-                this.annotationImageControl.SetImage(null);
+                this.annotationImageControl.SetImage(null, null);
 
                 this.annotationImageListControl.ShowExtractionWarning(package);
             }
+
+            this.annotationPackageListControl.DataGridView.Refresh();
+            this.annotationImageListControl.DataGridView.Refresh();
 
             this.tagListControl.SetTags(package.Info);
         }
 
         private void ImageSelected(AnnotationImage image)
         {
-            this.annotationImageControl.SetImage(image);
+            this.annotationImageControl.SetImage(image, this._objectClasses);
         }
 
         private void ExtractionRequested(AnnotationPackage package)

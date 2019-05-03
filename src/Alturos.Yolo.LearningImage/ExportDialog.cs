@@ -28,20 +28,9 @@ namespace Alturos.Yolo.LearningImage
             this.annotationImageListControl.SetImages(newImages);
         }
 
-        public void CreateObjectClasses(int count)
+        public void SetObjectClasses(List<ObjectClass> objectClasses)
         {
-            var items = new List<ObjectClass>();
-            for (var i = 0; i < count; i++)
-            {
-                items.Add(new ObjectClass
-                {
-                    Selected = true,
-                    Id = i,
-                    Name = $"object{i}"
-                });
-            }
-
-            this.objectClassListControl.SetObjectClasses(items);
+            this.objectClassListControl.SetObjectClasses(objectClasses);
         }
 
         private void buttonExport_Click(object sender, EventArgs e)

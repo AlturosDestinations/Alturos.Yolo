@@ -1,16 +1,19 @@
 ﻿using Alturos.Yolo.LearningImage.Model;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Alturos.Yolo.LearningImage.CustomControls
 {
     public partial class AnnotationImageListControl : UserControl
     {
-        private AnnotationPackage _packageToExtract;
-
         public Action<AnnotationImage> ImageSelected { get; set; }
         public Action<AnnotationPackage> ExtractionRequested { get; set; }
+
+        public DataGridView DataGridView { get { return this.dataGridView1; } }
+
+        private AnnotationPackage _packageToExtract;
 
         public AnnotationImageListControl()
         {
@@ -92,6 +95,19 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             }
 
             this.dataGridView1.Refresh();
+        }
+
+        private void dataGridView1_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        {
+            var item = this.dataGridView1.Rows[e.RowIndex].DataBoundItem as AnnotationImage;
+
+            if (item.BoundingBoxes?.Count > 0)
+            {
+                this.dataGridView1.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.GreenYellow;
+                return;
+            }
+
+            this.dataGridView1.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.White;
         }
     }
 }

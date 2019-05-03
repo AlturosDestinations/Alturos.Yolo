@@ -3,9 +3,12 @@ using Alturos.Yolo.LearningImage.Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 
 namespace Alturos.Yolo.LearningImage.CustomControls
@@ -13,6 +16,8 @@ namespace Alturos.Yolo.LearningImage.CustomControls
     public partial class AnnotationPackageListControl : UserControl
     {
         public Action<AnnotationPackage> FolderSelected { get; set; }
+
+        public DataGridView DataGridView { get { return this.dataGridView1; } }
 
         private IBoundingBoxReader _boundingBoxReader;
         private IAnnotationPackageProvider _annotationPackageProvider;
@@ -65,7 +70,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             foreach (DataGridViewRow row in this.dataGridView1.Rows)
             {
                 var package = row.DataBoundItem as AnnotationPackage;
-                if (package.Extracted)
+                if (package.Extracted && package.Images != null)
                 {
                     items.AddRange(package.Images);
                 }
@@ -92,7 +97,10 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         public void LoadPackages()
         {
             var packages = this._annotationPackageProvider.GetPackages();
-            this.dataGridView1.DataSource = packages;
+            if (packages?.Length > 0)
+            {
+                this.dataGridView1.DataSource = packages;
+            }
         }
 
         public void UnzipPackage(AnnotationPackage package)
@@ -110,6 +118,30 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
             package.Extracted = true;
             package.PackagePath = extractedPackagePath;
+
+            if (package.Info.ImageDtos != null)
+            {
+                var customCulture = (CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
+                customCulture.NumberFormat.NumberDecimalSeparator = ".";
+
+                System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
+
+                foreach (var imageDto in package.Info.ImageDtos)
+                {
+                    var sb = new StringBuilder();
+                    foreach (var boundingBox in imageDto.BoundingBoxes)
+                    {
+                        sb.Append(boundingBox.ObjectIndex).Append(" ");
+                        sb.Append(boundingBox.CenterX).Append(" ");
+                        sb.Append(boundingBox.CenterY).Append(" ");
+                        sb.Append(boundingBox.Width).Append(" ");
+                        sb.Append(boundingBox.Height).AppendLine();
+                    }
+
+                    var dataPath = this._boundingBoxReader.GetDataPath(imageDto.FilePath);
+                    File.WriteAllText(dataPath, sb.ToString());
+                }
+            }
         }
 
         public void OpenPackage(AnnotationPackage package)
@@ -176,7 +208,17 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             this.FolderSelected?.Invoke(downloadedPackage);
         }
 
+        private void annotateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.AnnotatePackage();
+        }
+
         private void dataGridView1_DoubleClick(object sender, EventArgs e)
+        {
+            this.AnnotatePackage();
+        }
+
+        private void AnnotatePackage()
         {
             var package = this.dataGridView1.CurrentRow?.DataBoundItem as AnnotationPackage;
             if (package == null)
@@ -189,12 +231,49 @@ namespace Alturos.Yolo.LearningImage.CustomControls
                 return;
             }
 
-            var arguments = $@"""{package.PackagePath}"" C:\Users\kneluk\Documents\GitHub\Yolo_mark\x64\Release\data\train.txt C:\Users\kneluk\Documents\GitHub\Yolo_mark\x64\Release\data\obj.names";
-            var process = Process.Start(@"C:\Users\kneluk\Documents\GitHub\Yolo_mark\x64\Release\yolo_mark.exe", arguments);
+            var arguments = $@"""{package.PackagePath}"" yolomark\data\train.txt yolomark\data\obj.names";
+            var process = Process.Start(@"yolomark\yolo_mark.exe", arguments);
             process.WaitForExit();
 
             package.Images = null;
             this.FolderSelected?.Invoke(package);
+        }
+
+        public void UpdateAnnotationStatus(AnnotationPackage package)
+        {
+            // Check if package is annotated or not. 50% of images require to be annotated
+            var annotatedImageCount = 0;
+            var requiredPercentage = 50;
+
+            foreach (var image in package.Images)
+            {
+                if (image.BoundingBoxes?.Count > 0)
+                {
+                    annotatedImageCount++;
+                }
+            }
+
+            package.Info.AnnotationPercentage = annotatedImageCount / ((double)package.Images.Count) * 100;
+            package.Info.IsAnnotated = package.Info.AnnotationPercentage >= requiredPercentage;
+        }
+
+        private void dataGridView1_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        {
+            var item = this.dataGridView1.Rows[e.RowIndex].DataBoundItem as AnnotationPackage;
+
+            if (item.Info.IsAnnotated)
+            {
+                this.dataGridView1.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.GreenYellow;
+                return;
+            }
+
+            if (item.Extracted)
+            {
+                this.dataGridView1.DefaultCellStyle.BackColor = Color.Azure;
+                return;
+            }
+
+            this.dataGridView1.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.White;
         }
     }
 }

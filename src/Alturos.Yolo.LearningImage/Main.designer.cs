@@ -30,8 +30,6 @@
         {
             this.menuStripMain = new System.Windows.Forms.MenuStrip();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fromPCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fromAmazonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.syncToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.allImagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,26 +64,10 @@
             // 
             // loadToolStripMenuItem
             // 
-            this.loadToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fromPCToolStripMenuItem,
-            this.fromAmazonToolStripMenuItem});
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
             this.loadToolStripMenuItem.Size = new System.Drawing.Size(45, 20);
             this.loadToolStripMenuItem.Text = "&Load";
-            // 
-            // fromPCToolStripMenuItem
-            // 
-            this.fromPCToolStripMenuItem.Name = "fromPCToolStripMenuItem";
-            this.fromPCToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.fromPCToolStripMenuItem.Text = "From &PC";
-            this.fromPCToolStripMenuItem.Click += new System.EventHandler(this.fromPCToolStripMenuItem_Click);
-            // 
-            // fromAmazonToolStripMenuItem
-            // 
-            this.fromAmazonToolStripMenuItem.Name = "fromAmazonToolStripMenuItem";
-            this.fromAmazonToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
-            this.fromAmazonToolStripMenuItem.Text = "From &Amazon Cloud Storage";
-            this.fromAmazonToolStripMenuItem.Click += new System.EventHandler(this.fromAmazonToolStripMenuItem_Click);
+            this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
             // syncToolStripMenuItem
             // 
@@ -108,14 +90,14 @@
             // allImagesToolStripMenuItem
             // 
             this.allImagesToolStripMenuItem.Name = "allImagesToolStripMenuItem";
-            this.allImagesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.allImagesToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.allImagesToolStripMenuItem.Text = "&All Images";
             this.allImagesToolStripMenuItem.Click += new System.EventHandler(this.allImagesToolStripMenuItem_Click);
             // 
             // selectedImagesToolStripMenuItem
             // 
             this.selectedImagesToolStripMenuItem.Name = "selectedImagesToolStripMenuItem";
-            this.selectedImagesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.selectedImagesToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.selectedImagesToolStripMenuItem.Text = "&Selected Images";
             this.selectedImagesToolStripMenuItem.Click += new System.EventHandler(this.selectedImagesToolStripMenuItem_Click);
             // 
@@ -239,8 +221,6 @@
         private CustomControls.AnnotationPackageListControl annotationPackageListControl;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private CustomControls.AnnotationImageControl annotationImageControl;
-        private System.Windows.Forms.ToolStripMenuItem fromPCToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem fromAmazonToolStripMenuItem;
         private System.Windows.Forms.Panel panelImageList;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private CustomControls.TagListControl tagListControl;

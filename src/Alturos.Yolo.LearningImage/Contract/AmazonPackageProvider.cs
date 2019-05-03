@@ -6,7 +6,6 @@ using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.S3;
 using Amazon.S3.IO;
 using Amazon.S3.Transfer;
-using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -23,7 +22,9 @@ namespace Alturos.Yolo.LearningImage.Contract
         private readonly IAmazonDynamoDB _dynamoDbClient;
         private readonly string _bucketName;
         private readonly string _extractionFolder;
-        private readonly Dictionary<string, double> _uploadPercentages;
+
+        private int _packagesToSync;
+        private int _syncedPackages;
 
         public AmazonPackageProvider()
         {
@@ -35,8 +36,6 @@ namespace Alturos.Yolo.LearningImage.Contract
 
             this._client = new AmazonS3Client(accessKeyId, secretAccessKey, RegionEndpoint.EUWest1);
             this._dynamoDbClient = new AmazonDynamoDBClient(accessKeyId, secretAccessKey, RegionEndpoint.EUWest1);
-
-            this._uploadPercentages = new Dictionary<string, double>();
         }
 
         public AnnotationPackage[] GetPackages()
@@ -44,11 +43,8 @@ namespace Alturos.Yolo.LearningImage.Contract
             // Retrieve unannotated metadata
             var context = new DynamoDBContext(this._dynamoDbClient);
 
-            var results1 = context.Scan<AnnotationPackageInfo>(new ScanCondition("IsAnnotated", ScanOperator.IsNull));
-            var results2 = context.Scan<AnnotationPackageInfo>(new ScanCondition("IsAnnotated", ScanOperator.Equal, false));
-
-            var packageInfos = results1.Union(results2).ToList();
-
+            var packageInfos = context.Scan<AnnotationPackageInfo>(new ScanCondition("IsAnnotated", ScanOperator.Equal, false));
+            
             // Create packages
             var packages = packageInfos.Select(o => new AnnotationPackage {
                 Extracted = false,
@@ -100,12 +96,13 @@ namespace Alturos.Yolo.LearningImage.Contract
         public async Task SyncPackages(AnnotationPackage[] packages)
         {
             this.IsSyncing = true;
-            this._uploadPercentages.Clear();
-            
+
+            this._packagesToSync = packages.Length;
+            this._syncedPackages = 0;
+
             var tasks = new List<Task>();
             foreach (var package in packages)
             {
-                this._uploadPercentages[package.PackagePath] = 0;
                 tasks.Add(Task.Run(() => this.UploadAsync(package)));
             }
 
@@ -116,35 +113,10 @@ namespace Alturos.Yolo.LearningImage.Contract
 
         private async Task UploadAsync(AnnotationPackage package)
         {
-            var uploadRequest = new TransferUtilityUploadRequest
-            {
-                BucketName = this._bucketName,
-                FilePath = package.PackagePath
-            };
+            var context = new DynamoDBContext(this._dynamoDbClient);
+            await context.SaveAsync(package.Info);
 
-            uploadRequest.UploadProgressEvent += this.UploadRequest_UploadProgressEvent;
-
-            using (var fileTransferUtility = new TransferUtility(this._client))
-            {
-                try
-                {
-                    await fileTransferUtility.UploadAsync(uploadRequest);
-                }
-                catch (Exception exception)
-                {
-
-                }
-
-                var context = new DynamoDBContext(this._dynamoDbClient);
-                context.Save(package.Info);
-            }
-
-            uploadRequest.UploadProgressEvent -= this.UploadRequest_UploadProgressEvent;
-        }
-
-        private void UploadRequest_UploadProgressEvent(object sender, UploadProgressArgs e)
-        {
-            this._uploadPercentages[e.FilePath] = e.PercentDone;
+            this._syncedPackages++;
         }
 
         public double GetSyncProgress()
@@ -154,13 +126,7 @@ namespace Alturos.Yolo.LearningImage.Contract
                 return 0;
             }
 
-            var totalPercentage = 0.0;
-            foreach (var value in this._uploadPercentages.Values)
-            {
-                totalPercentage += value;
-            }
-
-            return totalPercentage / this._uploadPercentages.Count;
+            return this._syncedPackages / (double)this._packagesToSync * 100;
         }
     }
 }

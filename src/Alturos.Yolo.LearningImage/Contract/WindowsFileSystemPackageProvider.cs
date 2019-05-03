@@ -28,11 +28,17 @@ namespace Alturos.Yolo.LearningImage.Contract
                     var packages = new List<AnnotationPackage>();
                     foreach (var directory in directories)
                     {
+                        if (Directory.GetFiles(directory).Length == 0)
+                        {
+                            continue;
+                        }
+
                         packages.Add(new AnnotationPackage
                         {
                             Extracted = true,
                             PackagePath = directory,
-                            DisplayName = Path.GetFileNameWithoutExtension(directory)
+                            DisplayName = Path.GetFileNameWithoutExtension(directory),
+                            Info = new AnnotationPackageInfo()
                         });
                     }
 

@@ -14,5 +14,7 @@ namespace Alturos.Yolo.LearningImage.Model
         public string Device { get; set; }
         public string Flag { get; set; }
         public bool IsAnnotated { get; set; }
+        public double AnnotationPercentage { get; set; }
+        public List<AnnotationImageDto> ImageDtos { get; set; }
     }
 }

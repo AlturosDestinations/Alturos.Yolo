@@ -1,8 +1,6 @@
 ﻿using Alturos.Yolo.LearningImage.Contract;
 using Alturos.Yolo.LearningImage.Model;
 using System.Collections.Generic;
-using System.IO;
-using System.IO.Compression;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -21,27 +19,12 @@ namespace Alturos.Yolo.LearningImage
 
         public async Task Sync(AnnotationPackage[] packages)
         {
-            var zippedPackages = new List<AnnotationPackage>();
             foreach (var package in packages)
             {
-                package.Info.IsAnnotated = true;
-
-                if (!package.Extracted)
-                {
-                    continue;
-                }
-
-                var zippedPackage = this.ZipPackage(package);
-                zippedPackages.Add(zippedPackage);
+                this.AddImageDtos(package);
             }
 
-            if (zippedPackages.Count == 0)
-            {
-                this.Close();
-                return;
-            }
-
-            _ = Task.Run(() => this._annotationPackageProvider.SyncPackages(zippedPackages.ToArray()));
+            _ = Task.Run(() => this._annotationPackageProvider.SyncPackages(packages));
 
             while (!this._annotationPackageProvider.IsSyncing)
             {
@@ -59,24 +42,19 @@ namespace Alturos.Yolo.LearningImage
             this.Close();
         }
 
-        public AnnotationPackage ZipPackage(AnnotationPackage package)
+        private void AddImageDtos(AnnotationPackage package)
         {
-            var zipFilePath = Path.Combine(package.PackagePath, @"..\", $"{package.DisplayName}.zip");
+            var info = package.Info;
+            info.ImageDtos = new List<AnnotationImageDto>();
 
-            if (File.Exists(zipFilePath))
+            foreach (var image in package.Images)
             {
-                File.Delete(zipFilePath);
+                info.ImageDtos.Add(new AnnotationImageDto
+                {
+                    FilePath = image.FilePath,
+                    BoundingBoxes = image.BoundingBoxes
+                });
             }
-
-            ZipFile.CreateFromDirectory(package.PackagePath, zipFilePath);
-
-            var zippedPackage = new AnnotationPackage(package)
-            {
-                PackagePath = zipFilePath,
-                Extracted = false
-            };
-
-            return zippedPackage;
         }
     }
 }

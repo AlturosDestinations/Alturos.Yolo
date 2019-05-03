@@ -10,6 +10,7 @@ namespace Alturos.Yolo.LearningImage.Model
         public string DisplayName { get; set; }
         public List<AnnotationImage> Images { get; set; }
         public AnnotationPackageInfo Info { get; set; }
+        public double AnnotationPercentage { get { return Info.AnnotationPercentage; } }
 
         public AnnotationPackage() {
             this.Selected = true;
@@ -22,6 +23,7 @@ namespace Alturos.Yolo.LearningImage.Model
             this.PackagePath = package.PackagePath;
             this.DisplayName = package.DisplayName;
             this.Images = package.Images;
+            this.Info = package.Info;
         }
     }
 }
