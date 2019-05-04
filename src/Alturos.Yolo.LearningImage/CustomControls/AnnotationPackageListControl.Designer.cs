@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.selectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -134,10 +134,10 @@
             // ColumnPercentage
             // 
             this.ColumnPercentage.DataPropertyName = "AnnotationPercentage";
-            dataGridViewCellStyle2.Format = "0.00";
-            dataGridViewCellStyle2.NullValue = null;
-            this.ColumnPercentage.DefaultCellStyle = dataGridViewCellStyle2;
-            this.ColumnPercentage.HeaderText = "% Annotated";
+            dataGridViewCellStyle1.Format = "0.00";
+            dataGridViewCellStyle1.NullValue = null;
+            this.ColumnPercentage.DefaultCellStyle = dataGridViewCellStyle1;
+            this.ColumnPercentage.HeaderText = "Annotated (%)";
             this.ColumnPercentage.Name = "ColumnPercentage";
             this.ColumnPercentage.ReadOnly = true;
             // 
