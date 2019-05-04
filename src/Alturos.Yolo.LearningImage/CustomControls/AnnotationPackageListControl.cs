@@ -257,11 +257,19 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
             if (!package.Extracted)
             {
+                MessageBox.Show("Please extract package first", "Package is not available");
+                return;
+            }
+
+            var yoloMarkPath = @"yolomark\yolo_mark.exe";
+            if (!File.Exists(yoloMarkPath))
+            {
+                MessageBox.Show("Please download yolo mark first", "YoloMark missing");
                 return;
             }
 
             var arguments = $@"""{package.PackagePath}"" yolomark\data\train.txt yolomark\data\obj.names";
-            var process = Process.Start(@"yolomark\yolo_mark.exe", arguments);
+            var process = Process.Start(yoloMarkPath, arguments);
             process.WaitForExit();
 
             package.Images = null;

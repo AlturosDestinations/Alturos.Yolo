@@ -24,9 +24,7 @@ namespace Alturos.Yolo.LearningImage
         private static void Bootstrap()
         {
             _container = new Container();
-
             _container.Register<IBoundingBoxReader, YoloBoundingBoxReader>(Lifestyle.Singleton);
-
             _container.Verify();
         }
     }
