@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Alturos.Yolo.LearningImage.Contract;
+using SimpleInjector;
+using System;
 using System.Windows.Forms;
 
-namespace Test.YoloLearningImage
+namespace Alturos.Yolo.LearningImage
 {
     static class Program
     {
+        private static Container _container;
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -16,7 +17,17 @@ namespace Test.YoloLearningImage
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Main());
+            Bootstrap();
+            Application.Run(_container.GetInstance<Main>());
+        }
+
+        private static void Bootstrap()
+        {
+            _container = new Container();
+
+            _container.Register<IBoundingBoxReader, YoloBoundingBoxReader>(Lifestyle.Singleton);
+
+            _container.Verify();
         }
     }
 }
