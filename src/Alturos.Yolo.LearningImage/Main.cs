@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -21,14 +22,18 @@ namespace Alturos.Yolo.LearningImage
             this._boundingBoxReader = boundingBoxReader;
 
             var startupForm = new StartupForm();
-            startupForm.ShowDialog();
+            var dialogResult = startupForm.ShowDialog();
 
             this._annotationPackageProvider = startupForm.AnnotationPackageProvider;
             this._objectClasses = startupForm.ObjectClasses;
 
             this.InitializeComponent();
 
-            this.LoadPackages();
+            if (dialogResult == DialogResult.OK)
+            {
+                this.CreateYoloObjectNames();
+                this.LoadPackages();
+            }
         }
 
         #region Initialization and Cleanup
@@ -50,6 +55,23 @@ namespace Alturos.Yolo.LearningImage
 
             this.annotationImageListControl.ImageSelected -= this.ImageSelected;
             this.annotationImageListControl.ExtractionRequested -= this.ExtractionRequested;
+        }
+
+        private void CreateYoloObjectNames()
+        {
+            var sb = new StringBuilder();
+            foreach (var objectClass in this._objectClasses)
+            {
+                sb.AppendLine(objectClass.Name);
+            }
+
+            var yoloMarkPath = @"yolomark\data";
+            if (!Directory.Exists(yoloMarkPath))
+            {
+                Directory.CreateDirectory(yoloMarkPath);
+            }
+
+            File.WriteAllText(Path.Combine(yoloMarkPath, "obj.names"), sb.ToString());
         }
 
         #endregion

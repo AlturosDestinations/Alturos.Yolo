@@ -1,8 +1,6 @@
-﻿using Alturos.Yolo.LearningImage.Contract;
-using Alturos.Yolo.LearningImage.Model;
+﻿using Alturos.Yolo.LearningImage.Model;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -54,23 +52,24 @@ namespace Alturos.Yolo.LearningImage.CustomControls
                     var y = (item.CenterY * bitmap.Height) - (height / 2);
 
                     var color = ColorTranslator.FromHtml(colorCodes[item.ObjectIndex]);
-                    var pen = new Pen(color, 3);
-
-                    canvas.DrawRectangle(pen, x, y, width, height);
-
-                    var objectClass = objectClasses?.FirstOrDefault(o => o.Id == item.ObjectIndex);
-                    if (objectClass != null)
+                    using (var pen = new Pen(color, 3))
                     {
-                        using (var brush = new SolidBrush(color))
-                        using (var bgBrush = new SolidBrush(Color.FromArgb(128, 255, 255, 255)))
-                        using (var font = new Font("Arial", 20))
-                        {
-                            var text = $"{objectClass.Id} {objectClass.Name}";
-                            var point = new PointF(x + 4, y + 4);
-                            var size = canvas.MeasureString(text, font);
+                        canvas.DrawRectangle(pen, x, y, width, height);
 
-                            canvas.FillRectangle(bgBrush, point.X, point.Y, size.Width, size.Height);
-                            canvas.DrawString(text, font, brush, point);
+                        var objectClass = objectClasses?.FirstOrDefault(o => o.Id == item.ObjectIndex);
+                        if (objectClass != null)
+                        {
+                            using (var brush = new SolidBrush(color))
+                            using (var bgBrush = new SolidBrush(Color.FromArgb(128, 255, 255, 255)))
+                            using (var font = new Font("Arial", 20))
+                            {
+                                var text = $"{objectClass.Id} {objectClass.Name}";
+                                var point = new PointF(x + 4, y + 4);
+                                var size = canvas.MeasureString(text, font);
+
+                                canvas.FillRectangle(bgBrush, point.X, point.Y, size.Width, size.Height);
+                                canvas.DrawString(text, font, brush, point);
+                            }
                         }
                     }
                 }

@@ -68,6 +68,5 @@ namespace Alturos.Yolo.LearningImage.Contract
         {
             throw new NotImplementedException();
         }
-
     }
 }

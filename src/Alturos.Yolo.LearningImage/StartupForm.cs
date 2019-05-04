@@ -63,13 +63,6 @@ namespace Alturos.Yolo.LearningImage
                 }
             }
 
-            var sb = new StringBuilder();
-            foreach (var objectClass in this.ObjectClasses)
-            {
-                sb.AppendLine(objectClass.Name);
-            }
-            File.WriteAllText(@"yolomark\data\obj.names", sb.ToString());
-
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
