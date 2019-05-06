@@ -85,7 +85,7 @@ namespace Alturos.Yolo.LearningImage
 
         private void LoadPackages()
         {
-            this.annotationPackageListControl.Setup(this._boundingBoxReader, this._annotationPackageProvider);
+            this.annotationPackageListControl.Setup(this._boundingBoxReader, this._annotationPackageProvider, this._objectClasses);
             this.annotationPackageListControl.LoadPackages();
 
             this.syncToolStripMenuItem.Enabled = true;
