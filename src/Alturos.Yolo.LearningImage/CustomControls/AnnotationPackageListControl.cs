@@ -300,7 +300,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
             if (item.Extracted)
             {
-                this.dataGridView1.DefaultCellStyle.BackColor = Color.Azure;
+                this.dataGridView1.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Azure;
                 return;
             }
 

@@ -112,6 +112,7 @@
     <Compile Include="CustomControls\TagListControl.Designer.cs">
       <DependentUpon>TagListControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helper\DrawHelper.cs" />
     <Compile Include="Model\AnnotationImageDto.cs" />
     <Compile Include="Model\AnnotationImage.cs" />
     <Compile Include="Model\AnnotationPackage.cs" />
