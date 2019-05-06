@@ -326,15 +326,15 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
                 foreach (var line in lines)
                 {
-                    var index = new string(line.TakeWhile(char.IsDigit).ToArray());
+                    var index = line.GetFirstNumber();
 
                     try
                     {
-                        sb.AppendLine(line.ReplaceFirst(index, oldNewIndexCollection[int.Parse(index)].ToString()));
+                        sb.AppendLine(line.ReplaceFirst(index.ToString(), oldNewIndexCollection[index].ToString()));
                     }
                     catch (KeyNotFoundException exception)
                     {
-                        Log.Error($"{nameof(ChangeObjectClassIndices)} - key: {index}, toYoloMark: {toYoloMark}", exception);
+                        Log.Error($"{nameof(ChangeObjectClassIndices)} - key: {index.ToString()}, toYoloMark: {toYoloMark}", exception);
                     }
                 }
 
