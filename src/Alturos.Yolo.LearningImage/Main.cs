@@ -78,7 +78,7 @@ namespace Alturos.Yolo.LearningImage
 
         #region Load and Sync
 
-        private void loadToolStripMenuItem_Click(object sender, EventArgs e)
+        private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.LoadPackages();
         }
