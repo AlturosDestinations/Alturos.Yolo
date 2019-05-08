@@ -22,6 +22,10 @@ namespace Alturos.Yolo.LearningImage.Contract
             foreach (var line in lines)
             {
                 var parts = line.Split(' ');
+                if (parts.Length != 5)
+                {
+                    continue;
+                }
 
                 var ci = (CultureInfo)CultureInfo.CurrentCulture.Clone();
                 ci.NumberFormat.CurrencyDecimalSeparator = ".";

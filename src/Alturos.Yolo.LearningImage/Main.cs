@@ -78,14 +78,14 @@ namespace Alturos.Yolo.LearningImage
 
         #region Load and Sync
 
-        private void loadToolStripMenuItem_Click(object sender, EventArgs e)
+        private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.LoadPackages();
         }
 
         private void LoadPackages()
         {
-            this.annotationPackageListControl.Setup(this._boundingBoxReader, this._annotationPackageProvider);
+            this.annotationPackageListControl.Setup(this._boundingBoxReader, this._annotationPackageProvider, this._objectClasses);
             this.annotationPackageListControl.LoadPackages();
 
             this.syncToolStripMenuItem.Enabled = true;

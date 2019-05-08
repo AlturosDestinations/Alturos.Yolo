@@ -33,12 +33,7 @@
             this.groupBoxAnnotationPackageProvider = new System.Windows.Forms.GroupBox();
             this.buttonConfirm = new System.Windows.Forms.Button();
             this.groupBoxObjectClasses = new System.Windows.Forms.GroupBox();
-            this.checkBoxObject6 = new System.Windows.Forms.CheckBox();
-            this.checkBoxObject5 = new System.Windows.Forms.CheckBox();
-            this.checkBoxObject4 = new System.Windows.Forms.CheckBox();
-            this.checkBoxObject3 = new System.Windows.Forms.CheckBox();
-            this.checkBoxObject2 = new System.Windows.Forms.CheckBox();
-            this.checkBoxObject1 = new System.Windows.Forms.CheckBox();
+            this.checkBoxTemplate = new System.Windows.Forms.CheckBox();
             this.labelSelectObjectClasses = new System.Windows.Forms.Label();
             this.groupBoxAnnotationPackageProvider.SuspendLayout();
             this.groupBoxObjectClasses.SuspendLayout();
@@ -95,12 +90,7 @@
             this.groupBoxObjectClasses.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxObjectClasses.Controls.Add(this.checkBoxObject6);
-            this.groupBoxObjectClasses.Controls.Add(this.checkBoxObject5);
-            this.groupBoxObjectClasses.Controls.Add(this.checkBoxObject4);
-            this.groupBoxObjectClasses.Controls.Add(this.checkBoxObject3);
-            this.groupBoxObjectClasses.Controls.Add(this.checkBoxObject2);
-            this.groupBoxObjectClasses.Controls.Add(this.checkBoxObject1);
+            this.groupBoxObjectClasses.Controls.Add(this.checkBoxTemplate);
             this.groupBoxObjectClasses.Controls.Add(this.labelSelectObjectClasses);
             this.groupBoxObjectClasses.Location = new System.Drawing.Point(12, 81);
             this.groupBoxObjectClasses.Name = "groupBoxObjectClasses";
@@ -109,71 +99,15 @@
             this.groupBoxObjectClasses.TabStop = false;
             this.groupBoxObjectClasses.Text = "Object Classes";
             // 
-            // checkBoxObject6
+            // checkBoxTemplate
             // 
-            this.checkBoxObject6.AutoSize = true;
-            this.checkBoxObject6.Location = new System.Drawing.Point(159, 68);
-            this.checkBoxObject6.Name = "checkBoxObject6";
-            this.checkBoxObject6.Size = new System.Drawing.Size(53, 17);
-            this.checkBoxObject6.TabIndex = 9;
-            this.checkBoxObject6.Text = "Plane";
-            this.checkBoxObject6.UseVisualStyleBackColor = true;
-            this.checkBoxObject6.CheckedChanged += new System.EventHandler(this.checkBoxObject_CheckedChanged);
-            // 
-            // checkBoxObject5
-            // 
-            this.checkBoxObject5.AutoSize = true;
-            this.checkBoxObject5.Location = new System.Drawing.Point(84, 68);
-            this.checkBoxObject5.Name = "checkBoxObject5";
-            this.checkBoxObject5.Size = new System.Drawing.Size(60, 17);
-            this.checkBoxObject5.TabIndex = 8;
-            this.checkBoxObject5.Text = "Bicycle";
-            this.checkBoxObject5.UseVisualStyleBackColor = true;
-            this.checkBoxObject5.CheckedChanged += new System.EventHandler(this.checkBoxObject_CheckedChanged);
-            // 
-            // checkBoxObject4
-            // 
-            this.checkBoxObject4.AutoSize = true;
-            this.checkBoxObject4.Location = new System.Drawing.Point(9, 68);
-            this.checkBoxObject4.Name = "checkBoxObject4";
-            this.checkBoxObject4.Size = new System.Drawing.Size(50, 17);
-            this.checkBoxObject4.TabIndex = 7;
-            this.checkBoxObject4.Text = "Train";
-            this.checkBoxObject4.UseVisualStyleBackColor = true;
-            this.checkBoxObject4.CheckedChanged += new System.EventHandler(this.checkBoxObject_CheckedChanged);
-            // 
-            // checkBoxObject3
-            // 
-            this.checkBoxObject3.AutoSize = true;
-            this.checkBoxObject3.Location = new System.Drawing.Point(159, 45);
-            this.checkBoxObject3.Name = "checkBoxObject3";
-            this.checkBoxObject3.Size = new System.Drawing.Size(48, 17);
-            this.checkBoxObject3.TabIndex = 6;
-            this.checkBoxObject3.Text = "Tree";
-            this.checkBoxObject3.UseVisualStyleBackColor = true;
-            this.checkBoxObject3.CheckedChanged += new System.EventHandler(this.checkBoxObject_CheckedChanged);
-            // 
-            // checkBoxObject2
-            // 
-            this.checkBoxObject2.AutoSize = true;
-            this.checkBoxObject2.Location = new System.Drawing.Point(84, 45);
-            this.checkBoxObject2.Name = "checkBoxObject2";
-            this.checkBoxObject2.Size = new System.Drawing.Size(46, 17);
-            this.checkBoxObject2.TabIndex = 5;
-            this.checkBoxObject2.Text = "Flag";
-            this.checkBoxObject2.UseVisualStyleBackColor = true;
-            this.checkBoxObject2.CheckedChanged += new System.EventHandler(this.checkBoxObject_CheckedChanged);
-            // 
-            // checkBoxObject1
-            // 
-            this.checkBoxObject1.AutoSize = true;
-            this.checkBoxObject1.Location = new System.Drawing.Point(9, 45);
-            this.checkBoxObject1.Name = "checkBoxObject1";
-            this.checkBoxObject1.Size = new System.Drawing.Size(50, 17);
-            this.checkBoxObject1.TabIndex = 4;
-            this.checkBoxObject1.Text = "Skier";
-            this.checkBoxObject1.UseVisualStyleBackColor = true;
-            this.checkBoxObject1.CheckedChanged += new System.EventHandler(this.checkBoxObject_CheckedChanged);
+            this.checkBoxTemplate.Location = new System.Drawing.Point(9, 45);
+            this.checkBoxTemplate.Name = "checkBoxTemplate";
+            this.checkBoxTemplate.Size = new System.Drawing.Size(75, 17);
+            this.checkBoxTemplate.TabIndex = 4;
+            this.checkBoxTemplate.Text = "Template";
+            this.checkBoxTemplate.UseVisualStyleBackColor = true;
+            this.checkBoxTemplate.CheckedChanged += new System.EventHandler(this.checkBoxObject_CheckedChanged);
             // 
             // labelSelectObjectClasses
             // 
@@ -210,12 +144,7 @@
         private System.Windows.Forms.GroupBox groupBoxAnnotationPackageProvider;
         private System.Windows.Forms.Button buttonConfirm;
         private System.Windows.Forms.GroupBox groupBoxObjectClasses;
-        private System.Windows.Forms.CheckBox checkBoxObject6;
-        private System.Windows.Forms.CheckBox checkBoxObject5;
-        private System.Windows.Forms.CheckBox checkBoxObject4;
-        private System.Windows.Forms.CheckBox checkBoxObject3;
-        private System.Windows.Forms.CheckBox checkBoxObject2;
-        private System.Windows.Forms.CheckBox checkBoxObject1;
+        private System.Windows.Forms.CheckBox checkBoxTemplate;
         private System.Windows.Forms.Label labelSelectObjectClasses;
     }
 }

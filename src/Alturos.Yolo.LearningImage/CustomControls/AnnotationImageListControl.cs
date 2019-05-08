@@ -1,7 +1,9 @@
-﻿using Alturos.Yolo.LearningImage.Model;
+﻿using Alturos.Yolo.LearningImage.Helper;
+using Alturos.Yolo.LearningImage.Model;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Alturos.Yolo.LearningImage.CustomControls
@@ -54,7 +56,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         public void SetImages(List<AnnotationImage> images)
         {
             this.panelExtractNotification.Hide();
-            this.dataGridView1.DataSource = images;
+            this.dataGridView1.DataSource = images?.OrderBy(o => o.DisplayName.GetFirstNumber()).ToList();
         }
 
         public void ShowExtractionWarning(AnnotationPackage package)

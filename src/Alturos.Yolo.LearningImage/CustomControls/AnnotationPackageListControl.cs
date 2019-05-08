@@ -1,5 +1,7 @@
 ﻿using Alturos.Yolo.LearningImage.Contract;
+using Alturos.Yolo.LearningImage.Helper;
 using Alturos.Yolo.LearningImage.Model;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,12 +18,15 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 {
     public partial class AnnotationPackageListControl : UserControl
     {
+        private static ILog Log = LogManager.GetLogger(typeof(AnnotationPackageListControl));
+
         public Action<AnnotationPackage> FolderSelected { get; set; }
 
         public DataGridView DataGridView { get { return this.dataGridView1; } }
 
         private IBoundingBoxReader _boundingBoxReader;
         private IAnnotationPackageProvider _annotationPackageProvider;
+        private List<ObjectClass> _objectClasses;
 
         public AnnotationPackageListControl()
         {
@@ -29,10 +34,11 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             this.dataGridView1.AutoGenerateColumns = false;
         }
 
-        public void Setup(IBoundingBoxReader boundingBoxReader, IAnnotationPackageProvider annotationPackageProvider)
+        public void Setup(IBoundingBoxReader boundingBoxReader, IAnnotationPackageProvider annotationPackageProvider, List<ObjectClass> objectClasses)
         {
             this._boundingBoxReader = boundingBoxReader;
             this._annotationPackageProvider = annotationPackageProvider;
+            this._objectClasses = objectClasses;
         }
 
         public AnnotationPackage[] GetAllPackages()
@@ -268,9 +274,17 @@ namespace Alturos.Yolo.LearningImage.CustomControls
                 return;
             }
 
-            var arguments = $@"""{package.PackagePath}"" yolomark\data\train.txt yolomark\data\obj.names";
+            // Turn our indices to Yolo Mark indices
+            this.ChangeObjectClassIndices(package, true);
+
+            // Start Yolo Mark
+            var arguments = $@"""{package.PackagePath}"" yolomark\data\output.txt yolomark\data\obj.names";
             var process = Process.Start(yoloMarkPath, arguments);
-            process.WaitForExit();
+
+            await process.WaitForExitAsync();
+
+            // Turn Yolo Mark indices to our indices
+            this.ChangeObjectClassIndices(package, false);
 
             package.Images = null;
             this.FolderSelected?.Invoke(package);
@@ -288,6 +302,46 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             }
         }
 
+        private void ChangeObjectClassIndices(AnnotationPackage package, bool toYoloMark)
+        {
+            // Lookup table to convert Yolo Mark indices to our indices or vice-versa
+            var oldNewIndexCollection = new Dictionary<int, int>();
+            for (var i = 0; i < this._objectClasses.Count; i++)
+            {
+                if (toYoloMark)
+                {
+                    oldNewIndexCollection[this._objectClasses[i].Id] = i;
+                }
+                else
+                {
+                    oldNewIndexCollection[i] = this._objectClasses[i].Id;
+                }
+            }
+
+            var files = Directory.GetFiles(package.PackagePath).Where(o => o.EndsWith(".txt"));
+            foreach (var file in files)
+            {
+                var lines = File.ReadAllLines(file);
+                var sb = new StringBuilder();
+
+                foreach (var line in lines)
+                {
+                    var index = line.GetFirstNumber();
+
+                    try
+                    {
+                        sb.AppendLine(line.ReplaceFirst(index.ToString(), oldNewIndexCollection[index].ToString()));
+                    }
+                    catch (KeyNotFoundException exception)
+                    {
+                        Log.Error($"{nameof(ChangeObjectClassIndices)} - key: {index.ToString()}, toYoloMark: {toYoloMark}", exception);
+                    }
+                }
+
+                File.WriteAllText(file, sb.ToString());
+            }
+        }
+
         private void dataGridView1_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
         {
             var item = this.dataGridView1.Rows[e.RowIndex].DataBoundItem as AnnotationPackage;
@@ -300,7 +354,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
             if (item.Extracted)
             {
-                this.dataGridView1.DefaultCellStyle.BackColor = Color.Azure;
+                this.dataGridView1.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Azure;
                 return;
             }
 
