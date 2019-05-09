@@ -127,7 +127,8 @@ If you have some error like `NotSupportedException` check if you use the latest 
 
 ## Dataset of tagged images
 
-http://cocodataset.org/
+- http://cocodataset.org/
+- https://storage.googleapis.com/openimages/web/index.html
 
 ## Directory Structure
     .
