@@ -24,7 +24,7 @@ namespace Alturos.Yolo.LearningImage
                 this.AddImageDtos(package);
             }
 
-            _ = Task.Run(() => this._annotationPackageProvider.SyncPackages(packages));
+            _ = Task.Run(() => this._annotationPackageProvider.SyncPackagesAsync(packages));
 
             while (!this._annotationPackageProvider.IsSyncing)
             {

@@ -67,14 +67,14 @@ namespace Alturos.Yolo.LearningImage.Contract
             return packages.ToArray();
         }
 
-        public AnnotationPackage RefreshPackage(AnnotationPackage package)
+        public async Task<AnnotationPackage> RefreshPackageAsync(AnnotationPackage package)
         {
             package.Extracted = false;
             package.PackagePath = $"{package.DisplayName}.zip";
-            return this.DownloadPackage(package);
+            return await this.DownloadPackageAsync(package);
         }
 
-        public AnnotationPackage DownloadPackage(AnnotationPackage package)
+        public async Task<AnnotationPackage> DownloadPackageAsync(AnnotationPackage package)
         {
             if (!Directory.Exists(this._extractionFolder))
             {
@@ -85,15 +85,23 @@ namespace Alturos.Yolo.LearningImage.Contract
             var file = dir.GetFile(package.PackagePath);
 
             var zipFilePath = Path.Combine(this._extractionFolder, file.Name);
-            var fileInfo = file.CopyToLocal(zipFilePath, true);
 
+            package.Downloading = true;
+
+            FileInfo fileInfo = null;
+            await Task.Run(() =>
+            {
+                fileInfo = file.CopyToLocal(zipFilePath, true);
+            });
+
+            package.Downloading = false;
             package.PackagePath = fileInfo.FullName;
             package.DisplayName = Path.GetFileNameWithoutExtension(fileInfo.FullName);
 
-            return package;
+            return await Task.FromResult(package);
         }
 
-        public async Task SyncPackages(AnnotationPackage[] packages)
+        public async Task SyncPackagesAsync(AnnotationPackage[] packages)
         {
             this.IsSyncing = true;
 

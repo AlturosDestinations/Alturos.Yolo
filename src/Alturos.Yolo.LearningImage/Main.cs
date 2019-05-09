@@ -46,7 +46,7 @@ namespace Alturos.Yolo.LearningImage
         private void annotationImageList_Load(object sender, EventArgs e)
         {
             this.annotationImageListControl.ImageSelected += this.ImageSelected;
-            this.annotationImageListControl.ExtractionRequested += this.ExtractionRequested;
+            this.annotationImageListControl.DownloadControl.ExtractionRequested += this.ExtractionRequested;
         }
 
         private void Main_FormClosed(object sender, FormClosedEventArgs e)
@@ -54,7 +54,7 @@ namespace Alturos.Yolo.LearningImage
             this.annotationPackageListControl.FolderSelected -= this.FolderSelected;
 
             this.annotationImageListControl.ImageSelected -= this.ImageSelected;
-            this.annotationImageListControl.ExtractionRequested -= this.ExtractionRequested;
+            this.annotationImageListControl.DownloadControl.ExtractionRequested -= this.ExtractionRequested;
         }
 
         private void CreateYoloObjectNames()
@@ -157,7 +157,7 @@ namespace Alturos.Yolo.LearningImage
                 this.annotationImageListControl.SetImages(null);
                 this.annotationImageControl.SetImage(null, null);
 
-                this.annotationImageListControl.ShowExtractionWarning(package);
+                this.annotationImageListControl.DownloadControl.ShowDownloadDialog(package);
             }
 
             this.annotationPackageListControl.DataGridView.Refresh();
@@ -171,9 +171,9 @@ namespace Alturos.Yolo.LearningImage
             this.annotationImageControl.SetImage(image, this._objectClasses);
         }
 
-        private void ExtractionRequested(AnnotationPackage package)
+        private async Task ExtractionRequested(AnnotationPackage package)
         {
-            var downloadedPackage = this._annotationPackageProvider.DownloadPackage(package);
+            var downloadedPackage = await this._annotationPackageProvider.DownloadPackageAsync(package);
             this.annotationPackageListControl.UnzipPackage(downloadedPackage);
 
             // Select folder to apply the images after extraction

@@ -149,7 +149,6 @@
             // annotationImageListControl
             // 
             this.annotationImageListControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.annotationImageListControl.ExtractionRequested = null;
             this.annotationImageListControl.ImageSelected = null;
             this.annotationImageListControl.Location = new System.Drawing.Point(0, 0);
             this.annotationImageListControl.Name = "annotationImageListControl";

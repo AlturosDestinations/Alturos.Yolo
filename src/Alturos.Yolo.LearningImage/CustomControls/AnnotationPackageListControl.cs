@@ -230,13 +230,13 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             this.dataGridView1.Refresh();
         }
 
-        private void redownloadToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void redownloadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.FolderSelected?.Invoke(null);
 
             var package = this.dataGridView1.Rows[this.dataGridView1.CurrentCell.RowIndex].DataBoundItem as AnnotationPackage;
 
-            var downloadedPackage = this._annotationPackageProvider.RefreshPackage(package);
+            var downloadedPackage = await this._annotationPackageProvider.RefreshPackageAsync(package);
             this.UnzipPackage(downloadedPackage);
 
             downloadedPackage.Images = null;
@@ -354,7 +354,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
             if (item.Extracted)
             {
-                this.dataGridView1.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Azure;
+                this.dataGridView1.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightBlue;
                 return;
             }
 
