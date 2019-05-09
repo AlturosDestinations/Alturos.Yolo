@@ -29,15 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.selectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.deselectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.redownloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.annotateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.ColumnSelected = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.ColumnName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnPercentage = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -52,7 +49,6 @@
             this.dataGridView1.AllowUserToResizeRows = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ColumnSelected,
             this.ColumnName,
             this.ColumnPercentage});
             this.dataGridView1.ContextMenuStrip = this.contextMenuStrip1;
@@ -69,26 +65,10 @@
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.selectAllToolStripMenuItem,
-            this.deselectAllToolStripMenuItem,
             this.redownloadToolStripMenuItem,
             this.annotateToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(141, 92);
-            // 
-            // selectAllToolStripMenuItem
-            // 
-            this.selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
-            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
-            this.selectAllToolStripMenuItem.Text = "&Select All";
-            this.selectAllToolStripMenuItem.Click += new System.EventHandler(this.selectAllToolStripMenuItem_Click);
-            // 
-            // deselectAllToolStripMenuItem
-            // 
-            this.deselectAllToolStripMenuItem.Name = "deselectAllToolStripMenuItem";
-            this.deselectAllToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
-            this.deselectAllToolStripMenuItem.Text = "&Deselect All";
-            this.deselectAllToolStripMenuItem.Click += new System.EventHandler(this.deselectAllToolStripMenuItem_Click);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 70);
             // 
             // redownloadToolStripMenuItem
             // 
@@ -115,14 +95,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Packages";
             // 
-            // ColumnSelected
-            // 
-            this.ColumnSelected.DataPropertyName = "Selected";
-            this.ColumnSelected.HeaderText = "";
-            this.ColumnSelected.Name = "ColumnSelected";
-            this.ColumnSelected.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.ColumnSelected.Width = 30;
-            // 
             // ColumnName
             // 
             this.ColumnName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
@@ -134,9 +106,9 @@
             // ColumnPercentage
             // 
             this.ColumnPercentage.DataPropertyName = "AnnotationPercentage";
-            dataGridViewCellStyle1.Format = "0.00";
-            dataGridViewCellStyle1.NullValue = null;
-            this.ColumnPercentage.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Format = "0.00";
+            dataGridViewCellStyle2.NullValue = null;
+            this.ColumnPercentage.DefaultCellStyle = dataGridViewCellStyle2;
             this.ColumnPercentage.HeaderText = "Annotated (%)";
             this.ColumnPercentage.Name = "ColumnPercentage";
             this.ColumnPercentage.ReadOnly = true;
@@ -160,11 +132,8 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem selectAllToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem deselectAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem redownloadToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem annotateToolStripMenuItem;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn ColumnSelected;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnName;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnPercentage;
     }

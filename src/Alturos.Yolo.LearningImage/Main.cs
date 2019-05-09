@@ -94,14 +94,28 @@ namespace Alturos.Yolo.LearningImage
 
         private async void syncToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var packages = this.annotationPackageListControl.GetSelectedPackages().Where(o => o.Extracted).ToArray();
+            var packages = this.annotationPackageListControl.GetAllPackages().Where(o => o.Extracted && o.Info.IsAnnotated).ToArray();
             if (packages.Length > 0)
             {
                 // Proceed with syncing
-                var syncForm = new SyncForm(this._annotationPackageProvider);
-                syncForm.Show();
+                var sb = new StringBuilder();
+                foreach (var package in packages)
+                {
+                    sb.AppendLine(package.DisplayName);
+                }
 
-                await syncForm.Sync(packages);
+                var dialogResult = MessageBox.Show($"Do you want to sync the following packages?\n\n{sb.ToString()}", "Confirm syncing", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.OK)
+                {
+                    var syncForm = new SyncForm(this._annotationPackageProvider);
+                    syncForm.Show();
+
+                    await syncForm.Sync(packages);
+                }
+            }
+            else
+            {
+                MessageBox.Show("There are no annoted packages to sync.", "Nothing to sync!");
             }
         }
 
@@ -109,24 +123,34 @@ namespace Alturos.Yolo.LearningImage
 
         #region Export
 
-        private void allImagesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var items = this.annotationPackageListControl.GetAllImages();
-            this.Export(items);
-        }
+            var images = this.annotationPackageListControl.GetAllImages();
 
-        private void selectedImagesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var items = this.annotationPackageListControl.GetSelectedImages();
-            this.Export(items);
-        }
-
-        private void Export(AnnotationImage[] images)
-        {
             var exportDialog = new ExportDialog();
             exportDialog.CreateImages(images.ToList());
             exportDialog.SetObjectClasses(this._objectClasses);
             exportDialog.Show();
+        }
+
+        #endregion
+
+        #region Upload
+
+        private void uploadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                Filter = "ZIP files (*.zip)|*.zip"
+            };
+
+            var dialogResult = openFileDialog.ShowDialog();
+            if (dialogResult == DialogResult.OK)
+            {
+                var file = openFileDialog.FileName;
+                this._annotationPackageProvider.UploadPackageAsync(file);
+            }
         }
 
         #endregion

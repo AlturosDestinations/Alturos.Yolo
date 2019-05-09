@@ -35,22 +35,6 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             return items.ToArray();
         }
 
-        public AnnotationImage[] GetSelected()
-        {
-            var items = new List<AnnotationImage>();
-
-            foreach (DataGridViewRow row in this.dataGridView1.Rows)
-            {
-                var item = row.DataBoundItem as AnnotationImage;
-                if (item.Selected)
-                {
-                    items.Add(item);
-                }
-            }
-
-            return items.ToArray();
-        }
-
         public void SetImages(List<AnnotationImage> images)
         {
             this.downloadControl.Hide();
@@ -61,28 +45,6 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         {
             var image = this.dataGridView1.CurrentRow.DataBoundItem as AnnotationImage;
             this.ImageSelected?.Invoke(image);
-        }
-
-        private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            foreach (DataGridViewRow row in this.dataGridView1.Rows)
-            {
-                var package = row.DataBoundItem as AnnotationImage;
-                package.Selected = true;
-            }
-
-            this.dataGridView1.Refresh();
-        }
-
-        private void deselectAllToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            foreach (DataGridViewRow row in this.dataGridView1.Rows)
-            {
-                var package = row.DataBoundItem as AnnotationImage;
-                package.Selected = false;
-            }
-
-            this.dataGridView1.Refresh();
         }
 
         private void dataGridView1_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)

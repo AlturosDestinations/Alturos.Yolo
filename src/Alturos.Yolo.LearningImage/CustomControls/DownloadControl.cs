@@ -23,6 +23,17 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
             this._packageToExtract = package;
             this.Show();
+
+            Task.Run(() => ShowDownloadProgress(package));
+        }
+
+        private async Task ShowDownloadProgress(AnnotationPackage package)
+        {
+            while (this.progressBarDownload.Value < 100 && package.Downloading && _packageToExtract == package)
+            {
+                await Task.Delay(20);
+                this.progressBarDownload.Invoke((MethodInvoker)delegate { this.progressBarDownload.Value = (int)package.DownloadProgress; });
+            }
         }
 
         private async void buttonDownload_Click(object sender, EventArgs e)

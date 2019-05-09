@@ -59,6 +59,11 @@ namespace Alturos.Yolo.LearningImage.Contract
             return Task.FromResult(package);
         }
 
+        public Task UploadPackageAsync(string packagePath)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task SyncPackagesAsync(AnnotationPackage[] packages)
         {
             throw new NotImplementedException();

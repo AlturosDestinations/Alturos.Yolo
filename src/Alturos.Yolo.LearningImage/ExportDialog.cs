@@ -75,57 +75,57 @@ namespace Alturos.Yolo.LearningImage
         /// </summary>
         private void CreateFiles(string dataPath, string imagePath)
         {
-            var images = this.annotationImageListControl.GetSelected();
-            var objectClasses = this.objectClassListControl.GetSelected();
+            //var images = this.annotationImageListControl.GetSelected();
+            //var objectClasses = this.objectClassListControl.GetSelected();
 
-            var stringBuilderDict = new Dictionary<int, StringBuilder>();
-            foreach (var objectClass in objectClasses)
-            {
-                stringBuilderDict[objectClass.Id] = new StringBuilder();
-            }
+            //var stringBuilderDict = new Dictionary<int, StringBuilder>();
+            //foreach (var objectClass in objectClasses)
+            //{
+            //    stringBuilderDict[objectClass.Id] = new StringBuilder();
+            //}
 
-            var usedFileNames = new List<string>();
+            //var usedFileNames = new List<string>();
 
-            foreach (var image in images)
-            {
-                var boxes = image.BoundingBoxes;
-                boxes.RemoveAll(box => !objectClasses.Select(objectClass => objectClass.Id).Contains(box.ObjectIndex));
+            //foreach (var image in images)
+            //{
+            //    var boxes = image.BoundingBoxes;
+            //    boxes.RemoveAll(box => !objectClasses.Select(objectClass => objectClass.Id).Contains(box.ObjectIndex));
 
-                if (boxes.Count == 0)
-                {
-                    continue;
-                }
+            //    if (boxes.Count == 0)
+            //    {
+            //        continue;
+            //    }
 
-                var newFileName = Path.GetFileName(image.FilePath);
-                while (usedFileNames.Contains(newFileName))
-                {
-                    newFileName = Path.GetFileNameWithoutExtension(image.FilePath) + "(1)" + Path.GetExtension(image.FilePath);
-                }
+            //    var newFileName = Path.GetFileName(image.FilePath);
+            //    while (usedFileNames.Contains(newFileName))
+            //    {
+            //        newFileName = Path.GetFileNameWithoutExtension(image.FilePath) + "(1)" + Path.GetExtension(image.FilePath);
+            //    }
 
-                usedFileNames.Add(newFileName);
+            //    usedFileNames.Add(newFileName);
 
-                var newFilePath = Path.Combine(imagePath, newFileName);
+            //    var newFilePath = Path.Combine(imagePath, newFileName);
 
-                for (var i = 0; i < boxes.Count; i++)
-                {
-                    if (boxes[i] != null)
-                    {
-                        stringBuilderDict[boxes[i].ObjectIndex].AppendLine(Path.GetFullPath(newFilePath));
-                    }
-                }
+            //    for (var i = 0; i < boxes.Count; i++)
+            //    {
+            //        if (boxes[i] != null)
+            //        {
+            //            stringBuilderDict[boxes[i].ObjectIndex].AppendLine(Path.GetFullPath(newFilePath));
+            //        }
+            //    }
 
-                // Copy image
-                File.Copy(image.FilePath, newFilePath, true);
+            //    // Copy image
+            //    File.Copy(image.FilePath, newFilePath, true);
 
-                //Create bounding boxes
-                this.CreateBoundingBoxes(image.BoundingBoxes, Path.ChangeExtension(newFilePath, "txt"));
-            }
+            //    //Create bounding boxes
+            //    this.CreateBoundingBoxes(image.BoundingBoxes, Path.ChangeExtension(newFilePath, "txt"));
+            //}
 
-            // Write object lists to file
-            foreach (var objectClass in objectClasses)
-            {
-                File.WriteAllText(Path.Combine(dataPath, $"{objectClass.Name}.txt"), stringBuilderDict[objectClass.Id].ToString());
-            }
+            //// Write object lists to file
+            //foreach (var objectClass in objectClasses)
+            //{
+            //    File.WriteAllText(Path.Combine(dataPath, $"{objectClass.Name}.txt"), stringBuilderDict[objectClass.Id].ToString());
+            //}
         }
 
         /// <summary>

@@ -4,8 +4,8 @@ namespace Alturos.Yolo.LearningImage.Model
 {
     public class AnnotationPackage
     {
-        public bool Selected { get; set; }
         public bool Downloading { get; set; }
+        public double DownloadProgress { get; set; }
         public bool Extracted { get; set; }
         public string PackagePath { get; set; }
         public string DisplayName { get; set; }
@@ -13,14 +13,12 @@ namespace Alturos.Yolo.LearningImage.Model
         public AnnotationPackageInfo Info { get; set; }
         public double AnnotationPercentage { get { return Info.AnnotationPercentage; } }
 
-        public AnnotationPackage() {
-            this.Selected = true;
-        }
+        public AnnotationPackage() { }
 
         public AnnotationPackage(AnnotationPackage package)
         {
-            this.Selected = true;
             this.Downloading = package.Downloading;
+            this.DownloadProgress = package.DownloadProgress;
             this.Extracted = package.Extracted;
             this.PackagePath = package.PackagePath;
             this.DisplayName = package.DisplayName;
