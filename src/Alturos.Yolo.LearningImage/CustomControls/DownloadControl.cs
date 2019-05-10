@@ -20,29 +20,40 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         {
             this.buttonDownload.Visible = !package.Downloading;
             this.progressBarDownload.Visible = package.Downloading;
+            this.labelPercentage.Visible = package.Downloading;
+
+            this.labelPercentage.BringToFront();
 
             this._packageToExtract = package;
             this.Show();
 
-            Task.Run(() => ShowDownloadProgress(package));
+            Task.Run(() => this.ShowDownloadProgress(package));
         }
 
         private async Task ShowDownloadProgress(AnnotationPackage package)
         {
-            while (this.progressBarDownload.Value < 100 && package.Downloading && _packageToExtract == package)
+            while (package.DownloadProgress < 100 && package.Downloading && this._packageToExtract == package)
             {
                 await Task.Delay(20);
+                this.labelPercentage.Invoke((MethodInvoker)delegate { this.labelPercentage.Text = $"{(int)package.DownloadProgress}%"; });
                 this.progressBarDownload.Invoke((MethodInvoker)delegate { this.progressBarDownload.Value = (int)package.DownloadProgress; });
             }
+
+            this.progressBarDownload.Value = 0;
         }
 
         private async void buttonDownload_Click(object sender, EventArgs e)
         {
             this.buttonDownload.Visible = false;
             this.progressBarDownload.Visible = true;
+            this.labelPercentage.Visible = true;
+
+            this.labelPercentage.BringToFront();
+
+            this._packageToExtract.Downloading = true;
+            _ = Task.Run(() => this.ShowDownloadProgress(this._packageToExtract));
 
             await this.ExtractionRequested?.Invoke(this._packageToExtract);
-            this.Hide();
         }
     }
 }

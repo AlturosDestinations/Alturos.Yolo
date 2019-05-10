@@ -13,13 +13,11 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         public Action<AnnotationImage> ImageSelected { get; set; }
 
         public DataGridView DataGridView { get { return this.dataGridView1; } }
-        public DownloadControl DownloadControl { get { return this.downloadControl; } }
 
         public AnnotationImageListControl()
         {
             this.InitializeComponent();
             this.dataGridView1.AutoGenerateColumns = false;
-            this.downloadControl.Hide();
         }
 
         public AnnotationImage[] GetAll()
@@ -37,7 +35,6 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
         public void SetImages(List<AnnotationImage> images)
         {
-            this.downloadControl.Hide();
             this.dataGridView1.DataSource = images?.OrderBy(o => o.DisplayName.GetFirstNumber()).ToList();
         }
 

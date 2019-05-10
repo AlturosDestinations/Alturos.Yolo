@@ -46,7 +46,7 @@ namespace Alturos.Yolo.LearningImage
         private void annotationImageList_Load(object sender, EventArgs e)
         {
             this.annotationImageListControl.ImageSelected += this.ImageSelected;
-            this.annotationImageListControl.DownloadControl.ExtractionRequested += this.ExtractionRequested;
+            this.downloadControl.ExtractionRequested += this.ExtractionRequested;
         }
 
         private void Main_FormClosed(object sender, FormClosedEventArgs e)
@@ -54,7 +54,7 @@ namespace Alturos.Yolo.LearningImage
             this.annotationPackageListControl.FolderSelected -= this.FolderSelected;
 
             this.annotationImageListControl.ImageSelected -= this.ImageSelected;
-            this.annotationImageListControl.DownloadControl.ExtractionRequested -= this.ExtractionRequested;
+            this.downloadControl.ExtractionRequested -= this.ExtractionRequested;
         }
 
         private void CreateYoloObjectNames()
@@ -159,6 +159,9 @@ namespace Alturos.Yolo.LearningImage
 
         private void FolderSelected(AnnotationPackage package)
         {
+            this.annotationImageListControl.Show();
+            this.downloadControl.Hide();
+
             if (package == null)
             {
                 this.annotationImageListControl.SetImages(null);
@@ -181,7 +184,8 @@ namespace Alturos.Yolo.LearningImage
                 this.annotationImageListControl.SetImages(null);
                 this.annotationImageControl.SetImage(null, null);
 
-                this.annotationImageListControl.DownloadControl.ShowDownloadDialog(package);
+                this.annotationImageListControl.Hide();
+                this.downloadControl.ShowDownloadDialog(package);
             }
 
             this.annotationPackageListControl.DataGridView.Refresh();

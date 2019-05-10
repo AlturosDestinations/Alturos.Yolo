@@ -32,6 +32,7 @@
             this.labelNotification = new System.Windows.Forms.Label();
             this.progressBarDownload = new System.Windows.Forms.ProgressBar();
             this.groupBoxDownload = new System.Windows.Forms.GroupBox();
+            this.labelPercentage = new System.Windows.Forms.Label();
             this.groupBoxDownload.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -65,12 +66,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBarDownload.Location = new System.Drawing.Point(6, 32);
             this.progressBarDownload.Name = "progressBarDownload";
-            this.progressBarDownload.Size = new System.Drawing.Size(262, 31);
+            this.progressBarDownload.Size = new System.Drawing.Size(226, 31);
             this.progressBarDownload.TabIndex = 4;
             this.progressBarDownload.Visible = false;
             // 
             // groupBoxDownload
             // 
+            this.groupBoxDownload.Controls.Add(this.labelPercentage);
             this.groupBoxDownload.Controls.Add(this.progressBarDownload);
             this.groupBoxDownload.Controls.Add(this.labelNotification);
             this.groupBoxDownload.Controls.Add(this.buttonDownload);
@@ -82,10 +84,25 @@
             this.groupBoxDownload.TabStop = false;
             this.groupBoxDownload.Text = "Download";
             // 
+            // labelPercentage
+            // 
+            this.labelPercentage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelPercentage.AutoSize = true;
+            this.labelPercentage.BackColor = System.Drawing.SystemColors.Control;
+            this.labelPercentage.Location = new System.Drawing.Point(238, 41);
+            this.labelPercentage.Name = "labelPercentage";
+            this.labelPercentage.Size = new System.Drawing.Size(21, 13);
+            this.labelPercentage.TabIndex = 5;
+            this.labelPercentage.Text = "0%";
+            this.labelPercentage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.labelPercentage.Visible = false;
+            // 
             // DownloadControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.Transparent;
             this.Controls.Add(this.groupBoxDownload);
             this.Name = "DownloadControl";
             this.Size = new System.Drawing.Size(274, 69);
@@ -101,5 +118,6 @@
         private System.Windows.Forms.Label labelNotification;
         private System.Windows.Forms.ProgressBar progressBarDownload;
         private System.Windows.Forms.GroupBox groupBoxDownload;
+        private System.Windows.Forms.Label labelPercentage;
     }
 }

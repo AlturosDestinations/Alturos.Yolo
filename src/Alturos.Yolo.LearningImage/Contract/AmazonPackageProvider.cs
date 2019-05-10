@@ -109,7 +109,7 @@ namespace Alturos.Yolo.LearningImage.Contract
                 this._currentlyDownloadedPackages.Add(package);
                 response.WriteObjectProgressEvent += this.WriteObjectProgressEvent;
 
-                await response.WriteResponseStreamToFileAsync(zipFilePath, true, new System.Threading.CancellationToken());
+                await response.WriteResponseStreamToFileAsync(zipFilePath, false, new System.Threading.CancellationToken());
 
                 this._currentlyDownloadedPackages.Remove(package);
                 response.WriteObjectProgressEvent -= this.WriteObjectProgressEvent;
