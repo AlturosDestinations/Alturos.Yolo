@@ -49,17 +49,22 @@ namespace Alturos.Yolo.LearningImage.Contract
             }
         }
 
-        public AnnotationPackage RefreshPackage(AnnotationPackage package)
+        public Task<AnnotationPackage> RefreshPackageAsync(AnnotationPackage package)
         {
-            return package;
+            return Task.FromResult(package);
         }
 
-        public AnnotationPackage DownloadPackage(AnnotationPackage package)
+        public Task<AnnotationPackage> DownloadPackageAsync(AnnotationPackage package)
         {
-            return package;
+            return Task.FromResult(package);
         }
 
-        public Task SyncPackages(AnnotationPackage[] packages)
+        public Task UploadPackageAsync(string packagePath)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SyncPackagesAsync(AnnotationPackage[] packages)
         {
             throw new NotImplementedException();
         }

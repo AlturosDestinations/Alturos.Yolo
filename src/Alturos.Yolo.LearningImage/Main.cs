@@ -46,7 +46,7 @@ namespace Alturos.Yolo.LearningImage
         private void annotationImageList_Load(object sender, EventArgs e)
         {
             this.annotationImageListControl.ImageSelected += this.ImageSelected;
-            this.annotationImageListControl.ExtractionRequested += this.ExtractionRequested;
+            this.downloadControl.ExtractionRequested += this.ExtractionRequested;
         }
 
         private void Main_FormClosed(object sender, FormClosedEventArgs e)
@@ -54,7 +54,7 @@ namespace Alturos.Yolo.LearningImage
             this.annotationPackageListControl.FolderSelected -= this.FolderSelected;
 
             this.annotationImageListControl.ImageSelected -= this.ImageSelected;
-            this.annotationImageListControl.ExtractionRequested -= this.ExtractionRequested;
+            this.downloadControl.ExtractionRequested -= this.ExtractionRequested;
         }
 
         private void CreateYoloObjectNames()
@@ -94,14 +94,28 @@ namespace Alturos.Yolo.LearningImage
 
         private async void syncToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var packages = this.annotationPackageListControl.GetSelectedPackages().Where(o => o.Extracted).ToArray();
+            var packages = this.annotationPackageListControl.GetAllPackages().Where(o => o.Extracted && o.Info.IsAnnotated).ToArray();
             if (packages.Length > 0)
             {
                 // Proceed with syncing
-                var syncForm = new SyncForm(this._annotationPackageProvider);
-                syncForm.Show();
+                var sb = new StringBuilder();
+                foreach (var package in packages)
+                {
+                    sb.AppendLine(package.DisplayName);
+                }
 
-                await syncForm.Sync(packages);
+                var dialogResult = MessageBox.Show($"Do you want to sync the following packages?\n\n{sb.ToString()}", "Confirm syncing", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.OK)
+                {
+                    var syncForm = new SyncForm(this._annotationPackageProvider);
+                    syncForm.Show();
+
+                    await syncForm.Sync(packages);
+                }
+            }
+            else
+            {
+                MessageBox.Show("There are no annoted packages to sync.", "Nothing to sync!");
             }
         }
 
@@ -109,20 +123,10 @@ namespace Alturos.Yolo.LearningImage
 
         #region Export
 
-        private void allImagesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var items = this.annotationPackageListControl.GetAllImages();
-            this.Export(items);
-        }
+            var images = this.annotationPackageListControl.GetAllImages();
 
-        private void selectedImagesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var items = this.annotationPackageListControl.GetSelectedImages();
-            this.Export(items);
-        }
-
-        private void Export(AnnotationImage[] images)
-        {
             var exportDialog = new ExportDialog();
             exportDialog.CreateImages(images.ToList());
             exportDialog.SetObjectClasses(this._objectClasses);
@@ -131,10 +135,33 @@ namespace Alturos.Yolo.LearningImage
 
         #endregion
 
+        #region Upload
+
+        private void uploadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                Filter = "ZIP files (*.zip)|*.zip"
+            };
+
+            var dialogResult = openFileDialog.ShowDialog();
+            if (dialogResult == DialogResult.OK)
+            {
+                var file = openFileDialog.FileName;
+                this._annotationPackageProvider.UploadPackageAsync(file);
+            }
+        }
+
+        #endregion
+
         #region Delegate Callbacks
 
         private void FolderSelected(AnnotationPackage package)
         {
+            this.annotationImageListControl.Show();
+            this.downloadControl.Hide();
+
             if (package == null)
             {
                 this.annotationImageListControl.SetImages(null);
@@ -157,7 +184,8 @@ namespace Alturos.Yolo.LearningImage
                 this.annotationImageListControl.SetImages(null);
                 this.annotationImageControl.SetImage(null, null);
 
-                this.annotationImageListControl.ShowExtractionWarning(package);
+                this.annotationImageListControl.Hide();
+                this.downloadControl.ShowDownloadDialog(package);
             }
 
             this.annotationPackageListControl.DataGridView.Refresh();
@@ -171,9 +199,9 @@ namespace Alturos.Yolo.LearningImage
             this.annotationImageControl.SetImage(image, this._objectClasses);
         }
 
-        private void ExtractionRequested(AnnotationPackage package)
+        private async Task ExtractionRequested(AnnotationPackage package)
         {
-            var downloadedPackage = this._annotationPackageProvider.DownloadPackage(package);
+            var downloadedPackage = await this._annotationPackageProvider.DownloadPackageAsync(package);
             this.annotationPackageListControl.UnzipPackage(downloadedPackage);
 
             // Select folder to apply the images after extraction

@@ -5,7 +5,9 @@ using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.S3;
 using Amazon.S3.IO;
+using Amazon.S3.Model;
 using Amazon.S3.Transfer;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -22,6 +24,7 @@ namespace Alturos.Yolo.LearningImage.Contract
         private readonly IAmazonDynamoDB _dynamoDbClient;
         private readonly string _bucketName;
         private readonly string _extractionFolder;
+        private readonly List<AnnotationPackage> _currentlyDownloadedPackages;
 
         private int _packagesToSync;
         private int _syncedPackages;
@@ -36,6 +39,8 @@ namespace Alturos.Yolo.LearningImage.Contract
 
             this._client = new AmazonS3Client(accessKeyId, secretAccessKey, RegionEndpoint.EUWest1);
             this._dynamoDbClient = new AmazonDynamoDBClient(accessKeyId, secretAccessKey, RegionEndpoint.EUWest1);
+
+            this._currentlyDownloadedPackages = new List<AnnotationPackage>();
         }
 
         public AnnotationPackage[] GetPackages()
@@ -67,14 +72,14 @@ namespace Alturos.Yolo.LearningImage.Contract
             return packages.ToArray();
         }
 
-        public AnnotationPackage RefreshPackage(AnnotationPackage package)
+        public async Task<AnnotationPackage> RefreshPackageAsync(AnnotationPackage package)
         {
             package.Extracted = false;
             package.PackagePath = $"{package.DisplayName}.zip";
-            return this.DownloadPackage(package);
+            return await this.DownloadPackageAsync(package);
         }
 
-        public AnnotationPackage DownloadPackage(AnnotationPackage package)
+        public async Task<AnnotationPackage> DownloadPackageAsync(AnnotationPackage package)
         {
             if (!Directory.Exists(this._extractionFolder))
             {
@@ -85,15 +90,61 @@ namespace Alturos.Yolo.LearningImage.Contract
             var file = dir.GetFile(package.PackagePath);
 
             var zipFilePath = Path.Combine(this._extractionFolder, file.Name);
-            var fileInfo = file.CopyToLocal(zipFilePath, true);
 
-            package.PackagePath = fileInfo.FullName;
-            package.DisplayName = Path.GetFileNameWithoutExtension(fileInfo.FullName);
+            package.Downloading = true;
 
-            return package;
+            //FileInfo fileInfo = null;
+            //await Task.Run(() =>
+            //{
+            //    fileInfo = file.CopyToLocal(zipFilePath, true);
+            //});
+
+            var request = new GetObjectRequest
+            {
+                BucketName = this._bucketName,
+                Key = file.Name
+            };
+            using (var response = this._client.GetObject(request))
+            {
+                this._currentlyDownloadedPackages.Add(package);
+                response.WriteObjectProgressEvent += this.WriteObjectProgressEvent;
+
+                await response.WriteResponseStreamToFileAsync(zipFilePath, false, new System.Threading.CancellationToken());
+
+                this._currentlyDownloadedPackages.Remove(package);
+                response.WriteObjectProgressEvent -= this.WriteObjectProgressEvent;
+            }
+
+            package.Downloading = false;
+            package.PackagePath = zipFilePath;
+            package.DisplayName = Path.GetFileNameWithoutExtension(zipFilePath);
+
+            return await Task.FromResult(package);
         }
 
-        public async Task SyncPackages(AnnotationPackage[] packages)
+        private void WriteObjectProgressEvent(object sender, WriteObjectProgressArgs e)
+        {
+            this._currentlyDownloadedPackages.Single(o => o.PackagePath == ((GetObjectResponse)sender).Key).DownloadProgress = e.PercentDone;
+        }
+
+        public async Task UploadPackageAsync(string packagePath)
+        {
+            var fileTransferUtility = new TransferUtility(this._client);
+            var uploadRequest = new TransferUtilityUploadRequest
+            {
+                FilePath = packagePath,
+                BucketName = this._bucketName
+            };
+            uploadRequest.UploadProgressEvent += this.UploadProgress;
+            await fileTransferUtility.UploadAsync(uploadRequest);
+        }
+
+        private void UploadProgress(object sender, UploadProgressArgs e)
+        {
+            //TODO: Show upload progress
+        }
+
+        public async Task SyncPackagesAsync(AnnotationPackage[] packages)
         {
             this.IsSyncing = true;
 
@@ -103,7 +154,7 @@ namespace Alturos.Yolo.LearningImage.Contract
             var tasks = new List<Task>();
             foreach (var package in packages)
             {
-                tasks.Add(Task.Run(() => this.UploadAsync(package)));
+                tasks.Add(Task.Run(() => this.SyncPackageAsync(package)));
             }
 
             await Task.WhenAll(tasks);
@@ -111,7 +162,7 @@ namespace Alturos.Yolo.LearningImage.Contract
             this.IsSyncing = false;
         }
 
-        private async Task UploadAsync(AnnotationPackage package)
+        private async Task SyncPackageAsync(AnnotationPackage package)
         {
             var context = new DynamoDBContext(this._dynamoDbClient);
             await context.SaveAsync(package.Info);

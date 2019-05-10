@@ -54,22 +54,6 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             return items.ToArray();
         }
 
-        public AnnotationPackage[] GetSelectedPackages()
-        {
-            var items = new List<AnnotationPackage>();
-
-            foreach (DataGridViewRow row in this.dataGridView1.Rows)
-            {
-                var package = row.DataBoundItem as AnnotationPackage;
-                if (package.Selected)
-                {
-                    items.Add(package);
-                }
-            }
-
-            return items.ToArray();
-        }
-
         public AnnotationImage[] GetAllImages()
         {
             var items = new List<AnnotationImage>();
@@ -80,21 +64,6 @@ namespace Alturos.Yolo.LearningImage.CustomControls
                 if (package.Extracted && package.Images != null)
                 {
                     items.AddRange(package.Images);
-                }
-            }
-
-            return items.ToArray();
-        }
-
-        public AnnotationImage[] GetSelectedImages()
-        {
-            var items = new List<AnnotationImage>();
-
-            foreach (DataGridViewRow row in this.dataGridView1.Rows)
-            {
-                var package = row.DataBoundItem as AnnotationPackage;
-                if (package.Extracted && package.Selected) {
-                    items.AddRange(package.Images.Where(o => o.Selected));
                 }
             }
 
@@ -208,35 +177,13 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             this.FolderSelected?.Invoke(package);
         }
 
-        private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            foreach (DataGridViewRow row in this.dataGridView1.Rows)
-            {
-                var package = row.DataBoundItem as AnnotationPackage;
-                package.Selected = true;
-            }
-
-            this.dataGridView1.Refresh();
-        }
-
-        private void deselectAllToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            foreach (DataGridViewRow row in this.dataGridView1.Rows)
-            {
-                var package = row.DataBoundItem as AnnotationPackage;
-                package.Selected = false;
-            }
-
-            this.dataGridView1.Refresh();
-        }
-
-        private void redownloadToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void redownloadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.FolderSelected?.Invoke(null);
 
             var package = this.dataGridView1.Rows[this.dataGridView1.CurrentCell.RowIndex].DataBoundItem as AnnotationPackage;
 
-            var downloadedPackage = this._annotationPackageProvider.RefreshPackage(package);
+            var downloadedPackage = await this._annotationPackageProvider.RefreshPackageAsync(package);
             this.UnzipPackage(downloadedPackage);
 
             downloadedPackage.Images = null;
@@ -354,7 +301,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
             if (item.Extracted)
             {
-                this.dataGridView1.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Azure;
+                this.dataGridView1.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightBlue;
                 return;
             }
 

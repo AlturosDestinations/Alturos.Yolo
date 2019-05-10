@@ -32,11 +32,11 @@
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.syncToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.allImagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.selectedImagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.uploaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panelImageList = new System.Windows.Forms.Panel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.downloadControl = new Alturos.Yolo.LearningImage.CustomControls.DownloadControl();
             this.annotationImageListControl = new Alturos.Yolo.LearningImage.CustomControls.AnnotationImageListControl();
             this.tagListControl = new Alturos.Yolo.LearningImage.CustomControls.TagListControl();
             this.annotationPackageListControl = new Alturos.Yolo.LearningImage.CustomControls.AnnotationPackageListControl();
@@ -55,7 +55,8 @@
             this.menuStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.loadToolStripMenuItem,
             this.syncToolStripMenuItem,
-            this.exportToolStripMenuItem});
+            this.exportToolStripMenuItem,
+            this.uploaToolStripMenuItem});
             this.menuStripMain.Location = new System.Drawing.Point(0, 0);
             this.menuStripMain.Name = "menuStripMain";
             this.menuStripMain.Size = new System.Drawing.Size(1334, 24);
@@ -79,27 +80,18 @@
             // 
             // exportToolStripMenuItem
             // 
-            this.exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.allImagesToolStripMenuItem,
-            this.selectedImagesToolStripMenuItem});
             this.exportToolStripMenuItem.Enabled = false;
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
             this.exportToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.exportToolStripMenuItem.Text = "&Export";
+            this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
             // 
-            // allImagesToolStripMenuItem
+            // uploaToolStripMenuItem
             // 
-            this.allImagesToolStripMenuItem.Name = "allImagesToolStripMenuItem";
-            this.allImagesToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
-            this.allImagesToolStripMenuItem.Text = "&All Images";
-            this.allImagesToolStripMenuItem.Click += new System.EventHandler(this.allImagesToolStripMenuItem_Click);
-            // 
-            // selectedImagesToolStripMenuItem
-            // 
-            this.selectedImagesToolStripMenuItem.Name = "selectedImagesToolStripMenuItem";
-            this.selectedImagesToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
-            this.selectedImagesToolStripMenuItem.Text = "&Selected Images";
-            this.selectedImagesToolStripMenuItem.Click += new System.EventHandler(this.selectedImagesToolStripMenuItem_Click);
+            this.uploaToolStripMenuItem.Name = "uploaToolStripMenuItem";
+            this.uploaToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
+            this.uploaToolStripMenuItem.Text = "Upload";
+            this.uploaToolStripMenuItem.Click += new System.EventHandler(this.uploadToolStripMenuItem_Click);
             // 
             // tableLayoutPanel1
             // 
@@ -137,6 +129,7 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.downloadControl);
             this.splitContainer1.Panel1.Controls.Add(this.annotationImageListControl);
             // 
             // splitContainer1.Panel2
@@ -146,10 +139,20 @@
             this.splitContainer1.SplitterDistance = 300;
             this.splitContainer1.TabIndex = 0;
             // 
+            // downloadControl
+            // 
+            this.downloadControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.downloadControl.BackColor = System.Drawing.SystemColors.Control;
+            this.downloadControl.ExtractionRequested = null;
+            this.downloadControl.Location = new System.Drawing.Point(0, 0);
+            this.downloadControl.Name = "downloadControl";
+            this.downloadControl.Size = new System.Drawing.Size(344, 69);
+            this.downloadControl.TabIndex = 1;
+            // 
             // annotationImageListControl
             // 
             this.annotationImageListControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.annotationImageListControl.ExtractionRequested = null;
             this.annotationImageListControl.ImageSelected = null;
             this.annotationImageListControl.Location = new System.Drawing.Point(0, 0);
             this.annotationImageListControl.Name = "annotationImageListControl";
@@ -215,8 +218,6 @@
         private System.Windows.Forms.MenuStrip menuStripMain;
         private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem allImagesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem selectedImagesToolStripMenuItem;
         private CustomControls.AnnotationImageListControl annotationImageListControl;
         private CustomControls.AnnotationPackageListControl annotationPackageListControl;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
@@ -225,6 +226,8 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private CustomControls.TagListControl tagListControl;
         private System.Windows.Forms.ToolStripMenuItem syncToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem uploaToolStripMenuItem;
+        private CustomControls.DownloadControl downloadControl;
     }
 }
 

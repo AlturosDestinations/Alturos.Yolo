@@ -106,6 +106,12 @@
     <Compile Include="Contract\IAnnotationPackageInitializationService.cs" />
     <Compile Include="Contract\IAnnotationPackageProvider.cs" />
     <Compile Include="Contract\WindowsFileSystemPackageProvider.cs" />
+    <Compile Include="CustomControls\DownloadControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CustomControls\DownloadControl.Designer.cs">
+      <DependentUpon>DownloadControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="CustomControls\TagListControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -175,6 +181,9 @@
     </Compile>
     <EmbeddedResource Include="CustomControls\AnnotationImageControl.resx">
       <DependentUpon>AnnotationImageControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CustomControls\DownloadControl.resx">
+      <DependentUpon>DownloadControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CustomControls\ObjectClassListControl.resx">
       <DependentUpon>ObjectClassListControl.cs</DependentUpon>
