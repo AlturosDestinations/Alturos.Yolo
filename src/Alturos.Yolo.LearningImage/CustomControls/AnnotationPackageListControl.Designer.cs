@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.ColumnName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnPercentage = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -74,9 +74,9 @@
             // ColumnPercentage
             // 
             this.ColumnPercentage.DataPropertyName = "AnnotationPercentage";
-            dataGridViewCellStyle2.Format = "0.00";
-            dataGridViewCellStyle2.NullValue = null;
-            this.ColumnPercentage.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle3.Format = "0.00";
+            dataGridViewCellStyle3.NullValue = null;
+            this.ColumnPercentage.DefaultCellStyle = dataGridViewCellStyle3;
             this.ColumnPercentage.HeaderText = "Annotated (%)";
             this.ColumnPercentage.Name = "ColumnPercentage";
             this.ColumnPercentage.ReadOnly = true;
@@ -120,9 +120,9 @@
             this.labelLoading.AutoSize = true;
             this.labelLoading.Location = new System.Drawing.Point(6, 43);
             this.labelLoading.Name = "labelLoading";
-            this.labelLoading.Size = new System.Drawing.Size(149, 13);
+            this.labelLoading.Size = new System.Drawing.Size(203, 13);
             this.labelLoading.TabIndex = 3;
-            this.labelLoading.Text = "Loading package, please wait";
+            this.labelLoading.Text = "Loading package information, please wait";
             // 
             // AnnotationPackageListControl
             // 

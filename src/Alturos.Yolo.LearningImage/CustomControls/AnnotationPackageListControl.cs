@@ -230,7 +230,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             var yoloMarkPath = @"yolomark\yolo_mark.exe";
             if (!File.Exists(yoloMarkPath))
             {
-                MessageBox.Show("Please download yolo mark first", "YoloMark missing");
+                MessageBox.Show("Please download Yolo_mark first (https://github.com/AlexeyAB/Yolo_mark)", "Cannot found Yolo_mark", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 

@@ -22,9 +22,12 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             this.progressBarDownload.Visible = package.Downloading;
             this.labelPercentage.Visible = package.Downloading;
 
-            this.labelPercentage.BringToFront();
-
             this._packageToExtract = package;
+
+            this.labelPercentage.Text = "";
+            this.labelDownload.Text = "";
+            this.progressBarDownload.Value = 0;
+
             this.Show();
 
             Task.Run(() => this.ShowDownloadProgress(package));
@@ -34,7 +37,6 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         {
             while (package.DownloadProgress < 100 && package.Downloading && this._packageToExtract == package)
             {
-                await Task.Delay(200);
                 this.labelPercentage.Invoke((MethodInvoker)delegate
                 {
                     this.labelPercentage.Text = $"{(int)package.DownloadProgress}%";
@@ -44,6 +46,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
                     this.labelDownload.Text = $"{package.TransferredBytes / 1024.0 / 1024.0:0.00} MB of {package.TotalBytes / 1024.0 / 1024.0:0.00} MB";
                 });
                 this.progressBarDownload.Invoke((MethodInvoker)delegate { this.progressBarDownload.Value = (int)package.DownloadProgress; });
+                await Task.Delay(200);
             }
 
             await Task.Delay(200);
