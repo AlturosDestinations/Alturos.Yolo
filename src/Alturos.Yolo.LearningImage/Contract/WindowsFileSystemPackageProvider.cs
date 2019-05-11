@@ -12,7 +12,7 @@ namespace Alturos.Yolo.LearningImage.Contract
     {
         public bool IsSyncing { get; set; }
 
-        public AnnotationPackage[] GetPackages()
+        public async Task<AnnotationPackage[]> GetPackagesAsync()
         {
             using (var openFolderDialog = new CommonOpenFileDialog())
             {
@@ -42,10 +42,10 @@ namespace Alturos.Yolo.LearningImage.Contract
                         });
                     }
 
-                    return packages.ToArray();
+                    return await Task.FromResult(packages.ToArray());
                 }
 
-                return new AnnotationPackage[0];
+                return await Task.FromResult(new AnnotationPackage[0]);
             }
         }
 

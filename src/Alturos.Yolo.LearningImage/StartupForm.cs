@@ -62,7 +62,7 @@ namespace Alturos.Yolo.LearningImage
             this.buttonConfirm.Enabled = checkedBoxCount > 0;
         }
 
-        private void comboBoxAnnotationPackageProvider_SelectedIndexChanged(object sender, System.EventArgs e)
+        private void comboBoxAnnotationPackageProvider_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.AnnotationPackageProvider = this.comboBoxAnnotationPackageProvider.SelectedItem as IAnnotationPackageProvider;
         }

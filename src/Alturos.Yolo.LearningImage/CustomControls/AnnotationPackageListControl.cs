@@ -20,7 +20,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
     {
         private static ILog Log = LogManager.GetLogger(typeof(AnnotationPackageListControl));
 
-        public Action<AnnotationPackage> FolderSelected { get; set; }
+        public Action<AnnotationPackage> PackageSelected { get; set; }
 
         public DataGridView DataGridView { get { return this.dataGridView1; } }
 
@@ -32,6 +32,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         {
             this.InitializeComponent();
             this.dataGridView1.AutoGenerateColumns = false;
+            this.labelLoading.Location = new Point(5, 20);
         }
 
         public void Setup(IBoundingBoxReader boundingBoxReader, IAnnotationPackageProvider annotationPackageProvider, List<ObjectClass> objectClasses)
@@ -70,37 +71,49 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             return items.ToArray();
         }
 
-        public void LoadPackages()
+        public async Task LoadPackagesAsync()
         {
-            var packages = this._annotationPackageProvider.GetPackages();
+            this.labelLoading.Invoke((MethodInvoker)delegate { this.labelLoading.Visible = true; });
+            this.dataGridView1.Invoke((MethodInvoker)delegate { this.dataGridView1.Visible = false; });
 
+            var packages = await this._annotationPackageProvider.GetPackagesAsync();
+
+            this.labelLoading.Invoke((MethodInvoker)delegate { this.labelLoading.Visible = false; });
+
+            //TODO:Check is required? If there a lot sessions local this job time increase
             foreach (var package in packages)
             {
                 if (package.Extracted && package.Images == null)
                 {
-                    this.OpenPackage(package);
+                    this.AnalyzeAnnotationStatus(package);
                 }
             }
 
             if (packages?.Length > 0)
             {
-                this.dataGridView1.DataSource = packages;
+                this.dataGridView1.Invoke((MethodInvoker)delegate
+                {
+                    this.dataGridView1.Visible = true;
+                    this.dataGridView1.DataSource = packages;
+                });
             }
         }
 
-        public void OpenPackage(AnnotationPackage package)
+        public void AnalyzeAnnotationStatus(AnnotationPackage package)
         {
             if (!package.Extracted)
             {
                 return;
             }
 
-            var files = Directory.GetFiles(package.PackagePath, "*.*", SearchOption.TopDirectoryOnly);
-            var items = files.Where(s => s.EndsWith(".png") || s.EndsWith(".jpg")).Select(o => new AnnotationImage
+            var allowedImageFormats = new string[] { ".png" , ".jpg", ".bmp" };
+
+            var files = Directory.GetFiles(package.PackagePath, "*.*", SearchOption.TopDirectoryOnly).Select(file => new FileInfo(file));
+            var items = files.Where(file => allowedImageFormats.Contains(file.Extension)).Select(o => new AnnotationImage
             {
-                FilePath = o,
-                DisplayName = new FileInfo(o).Name,
-                BoundingBoxes = this._boundingBoxReader.GetBoxes(this._boundingBoxReader.GetDataPath(o)).ToList()
+                FilePath = o.FullName,
+                DisplayName = o.Name,
+                BoundingBoxes = this._boundingBoxReader.GetBoxes(this._boundingBoxReader.GetDataPath(o.FullName)).ToList()
             }).ToList();
 
             if (items.Count == 0)
@@ -174,12 +187,12 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)
         {
             var package = this.dataGridView1.CurrentRow.DataBoundItem as AnnotationPackage;
-            this.FolderSelected?.Invoke(package);
+            this.PackageSelected?.Invoke(package);
         }
 
         private async void redownloadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.FolderSelected?.Invoke(null);
+            this.PackageSelected?.Invoke(null);
 
             var package = this.dataGridView1.Rows[this.dataGridView1.CurrentCell.RowIndex].DataBoundItem as AnnotationPackage;
 
@@ -187,20 +200,20 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             this.UnzipPackage(downloadedPackage);
 
             downloadedPackage.Images = null;
-            this.FolderSelected?.Invoke(downloadedPackage);
+            this.PackageSelected?.Invoke(downloadedPackage);
         }
 
         private async void annotateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            await this.AnnotatePackage();
+            await this.AnnotatePackageAsync();
         }
 
         private async void dataGridView1_DoubleClick(object sender, EventArgs e)
         {
-            await this.AnnotatePackage();
+            await this.AnnotatePackageAsync();
         }
 
-        private async Task AnnotatePackage()
+        private async Task AnnotatePackageAsync()
         {
             var package = this.dataGridView1.CurrentRow?.DataBoundItem as AnnotationPackage;
             if (package == null)
@@ -234,7 +247,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             this.ChangeObjectClassIndices(package, false);
 
             package.Images = null;
-            this.FolderSelected?.Invoke(package);
+            this.PackageSelected?.Invoke(package);
 
             if (package.Info.IsAnnotated)
             {

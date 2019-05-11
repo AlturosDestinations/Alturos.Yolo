@@ -34,12 +34,22 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         {
             while (package.DownloadProgress < 100 && package.Downloading && this._packageToExtract == package)
             {
-                await Task.Delay(20);
-                this.labelPercentage.Invoke((MethodInvoker)delegate { this.labelPercentage.Text = $"{(int)package.DownloadProgress}%"; });
+                await Task.Delay(200);
+                this.labelPercentage.Invoke((MethodInvoker)delegate
+                {
+                    this.labelPercentage.Text = $"{(int)package.DownloadProgress}%";
+                });
+                this.labelDownload.Invoke((MethodInvoker)delegate
+                {
+                    this.labelDownload.Text = $"{package.TransferredBytes / 1024.0 / 1024.0:0.00} MB of {package.TotalBytes / 1024.0 / 1024.0:0.00} MB";
+                });
                 this.progressBarDownload.Invoke((MethodInvoker)delegate { this.progressBarDownload.Value = (int)package.DownloadProgress; });
             }
 
-            this.progressBarDownload.Value = 0;
+            await Task.Delay(200);
+            this.labelPercentage.Invoke((MethodInvoker)delegate { this.labelPercentage.Text = ""; });
+            this.labelDownload.Invoke((MethodInvoker)delegate { this.labelDownload.Text = ""; });
+            this.progressBarDownload.Invoke((MethodInvoker)delegate { this.progressBarDownload.Value = 0; });
         }
 
         private async void buttonDownload_Click(object sender, EventArgs e)

@@ -43,15 +43,15 @@ namespace Alturos.Yolo.LearningImage.Contract
             this._currentlyDownloadedPackages = new List<AnnotationPackage>();
         }
 
-        public AnnotationPackage[] GetPackages()
+        public async Task<AnnotationPackage[]> GetPackagesAsync()
         {
             // Retrieve unannotated metadata
             var context = new DynamoDBContext(this._dynamoDbClient);
 
-            var packageInfos = context.Scan<AnnotationPackageInfo>(new ScanCondition("IsAnnotated", ScanOperator.Equal, false));
+            var packageInfos = context.ScanAsync<AnnotationPackageInfo>(new ScanCondition[] { new ScanCondition("IsAnnotated", ScanOperator.Equal, false) });
             
             // Create packages
-            var packages = packageInfos.Select(o => new AnnotationPackage {
+            var packages = (await packageInfos.GetNextSetAsync()).Select(o => new AnnotationPackage {
                 Extracted = false,
                 PackagePath = o.Id,
                 DisplayName = Path.GetFileNameWithoutExtension(o.Id),
@@ -124,7 +124,15 @@ namespace Alturos.Yolo.LearningImage.Contract
 
         private void WriteObjectProgressEvent(object sender, WriteObjectProgressArgs e)
         {
-            this._currentlyDownloadedPackages.Single(o => o.PackagePath == ((GetObjectResponse)sender).Key).DownloadProgress = e.PercentDone;
+            var item = this._currentlyDownloadedPackages.FirstOrDefault(o => o.PackagePath == ((GetObjectResponse)sender).Key);
+            if (item == null)
+            {
+                return;
+            }
+
+            item.TotalBytes = e.TotalBytes;
+            item.TransferredBytes = e.TransferredBytes;
+            item.DownloadProgress = e.PercentDone;
         }
 
         public async Task UploadPackageAsync(string packagePath)

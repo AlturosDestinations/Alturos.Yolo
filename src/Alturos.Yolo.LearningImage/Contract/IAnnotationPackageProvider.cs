@@ -1,5 +1,4 @@
 ﻿using Alturos.Yolo.LearningImage.Model;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Alturos.Yolo.LearningImage.Contract
@@ -8,7 +7,7 @@ namespace Alturos.Yolo.LearningImage.Contract
     {
         bool IsSyncing { get; set; }
 
-        AnnotationPackage[] GetPackages();
+        Task<AnnotationPackage[]> GetPackagesAsync();
         Task<AnnotationPackage> RefreshPackageAsync(AnnotationPackage package);
         Task<AnnotationPackage> DownloadPackageAsync(AnnotationPackage package);
         Task UploadPackageAsync(string packagePath);

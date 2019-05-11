@@ -32,7 +32,7 @@
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.syncToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.uploaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addPackageStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panelImageList = new System.Windows.Forms.Panel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -56,7 +56,7 @@
             this.loadToolStripMenuItem,
             this.syncToolStripMenuItem,
             this.exportToolStripMenuItem,
-            this.uploaToolStripMenuItem});
+            this.addPackageStripMenuItem});
             this.menuStripMain.Location = new System.Drawing.Point(0, 0);
             this.menuStripMain.Name = "menuStripMain";
             this.menuStripMain.Size = new System.Drawing.Size(1334, 24);
@@ -86,12 +86,12 @@
             this.exportToolStripMenuItem.Text = "&Export";
             this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
             // 
-            // uploaToolStripMenuItem
+            // addPackageStripMenuItem
             // 
-            this.uploaToolStripMenuItem.Name = "uploaToolStripMenuItem";
-            this.uploaToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
-            this.uploaToolStripMenuItem.Text = "Upload";
-            this.uploaToolStripMenuItem.Click += new System.EventHandler(this.uploadToolStripMenuItem_Click);
+            this.addPackageStripMenuItem.Name = "addPackageStripMenuItem";
+            this.addPackageStripMenuItem.Size = new System.Drawing.Size(88, 20);
+            this.addPackageStripMenuItem.Text = "Add Package";
+            this.addPackageStripMenuItem.Click += new System.EventHandler(this.addPackageStripMenuItem_Click);
             // 
             // tableLayoutPanel1
             // 
@@ -141,8 +141,6 @@
             // 
             // downloadControl
             // 
-            this.downloadControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.downloadControl.BackColor = System.Drawing.SystemColors.Control;
             this.downloadControl.ExtractionRequested = null;
             this.downloadControl.Location = new System.Drawing.Point(0, 0);
@@ -173,9 +171,9 @@
             this.annotationPackageListControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.annotationPackageListControl.FolderSelected = null;
             this.annotationPackageListControl.Location = new System.Drawing.Point(3, 3);
             this.annotationPackageListControl.Name = "annotationPackageListControl";
+            this.annotationPackageListControl.PackageSelected = null;
             this.annotationPackageListControl.Size = new System.Drawing.Size(344, 524);
             this.annotationPackageListControl.TabIndex = 1;
             this.annotationPackageListControl.Load += new System.EventHandler(this.annotationPackageList_Load);
@@ -226,7 +224,7 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private CustomControls.TagListControl tagListControl;
         private System.Windows.Forms.ToolStripMenuItem syncToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem uploaToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addPackageStripMenuItem;
         private CustomControls.DownloadControl downloadControl;
     }
 }
