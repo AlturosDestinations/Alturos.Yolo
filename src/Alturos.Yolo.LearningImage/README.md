@@ -3,6 +3,8 @@ In our case we have image data for different runs that we want to annotate toget
 
 For every AnnotationPackage we have some Metadata, Weather, Color, ... this informations we are store in a DynamoDB Table.
 
+![object detection result](/doc/AlturosImageAnnotation.png)
+
 ## Requirements
 
  - Amazon AWS Account (S3, DynamoDB)
