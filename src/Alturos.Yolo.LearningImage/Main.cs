@@ -2,7 +2,6 @@
 using Alturos.Yolo.LearningImage.Model;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -22,7 +21,8 @@ namespace Alturos.Yolo.LearningImage
             this._boundingBoxReader = boundingBoxReader;
 
             var startupForm = new StartupForm();
-            var dialogResult = startupForm.ShowDialog();
+            startupForm.StartPosition = FormStartPosition.CenterScreen;
+            var dialogResult = startupForm.ShowDialog(this);
 
             this._annotationPackageProvider = startupForm.AnnotationPackageProvider;
             this._objectClasses = startupForm.ObjectClasses;
