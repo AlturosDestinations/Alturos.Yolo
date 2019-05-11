@@ -204,7 +204,7 @@ namespace Alturos.Yolo
         }
 
         /// <summary>
-        /// Detect
+        /// Detect objects on an image
         /// </summary>
         /// <param name="filepath"></param>
         /// <returns></returns>
@@ -237,7 +237,7 @@ namespace Alturos.Yolo
         }
 
         /// <summary>
-        /// Detect
+        /// Detect objects on an image
         /// </summary>
         /// <param name="imageData"></param>
         /// <returns></returns>
