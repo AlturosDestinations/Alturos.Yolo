@@ -15,8 +15,8 @@ namespace Alturos.Yolo
         private const string YoloLibraryCpu = @"x64\yolo_cpp_dll_cpu.dll";
         private const string YoloLibraryGpu = @"x64\yolo_cpp_dll_gpu.dll";
 
-        private readonly Dictionary<int, string> _objectType = new Dictionary<int, string>();
         private readonly ImageAnalyzer _imageAnalyzer = new ImageAnalyzer();
+        private YoloObjectTypeResolver _objectTypeResolver;
 
         public DetectionSystem DetectionSystem { get; private set; } = DetectionSystem.Unknown;
         public EnvironmentReport EnvironmentReport { get; private set; }
@@ -126,11 +126,7 @@ namespace Alturos.Yolo
                     break;
             }
 
-            var lines = File.ReadAllLines(namesFilename);
-            for (var i = 0; i< lines.Length; i++)
-            {
-                this._objectType.Add(i, lines[i]);
-            }
+            this._objectTypeResolver = new YoloObjectTypeResolver(namesFilename);
         }
 
         private bool IsMicrosoftVisualCPlusPlus2017Available()
@@ -264,11 +260,6 @@ namespace Alturos.Yolo
             var yoloItems = new List<YoloItem>();
             foreach (var item in container.candidates.Where(o => o.h > 0 || o.w > 0))
             {
-                if (!this._objectType.TryGetValue((int)item.obj_id, out var objectType))
-                {
-                    objectType = "unknown key";
-                }
-
                 var yoloItem = new YoloItem
                 {
                     X = (int)item.x,
@@ -276,7 +267,7 @@ namespace Alturos.Yolo
                     Height = (int)item.h,
                     Width = (int)item.w,
                     Confidence = item.prob,
-                    Type = objectType
+                    Type = this._objectTypeResolver.Resolve((int)item.obj_id)
                 };
 
                 yoloItems.Add(yoloItem);

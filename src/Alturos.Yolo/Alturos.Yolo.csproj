@@ -54,6 +54,7 @@
     <Compile Include="Model\YoloPreTrainedData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="YoloConfiguration.cs" />
+    <Compile Include="YoloObjectTypeResolver.cs" />
     <Compile Include="YoloPreTrainedDatasetRepository.cs" />
     <Compile Include="YoloTracking.cs" />
     <Compile Include="YoloWrapper.cs" />
