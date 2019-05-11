@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Alturos.Yolo
 {
-    public class YoloObjectTypeResolver
+    internal class YoloObjectTypeResolver
     {
         private readonly Dictionary<int, string> _objectType = new Dictionary<int, string>();
 

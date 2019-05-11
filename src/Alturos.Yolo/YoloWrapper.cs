@@ -59,11 +59,30 @@ namespace Alturos.Yolo
 
         #endregion
 
+        /// <summary>
+        /// Initialize Yolo
+        /// </summary>
+        /// <param name="yoloConfiguration"></param>
+        /// <param name="ignoreGpu">Disable automatic gpu detection</param>
+        /// <exception cref="NotSupportedException">Thrown when the process not run in 64bit</exception>
+        /// <exception cref="DllNotFoundException">Thrown when Microsoft Visual C++ 2017 Redistributable not available</exception>
+        /// <exception cref="IndexOutOfRangeException">Thrown when the gpu index is not valid</exception>
         public YoloWrapper(YoloConfiguration yoloConfiguration, bool ignoreGpu = false)
         {
             this.Initialize(yoloConfiguration.ConfigFile, yoloConfiguration.WeightsFile, yoloConfiguration.NamesFile, 0, ignoreGpu);
         }
 
+        /// <summary>
+        /// Initialize Yolo
+        /// </summary>
+        /// <param name="configurationFilename">Yolo configuration (.cfg) file path</param>
+        /// <param name="weightsFilename">Yolo trainded data (.weights) file path</param>
+        /// <param name="namesFilename">Yolo object names (.names) file path</param>
+        /// <param name="gpu">Gpu Index if multiple graphic devices available</param>
+        /// <param name="ignoreGpu">Disable automatic gpu detection</param>
+        /// <exception cref="NotSupportedException">Thrown when the process not run in 64bit</exception>
+        /// <exception cref="DllNotFoundException">Thrown when Microsoft Visual C++ 2017 Redistributable not available</exception>
+        /// <exception cref="IndexOutOfRangeException">Thrown when the gpu index is not valid</exception>
         public YoloWrapper(string configurationFilename, string weightsFilename, string namesFilename, int gpu = 0, bool ignoreGpu = false)
         {
             this.Initialize(configurationFilename, weightsFilename, namesFilename, gpu, ignoreGpu);
@@ -184,6 +203,12 @@ namespace Alturos.Yolo
             return report;
         }
 
+        /// <summary>
+        /// Detect
+        /// </summary>
+        /// <param name="filepath"></param>
+        /// <returns></returns>
+        /// <exception cref="FileNotFoundException">Thrown when the filepath is wrong</exception>
         public IEnumerable<YoloItem> Detect(string filepath)
         {
             if (!File.Exists(filepath))
@@ -211,6 +236,12 @@ namespace Alturos.Yolo
             return this.Convert(container);
         }
 
+        /// <summary>
+        /// Detect
+        /// </summary>
+        /// <param name="imageData"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException">Thrown when the yolo_cpp dll is wrong compiled</exception>
         public IEnumerable<YoloItem> Detect(byte[] imageData)
         {
             if (!this._imageAnalyzer.IsValidImageFormat(imageData))
