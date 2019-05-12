@@ -14,6 +14,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         public DownloadControl()
         {
             this.InitializeComponent();
+            this.labelDownload.Text = "";
         }
 
         public void ShowDownloadDialog(AnnotationPackage package)
