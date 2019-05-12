@@ -275,15 +275,15 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             var width = 0.04;
             var height = 0.06;
 
-            var x = (e.X - canvasInfo.OffsetX - (width / 2)) / canvasInfo.ScaledWidth;
-            var y = (e.Y - canvasInfo.OffsetY - (height / 2)) / canvasInfo.ScaledHeight;
+            var x = (e.X - canvasInfo.OffsetX + (width * canvasInfo.ScaledWidth / 2)) / canvasInfo.ScaledWidth;
+            var y = (e.Y - canvasInfo.OffsetY + (height * canvasInfo.ScaledHeight / 2)) / canvasInfo.ScaledHeight;
 
             this._annotationImage.BoundingBoxes.Add(new AnnotationBoundingBox
             {
                 CenterX = (float)x,
                 CenterY = (float)y,
-                Height = (float)width,
-                Width = (float)height
+                Height = (float)height,
+                Width = (float)width
             });
         }
     }
