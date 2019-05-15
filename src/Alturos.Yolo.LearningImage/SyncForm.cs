@@ -21,6 +21,7 @@ namespace Alturos.Yolo.LearningImage
         {
             foreach (var package in packages)
             {
+                package.IsDirty = false;
                 this.AddImageDtos(package);
             }
 

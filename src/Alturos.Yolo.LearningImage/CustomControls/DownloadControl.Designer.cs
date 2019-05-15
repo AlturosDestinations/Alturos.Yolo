@@ -41,8 +41,9 @@
             // 
             // buttonDownload
             // 
+            this.buttonDownload.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel1.SetColumnSpan(this.buttonDownload, 2);
-            this.buttonDownload.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonDownload.Location = new System.Drawing.Point(3, 81);
             this.buttonDownload.Name = "buttonDownload";
             this.buttonDownload.Size = new System.Drawing.Size(420, 51);
@@ -59,7 +60,7 @@
             this.labelNotification.Name = "labelNotification";
             this.labelNotification.Size = new System.Drawing.Size(294, 13);
             this.labelNotification.TabIndex = 2;
-            this.labelNotification.Text = "Package is local not available, please start the download first";
+            this.labelNotification.Text = "Package isn\'t available locally, please start the download first";
             this.labelNotification.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // progressBarDownload

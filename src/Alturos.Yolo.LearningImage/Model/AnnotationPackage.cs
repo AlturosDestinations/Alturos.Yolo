@@ -13,6 +13,7 @@ namespace Alturos.Yolo.LearningImage.Model
         public long TransferredBytes { get; set; }
 
         public bool Extracted { get; set; }
+        public bool IsDirty { get; set; }
 
         public List<AnnotationImage> Images { get; set; }
         public AnnotationPackageInfo Info { get; set; }

@@ -203,65 +203,6 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             this.PackageSelected?.Invoke(downloadedPackage);
         }
 
-        private async void annotateToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            await this.AnnotatePackageAsync();
-        }
-
-        private async void dataGridView1_DoubleClick(object sender, EventArgs e)
-        {
-            await this.AnnotatePackageAsync();
-        }
-
-        private async Task AnnotatePackageAsync()
-        {
-            var package = this.dataGridView1.CurrentRow?.DataBoundItem as AnnotationPackage;
-            if (package == null)
-            {
-                return;
-            }
-
-            if (!package.Extracted)
-            {
-                MessageBox.Show("Please extract package first", "Package is not available");
-                return;
-            }
-
-            var yoloMarkPath = @"yolomark\yolo_mark.exe";
-            if (!File.Exists(yoloMarkPath))
-            {
-                MessageBox.Show("Please download Yolo_mark first (https://github.com/AlexeyAB/Yolo_mark)", "Cannot found Yolo_mark", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // Turn our indices to Yolo Mark indices
-            this.ChangeObjectClassIndices(package, true);
-
-            // Start Yolo Mark
-            var arguments = $@"""{package.PackagePath}"" yolomark\data\output.txt yolomark\data\obj.names";
-            var process = Process.Start(yoloMarkPath, arguments);
-
-            await process.WaitForExitAsync();
-
-            // Turn Yolo Mark indices to our indices
-            this.ChangeObjectClassIndices(package, false);
-
-            package.Images = null;
-            this.PackageSelected?.Invoke(package);
-
-            if (package.Info.IsAnnotated)
-            {
-                var dialogResult = MessageBox.Show("Do you want to sync the package now?", "Sync", MessageBoxButtons.YesNo);
-                if (dialogResult == DialogResult.Yes)
-                {
-                    var syncForm = new SyncForm(this._annotationPackageProvider);
-                    syncForm.Show();
-
-                    await syncForm.Sync(new AnnotationPackage[] { package });
-                }
-            }
-        }
-
         private void ChangeObjectClassIndices(AnnotationPackage package, bool toYoloMark)
         {
             // Lookup table to convert Yolo Mark indices to our indices or vice-versa

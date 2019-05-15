@@ -142,6 +142,7 @@
             // downloadControl
             // 
             this.downloadControl.BackColor = System.Drawing.SystemColors.Control;
+            this.downloadControl.Enabled = false;
             this.downloadControl.ExtractionRequested = null;
             this.downloadControl.Location = new System.Drawing.Point(0, 0);
             this.downloadControl.Name = "downloadControl";

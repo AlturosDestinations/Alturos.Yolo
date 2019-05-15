@@ -119,6 +119,7 @@
       <DependentUpon>TagListControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Helper\DrawHelper.cs" />
+    <Compile Include="Helper\MathHelper.cs" />
     <Compile Include="Helper\StringHelper.cs" />
     <Compile Include="Helper\TaskHelper.cs" />
     <Compile Include="Model\AnnotationImageDto.cs" />
@@ -166,6 +167,7 @@
     <Compile Include="Model\CanvasInfo.cs" />
     <Compile Include="Model\DragPoint.cs" />
     <Compile Include="Model\DragPointPosition.cs" />
+    <Compile Include="Model\DragPointType.cs" />
     <Compile Include="Model\ObjectClass.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
