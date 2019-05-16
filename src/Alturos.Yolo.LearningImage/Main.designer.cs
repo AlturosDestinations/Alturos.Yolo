@@ -188,6 +188,7 @@
             this.annotationImageControl.Name = "annotationImageControl";
             this.annotationImageControl.Size = new System.Drawing.Size(628, 524);
             this.annotationImageControl.TabIndex = 2;
+            this.annotationImageControl.Load += new System.EventHandler(this.annotationImageControl_Load);
             // 
             // Main
             // 
@@ -199,6 +200,7 @@
             this.MainMenuStrip = this.menuStripMain;
             this.Name = "Main";
             this.Text = "Alturos.Yolo.LearningImage";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Main_FormClosed);
             this.menuStripMain.ResumeLayout(false);
             this.menuStripMain.PerformLayout();

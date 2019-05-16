@@ -51,12 +51,45 @@ namespace Alturos.Yolo.LearningImage
             this.downloadControl.ExtractionRequested += this.ExtractionRequestedAsync;
         }
 
+        private void annotationImageControl_Load(object sender, EventArgs e)
+        {
+            this.annotationImageControl.PackageEdited += this.PackageEdited;
+        }
+
+        private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            var unsyncedPackages = this.annotationPackageListControl.GetAllPackages().Where(o => o.IsDirty);
+            if (unsyncedPackages.Any())
+            {
+                var sb = new StringBuilder();
+                foreach (var package in unsyncedPackages)
+                {
+                    sb.AppendLine(package.DisplayName);
+                }
+
+                var dialogResult = MessageBox.Show(
+                    "The following packages have been modified and not synced yet:\n\n" +
+                        $"{sb.ToString()}\n\n" +
+                        "If you close now any unsynced package will be lost.\n\nClose anyway and discard your changes?",
+                    "Unsynced packages detected",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                if (dialogResult == DialogResult.No)
+                {
+                    e.Cancel = true;
+                }
+            }
+        }
+
         private void Main_FormClosed(object sender, FormClosedEventArgs e)
         {
             this.annotationPackageListControl.PackageSelected -= this.PackageSelected;
 
             this.annotationImageListControl.ImageSelected -= this.ImageSelected;
             this.downloadControl.ExtractionRequested -= this.ExtractionRequestedAsync;
+
+            this.annotationImageControl.PackageEdited -= this.PackageEdited;
         }
 
         private void CreateYoloObjectNames()
@@ -90,12 +123,14 @@ namespace Alturos.Yolo.LearningImage
             this.annotationPackageListControl.Setup(this._boundingBoxReader, this._annotationPackageProvider, this._objectClasses);
             await this.annotationPackageListControl.LoadPackagesAsync();
 
-            this.syncToolStripMenuItem.Enabled = true;
-            this.exportToolStripMenuItem.Enabled = true;
-            this.downloadControl.Enabled = true;
+            this.Invoke((MethodInvoker)delegate {
+                this.syncToolStripMenuItem.Enabled = true;
+                this.exportToolStripMenuItem.Enabled = true;
+                this.downloadControl.Enabled = true;
+            });
         }
 
-        private async void syncToolStripMenuItem_Click(object sender, EventArgs e)
+        private void syncToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var packages = this.annotationPackageListControl.GetAllPackages().Where(o => o.Extracted && o.IsDirty).ToArray();
             if (packages.Length > 0)
@@ -113,7 +148,7 @@ namespace Alturos.Yolo.LearningImage
                     var syncForm = new SyncForm(this._annotationPackageProvider);
                     syncForm.Show();
 
-                    await syncForm.Sync(packages);
+                    _ = Task.Run(() => syncForm.Sync(packages));
                 }
             }
             else
@@ -170,8 +205,11 @@ namespace Alturos.Yolo.LearningImage
                     var dialogResult1 = MessageBox.Show("Are you finished annotating?", "Finish Annotation", MessageBoxButtons.YesNo);
                     if (dialogResult1 == DialogResult.Yes)
                     {
-                        this._packageEdited.Info.AnnotationPercentage = 100;
                         this._packageEdited.Info.IsAnnotated = true;
+                    }
+                    else
+                    {
+                        this._packageEdited.Info.IsAnnotated = false;
                     }
                 }
 
@@ -181,7 +219,8 @@ namespace Alturos.Yolo.LearningImage
                     var syncForm = new SyncForm(this._annotationPackageProvider);
                     syncForm.Show();
 
-                    Task.Run(() => syncForm.Sync(new AnnotationPackage[] { this._packageEdited }));
+                    var packageEdited = this._packageEdited;
+                    Task.Run(() => syncForm.Sync(new AnnotationPackage[] { packageEdited }));
                 }
             }
 
@@ -195,18 +234,15 @@ namespace Alturos.Yolo.LearningImage
             this.annotationImageControl.SetPackage(null);
             this.annotationImageControl.SetImage(null, null);
 
-            if (package == null)
-            {
-                return;
-            }
-
             this.tagListControl.SetTags(package.Info);
 
             if (package.Extracted)
             {
+                this.annotationPackageListControl.SetAnnotationMetadata(package);
+
                 if (package.Images == null)
                 {
-                    this.annotationPackageListControl.AnalyzeAnnotationStatus(package);
+                    this.annotationPackageListControl.LoadAnnotationImages(package);
                 }
 
                 this.annotationImageListControl.SetImages(package.Images);
@@ -228,6 +264,12 @@ namespace Alturos.Yolo.LearningImage
         private void ImageSelected(AnnotationImage image)
         {
             this.annotationImageControl.SetImage(image, this._objectClasses);
+        }
+
+        private void PackageEdited(AnnotationPackage package)
+        {
+            package.IsDirty = true;
+            this.annotationPackageListControl.UpdateAnnotationPercentage(package);
         }
 
         private async Task ExtractionRequestedAsync(AnnotationPackage package)

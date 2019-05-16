@@ -11,10 +11,12 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 {
     public partial class AnnotationImageControl : UserControl
     {
+        public Action<AnnotationPackage> PackageEdited { get; set; }
+
         private Point _mousePosition = new Point(0, 0);
         private List<Rectangle> _rectangles = new List<Rectangle>();
         private int _mouseDragElementSize = 10;
-        private AnnotationBoundingBox _selectedItem;
+        private AnnotationBoundingBox _selectedBoundingBox;
         private DragPoint _dragPoint;
         private AnnotationImage _annotationImage;
         private List<ObjectClass> _objectClasses;
@@ -24,6 +26,8 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         {
             this.InitializeComponent();
             this._rectangles.Add(new Rectangle(100, 100, 100, 100));
+
+            this.pictureBox1.ContextMenuStrip = this.contextMenuStripPicture;
         }
 
         public void SetPackage(AnnotationPackage package)
@@ -242,13 +246,13 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
                 if (startDrag)
                 {
-                    this._selectedItem = boundingBox;
+                    this._selectedBoundingBox = boundingBox;
                     break;
                 }
                 else
                 {
                     this._dragPoint = null;
-                    this._selectedItem = null;
+                    this._selectedBoundingBox = null;
                 }
             }
 
@@ -259,10 +263,12 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
         {
             if (this._dragPoint?.Type == DragPointType.Delete) {
-                this._annotationImage.BoundingBoxes.Remove(this._selectedItem);
+                this._annotationImage?.BoundingBoxes.Remove(this._selectedBoundingBox);
+
+                this.PackageEdited?.Invoke(this._package);
             }
 
-            this._selectedItem = null;
+            this._selectedBoundingBox = null;
 
             this._mousePosition = new Point(0,0);
             this.pictureBox1.Invalidate();
@@ -270,7 +276,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
-            if (this._selectedItem != null)
+            if (this._selectedBoundingBox != null)
             {
                 var canvasInfo = this.GetCanvasInformation();
                 var centerX = 0.0;
@@ -281,44 +287,44 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
                 if (this._dragPoint.Position == DragPointPosition.TopLeft)
                 {
-                    centerX = x + (this._selectedItem.Width / 2);
-                    centerY = y + (this._selectedItem.Height / 2);
+                    centerX = x + (this._selectedBoundingBox.Width / 2);
+                    centerY = y + (this._selectedBoundingBox.Height / 2);
                 }
 
                 if (this._dragPoint.Position == DragPointPosition.TopRight)
                 {
-                    centerX = x - (this._selectedItem.Width / 2);
-                    centerY = y + (this._selectedItem.Height / 2);
+                    centerX = x - (this._selectedBoundingBox.Width / 2);
+                    centerY = y + (this._selectedBoundingBox.Height / 2);
                 }
 
                 if (this._dragPoint.Position == DragPointPosition.BottomLeft)
                 {
-                    centerX = x + (this._selectedItem.Width / 2);
-                    centerY = y - (this._selectedItem.Height / 2);
+                    centerX = x + (this._selectedBoundingBox.Width / 2);
+                    centerY = y - (this._selectedBoundingBox.Height / 2);
                 }
 
-                centerX = centerX.Clamp(this._selectedItem.Width / 2, 1 - this._selectedItem.Width / 2);
-                centerY = centerY.Clamp(this._selectedItem.Height / 2, 1 - this._selectedItem.Height / 2);
+                centerX = centerX.Clamp(this._selectedBoundingBox.Width / 2, 1 - this._selectedBoundingBox.Width / 2);
+                centerY = centerY.Clamp(this._selectedBoundingBox.Height / 2, 1 - this._selectedBoundingBox.Height / 2);
 
                 if (this._dragPoint.Position == DragPointPosition.BottomRight)
                 {
-                    var topLeftX = this._selectedItem.CenterX - (this._selectedItem.Width / 2);
-                    var topLeftY = this._selectedItem.CenterY - (this._selectedItem.Height / 2);
+                    var topLeftX = this._selectedBoundingBox.CenterX - (this._selectedBoundingBox.Width / 2);
+                    var topLeftY = this._selectedBoundingBox.CenterY - (this._selectedBoundingBox.Height / 2);
 
-                    var width = Math.Max(0.05, x - topLeftX);
-                    var height = Math.Max(0.05, y - topLeftY);
+                    var width = Math.Max(0.02, x - topLeftX);
+                    var height = Math.Max(0.02, y - topLeftY);
 
                     centerX = topLeftX + (width / 2);
                     centerY = topLeftY + (height / 2);
 
-                    this._selectedItem.Width = (float)width;
-                    this._selectedItem.Height = (float)height;
+                    this._selectedBoundingBox.Width = (float)width;
+                    this._selectedBoundingBox.Height = (float)height;
                 }
 
-                this._selectedItem.CenterX = (float)centerX;
-                this._selectedItem.CenterY = (float)centerY;
+                this._selectedBoundingBox.CenterX = (float)centerX;
+                this._selectedBoundingBox.CenterY = (float)centerY;
 
-                this._package.IsDirty = true;
+                this.PackageEdited?.Invoke(this._package);
             }
 
             this._mousePosition = e.Location;
@@ -342,7 +348,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
                 Width = (float)width
             });
 
-            this._package.IsDirty = true;
+            this.PackageEdited?.Invoke(this._package);
         }
 
         private void clearAnnotationsToolStripMenuItem_Click(object sender, System.EventArgs e)

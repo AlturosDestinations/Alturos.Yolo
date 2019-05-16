@@ -7,7 +7,6 @@ using Amazon.S3;
 using Amazon.S3.IO;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
-using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -92,12 +91,6 @@ namespace Alturos.Yolo.LearningImage.Contract
             var zipFilePath = Path.Combine(this._extractionFolder, file.Name);
 
             package.Downloading = true;
-
-            //FileInfo fileInfo = null;
-            //await Task.Run(() =>
-            //{
-            //    fileInfo = file.CopyToLocal(zipFilePath, true);
-            //});
 
             var request = new GetObjectRequest
             {

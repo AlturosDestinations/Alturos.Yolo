@@ -17,7 +17,20 @@ namespace Alturos.Yolo.LearningImage.Model
 
         public List<AnnotationImage> Images { get; set; }
         public AnnotationPackageInfo Info { get; set; }
-        public double AnnotationPercentage { get { return Info.AnnotationPercentage; } }
+
+        public double AnnotationPercentage {
+            get {
+                return this.Info.AnnotationPercentage;
+            }
+        }
+        public string DirtyDisplayName
+        {
+            get
+            {
+                // An asterisk is commonly attached to filenames when they are dirty
+                return $"{this.DisplayName}{(this.IsDirty ? "*" : "")}";
+            }
+        }
 
         public AnnotationPackage() { }
 

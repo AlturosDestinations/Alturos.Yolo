@@ -80,12 +80,11 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
             this.labelLoading.Invoke((MethodInvoker)delegate { this.labelLoading.Visible = false; });
 
-            //TODO:Check is required? If there a lot sessions local this job time increase
             foreach (var package in packages)
             {
                 if (package.Extracted && package.Images == null)
                 {
-                    this.AnalyzeAnnotationStatus(package);
+                    this.LoadAnnotationImages(package);
                 }
             }
 
@@ -99,7 +98,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             }
         }
 
-        public void AnalyzeAnnotationStatus(AnnotationPackage package)
+        public void LoadAnnotationImages(AnnotationPackage package)
         {
             if (!package.Extracted)
             {
@@ -122,14 +121,12 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             }
 
             package.Images = items;
-            this.UpdateAnnotationStatus(package);
+            this.UpdateAnnotationPercentage(package);
         }
 
-        public void UpdateAnnotationStatus(AnnotationPackage package)
+        public void UpdateAnnotationPercentage(AnnotationPackage package)
         {
-            // Check if package is annotated or not. 50% of images require to be annotated
             var annotatedImageCount = 0;
-            var requiredPercentage = 50;
 
             foreach (var image in package.Images)
             {
@@ -140,7 +137,6 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             }
 
             package.Info.AnnotationPercentage = annotatedImageCount / ((double)package.Images.Count) * 100;
-            package.Info.IsAnnotated = package.Info.AnnotationPercentage >= requiredPercentage;
         }
 
         public void UnzipPackage(AnnotationPackage package)
@@ -158,9 +154,20 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
             package.Extracted = true;
             package.PackagePath = extractedPackagePath;
+        }
 
+        public void SetAnnotationMetadata(AnnotationPackage package)
+        {
             if (package.Info.ImageDtos != null)
             {
+                // Clean up
+                var files = Directory.GetFiles(package.PackagePath, "*.txt");
+                foreach (var file in files)
+                {
+                    File.Delete(file);
+                }
+
+                // Write annotation metadata
                 var customCulture = (CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
                 customCulture.NumberFormat.NumberDecimalSeparator = ".";
 
