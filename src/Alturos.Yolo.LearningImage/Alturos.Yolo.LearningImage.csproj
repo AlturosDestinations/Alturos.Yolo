@@ -119,6 +119,7 @@
       <DependentUpon>TagListControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Helper\DrawHelper.cs" />
+    <Compile Include="Helper\DynamoDBDictionaryConverter.cs" />
     <Compile Include="Helper\MathHelper.cs" />
     <Compile Include="Helper\StringHelper.cs" />
     <Compile Include="Helper\TaskHelper.cs" />

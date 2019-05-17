@@ -7,6 +7,7 @@ using Amazon.S3;
 using Amazon.S3.IO;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -48,27 +49,35 @@ namespace Alturos.Yolo.LearningImage.Contract
             var context = new DynamoDBContext(this._dynamoDbClient);
 
             var packageInfos = context.ScanAsync<AnnotationPackageInfo>(new ScanCondition[] { new ScanCondition("IsAnnotated", ScanOperator.Equal, false) });
-            
+
             // Create packages
-            var packages = (await packageInfos.GetNextSetAsync()).Select(o => new AnnotationPackage {
-                Extracted = false,
-                PackagePath = o.Id,
-                DisplayName = Path.GetFileNameWithoutExtension(o.Id),
-                Info = o
-            }).ToList();
-
-            // Get local folder if the package was already downloaded
-            foreach (var package in packages)
+            try
             {
-                var path = Path.Combine(this._extractionFolder, Path.GetFileNameWithoutExtension(package.DisplayName));
-                if (Directory.Exists(path))
+                var packages = (await packageInfos.GetNextSetAsync()).Select(o => new AnnotationPackage
                 {
-                    package.Extracted = true;
-                    package.PackagePath = path;
-                }
-            }
+                    Extracted = false,
+                    PackagePath = o.Id,
+                    DisplayName = Path.GetFileNameWithoutExtension(o.Id),
+                    Info = o
+                }).ToList();
 
-            return packages.ToArray();
+                // Get local folder if the package was already downloaded
+                foreach (var package in packages)
+                {
+                    var path = Path.Combine(this._extractionFolder, Path.GetFileNameWithoutExtension(package.DisplayName));
+                    if (Directory.Exists(path))
+                    {
+                        package.Extracted = true;
+                        package.PackagePath = path;
+                    }
+                }
+
+                return packages.ToArray();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public async Task<AnnotationPackage> RefreshPackageAsync(AnnotationPackage package)

@@ -32,9 +32,9 @@ namespace Alturos.Yolo
 
         private YoloConfiguration MapFiles(string[] files)
         {
-            var configurationFile = files.Where(o => o.EndsWith(".cfg")).FirstOrDefault();
-            var weightsFile = files.Where(o => o.EndsWith(".weights")).FirstOrDefault();
-            var namesFile = files.Where(o => o.EndsWith(".names")).FirstOrDefault();
+            var configurationFile = files.FirstOrDefault(o => o.EndsWith(".cfg"));
+            var weightsFile = files.FirstOrDefault(o => o.EndsWith(".weights"));
+            var namesFile = files.FirstOrDefault(o => o.EndsWith(".names"));
 
             return new YoloConfiguration(configurationFile, weightsFile, namesFile);
         }
