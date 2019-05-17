@@ -264,6 +264,7 @@ namespace Alturos.Yolo.LearningImage
         private void ImageSelected(AnnotationImage image)
         {
             this.annotationImageControl.SetImage(image, this._objectClasses);
+            this.annotationImageControl.ApplyCachedBoundingBox();
         }
 
         private void PackageEdited(AnnotationPackage package)

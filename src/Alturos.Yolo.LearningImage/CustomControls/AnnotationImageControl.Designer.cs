@@ -32,6 +32,7 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.contextMenuStripPicture = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.clearAnnotationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkBoxAutoPlace = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.contextMenuStripPicture.SuspendLayout();
             this.SuspendLayout();
@@ -56,25 +57,39 @@
             this.contextMenuStripPicture.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.clearAnnotationsToolStripMenuItem});
             this.contextMenuStripPicture.Name = "contextMenuStripPicture";
-            this.contextMenuStripPicture.Size = new System.Drawing.Size(181, 48);
+            this.contextMenuStripPicture.Size = new System.Drawing.Size(170, 26);
             // 
             // clearAnnotationsToolStripMenuItem
             // 
             this.clearAnnotationsToolStripMenuItem.Name = "clearAnnotationsToolStripMenuItem";
-            this.clearAnnotationsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clearAnnotationsToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
             this.clearAnnotationsToolStripMenuItem.Text = "Clear Annotations";
             this.clearAnnotationsToolStripMenuItem.Click += new System.EventHandler(this.clearAnnotationsToolStripMenuItem_Click);
+            // 
+            // checkBoxAutoPlace
+            // 
+            this.checkBoxAutoPlace.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxAutoPlace.AutoSize = true;
+            this.checkBoxAutoPlace.Location = new System.Drawing.Point(382, 316);
+            this.checkBoxAutoPlace.Name = "checkBoxAutoPlace";
+            this.checkBoxAutoPlace.Size = new System.Drawing.Size(239, 17);
+            this.checkBoxAutoPlace.TabIndex = 2;
+            this.checkBoxAutoPlace.Text = "Automatically place annotation on new image";
+            this.checkBoxAutoPlace.UseVisualStyleBackColor = true;
+            this.checkBoxAutoPlace.CheckedChanged += new System.EventHandler(this.checkBoxAutoPlace_CheckedChanged);
             // 
             // AnnotationImageControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.checkBoxAutoPlace);
             this.Controls.Add(this.pictureBox1);
             this.Name = "AnnotationImageControl";
             this.Size = new System.Drawing.Size(624, 336);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.contextMenuStripPicture.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -83,5 +98,6 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripPicture;
         private System.Windows.Forms.ToolStripMenuItem clearAnnotationsToolStripMenuItem;
+        private System.Windows.Forms.CheckBox checkBoxAutoPlace;
     }
 }

@@ -16,11 +16,13 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         private Point _mousePosition = new Point(0, 0);
         private List<Rectangle> _rectangles = new List<Rectangle>();
         private int _mouseDragElementSize = 10;
+        private AnnotationBoundingBox _cachedBoundingBox;
         private AnnotationBoundingBox _selectedBoundingBox;
         private DragPoint _dragPoint;
         private AnnotationImage _annotationImage;
         private List<ObjectClass> _objectClasses;
         private AnnotationPackage _package;
+        private bool _autoPlace;
 
         public AnnotationImageControl()
         {
@@ -54,6 +56,19 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             if (oldImage != null)
             {
                 oldImage.Dispose();
+            }
+        }
+
+        public void ApplyCachedBoundingBox()
+        {
+            if (!this._autoPlace)
+            {
+                return;
+            }
+
+            if (this._cachedBoundingBox != null && !this._annotationImage.BoundingBoxes.Any())
+            {
+                this._annotationImage.BoundingBoxes.Add(new AnnotationBoundingBox(this._cachedBoundingBox));
             }
         }
 
@@ -247,6 +262,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
                 if (startDrag)
                 {
                     this._selectedBoundingBox = boundingBox;
+                    this._cachedBoundingBox = new AnnotationBoundingBox(this._selectedBoundingBox);
                     break;
                 }
                 else
@@ -324,6 +340,12 @@ namespace Alturos.Yolo.LearningImage.CustomControls
                 this._selectedBoundingBox.CenterX = (float)centerX;
                 this._selectedBoundingBox.CenterY = (float)centerY;
 
+                this._cachedBoundingBox.CenterX = this._selectedBoundingBox.CenterX;
+                this._cachedBoundingBox.CenterY = this._selectedBoundingBox.CenterY;
+                this._cachedBoundingBox.Width = this._selectedBoundingBox.Width;
+                this._cachedBoundingBox.Height = this._selectedBoundingBox.Height;
+
+
                 this.PackageEdited?.Invoke(this._package);
             }
 
@@ -354,6 +376,11 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         private void clearAnnotationsToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
             this._annotationImage.BoundingBoxes.Clear();
+        }
+
+        private void checkBoxAutoPlace_CheckedChanged(object sender, EventArgs e)
+        {
+            this._autoPlace = this.checkBoxAutoPlace.Checked;
         }
     }
 }
