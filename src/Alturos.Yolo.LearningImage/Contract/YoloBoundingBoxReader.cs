@@ -12,7 +12,7 @@ namespace Alturos.Yolo.LearningImage.Contract
         {
             if (!File.Exists(dataPath))
             {
-                return new AnnotationBoundingBox[0];
+                return null;
             }
 
             var data = File.ReadAllText(dataPath);

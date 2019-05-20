@@ -1,5 +1,6 @@
 ﻿using Alturos.Yolo.LearningImage.Contract;
 using Alturos.Yolo.LearningImage.Model;
+using Mapster;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -28,7 +29,7 @@ namespace Alturos.Yolo.LearningImage
 
             this._syncing = true;
 
-            _ = Task.Run(() => UpdateProgressBar());
+            _ = Task.Run(() => this.UpdateProgressBar());
             await this._annotationPackageProvider.SyncPackagesAsync(packages);
 
             this._syncing = false;
@@ -54,11 +55,7 @@ namespace Alturos.Yolo.LearningImage
 
             foreach (var image in package.Images)
             {
-                info.ImageDtos.Add(new AnnotationImageDto
-                {
-                    FilePath = image.FilePath,
-                    BoundingBoxes = image.BoundingBoxes
-                });
+                info.ImageDtos.Add(image.Adapt<AnnotationImageDto>());
             }
         }
     }

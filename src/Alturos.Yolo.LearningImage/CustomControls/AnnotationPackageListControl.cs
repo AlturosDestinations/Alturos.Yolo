@@ -4,7 +4,6 @@ using Alturos.Yolo.LearningImage.Model;
 using log4net;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -112,7 +111,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             {
                 FilePath = o.FullName,
                 DisplayName = o.Name,
-                BoundingBoxes = this._boundingBoxReader.GetBoxes(this._boundingBoxReader.GetDataPath(o.FullName)).ToList()
+                BoundingBoxes = this._boundingBoxReader.GetBoxes(this._boundingBoxReader.GetDataPath(o.FullName))?.ToList()
             }).ToList();
 
             if (items.Count == 0)
@@ -128,15 +127,21 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         {
             var annotatedImageCount = 0;
 
+            if (package.Images == null)
+            {
+                return;
+            }
+
             foreach (var image in package.Images)
             {
-                if (image.BoundingBoxes?.Count > 0)
+                if (image.BoundingBoxes != null)
                 {
                     annotatedImageCount++;
                 }
             }
 
             package.Info.AnnotationPercentage = annotatedImageCount / ((double)package.Images.Count) * 100;
+            package.Info.IsAnnotated = package.Info.AnnotationPercentage >= 100;
         }
 
         public void UnzipPackage(AnnotationPackage package)
@@ -173,16 +178,19 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
                 System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
 
-                foreach (var imageDto in package.Info.ImageDtos.Where(o => o.BoundingBoxes?.Count > 0))
+                foreach (var imageDto in package.Info.ImageDtos.Where(o => o.BoundingBoxes != null))
                 {
                     var sb = new StringBuilder();
-                    foreach (var boundingBox in imageDto.BoundingBoxes)
+                    if (imageDto.BoundingBoxes != null)
                     {
-                        sb.Append(boundingBox.ObjectIndex).Append(" ");
-                        sb.Append(boundingBox.CenterX).Append(" ");
-                        sb.Append(boundingBox.CenterY).Append(" ");
-                        sb.Append(boundingBox.Width).Append(" ");
-                        sb.Append(boundingBox.Height).AppendLine();
+                        foreach (var boundingBox in imageDto.BoundingBoxes)
+                        {
+                            sb.Append(boundingBox.ObjectIndex).Append(" ");
+                            sb.Append(boundingBox.CenterX).Append(" ");
+                            sb.Append(boundingBox.CenterY).Append(" ");
+                            sb.Append(boundingBox.Width).Append(" ");
+                            sb.Append(boundingBox.Height).AppendLine();
+                        }
                     }
 
                     var dataPath = this._boundingBoxReader.GetDataPath(imageDto.FilePath);
@@ -199,9 +207,15 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
         private async void redownloadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.PackageSelected?.Invoke(null);
-
             var package = this.dataGridView1.Rows[this.dataGridView1.CurrentCell.RowIndex].DataBoundItem as AnnotationPackage;
+
+            if (package.Downloading)
+            {
+                return;
+            }
+
+            package.Downloading = true;
+            this.PackageSelected?.Invoke(package);
 
             var downloadedPackage = await this._annotationPackageProvider.RefreshPackageAsync(package);
             this.UnzipPackage(downloadedPackage);

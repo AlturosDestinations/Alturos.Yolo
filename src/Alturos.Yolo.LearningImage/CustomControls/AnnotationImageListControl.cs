@@ -48,7 +48,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         {
             var item = this.dataGridView1.Rows[e.RowIndex].DataBoundItem as AnnotationImage;
 
-            if (item.BoundingBoxes?.Count > 0)
+            if (item.BoundingBoxes != null)
             {
                 this.dataGridView1.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.GreenYellow;
                 return;

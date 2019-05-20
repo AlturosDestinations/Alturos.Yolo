@@ -15,7 +15,7 @@ namespace Alturos.Yolo.LearningImage
         private readonly IBoundingBoxReader _boundingBoxReader;
         private readonly IAnnotationPackageProvider _annotationPackageProvider;
         private readonly List<ObjectClass> _objectClasses;
-        private AnnotationPackage _packageEdited;
+        private AnnotationPackage _selectedPackage;
 
         public Main(IBoundingBoxReader boundingBoxReader)
         {
@@ -71,7 +71,7 @@ namespace Alturos.Yolo.LearningImage
                     "The following packages have been modified and not synced yet:\n\n" +
                         $"{sb.ToString()}\n\n" +
                         "If you close now any unsynced package will be lost.\n\nClose anyway and discard your changes?",
-                    "Unsynced packages detected",
+                    "Discard unsynced changes?",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning);
 
@@ -198,33 +198,20 @@ namespace Alturos.Yolo.LearningImage
         private void PackageSelected(AnnotationPackage package)
         {
             // Sync
-            if (this._packageEdited != null && this._packageEdited.IsDirty)
+            if (this._selectedPackage != null && this._selectedPackage.IsDirty)
             {
-                if (this._packageEdited.AnnotationPercentage < 100)
-                {
-                    var dialogResult1 = MessageBox.Show("Are you finished annotating?", "Finish Annotation", MessageBoxButtons.YesNo);
-                    if (dialogResult1 == DialogResult.Yes)
-                    {
-                        this._packageEdited.Info.IsAnnotated = true;
-                    }
-                    else
-                    {
-                        this._packageEdited.Info.IsAnnotated = false;
-                    }
-                }
-
-                var dialogResult2 = MessageBox.Show("Do you want to sync now?", "Sync Request", MessageBoxButtons.YesNo);
-                if (dialogResult2 == DialogResult.Yes)
+                var dialogResult = MessageBox.Show("Do you want to sync now?", "Sync Request", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
                 {
                     var syncForm = new SyncForm(this._annotationPackageProvider);
                     syncForm.Show();
 
-                    var packageEdited = this._packageEdited;
+                    var packageEdited = this._selectedPackage;
                     Task.Run(() => syncForm.Sync(new AnnotationPackage[] { packageEdited }));
                 }
             }
 
-            this._packageEdited = package;
+            this._selectedPackage = package;
 
             this.annotationImageListControl.Hide();
             this.downloadControl.Hide();
@@ -233,6 +220,11 @@ namespace Alturos.Yolo.LearningImage
 
             this.annotationImageControl.SetPackage(null);
             this.annotationImageControl.SetImage(null, null);
+
+            if (package == null)
+            {
+                return;
+            }
 
             this.tagListControl.SetTags(package.Info);
 
@@ -251,7 +243,7 @@ namespace Alturos.Yolo.LearningImage
 
                 this.annotationImageControl.SetPackage(package);
             }
-            else
+            if (package.Downloading)
             {
                 //TODO: On selected item change in the datagrid always new tasks started...
                 this.downloadControl.ShowDownloadDialog(package);
@@ -265,6 +257,12 @@ namespace Alturos.Yolo.LearningImage
         {
             this.annotationImageControl.SetImage(image, this._objectClasses);
             this.annotationImageControl.ApplyCachedBoundingBox();
+
+            if (image.BoundingBoxes == null)
+            {
+                image.BoundingBoxes = new List<AnnotationBoundingBox>();
+                this.PackageEdited(this._selectedPackage);
+            }
         }
 
         private void PackageEdited(AnnotationPackage package)

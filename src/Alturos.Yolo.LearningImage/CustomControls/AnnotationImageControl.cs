@@ -362,6 +362,10 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             var x = (e.X - canvasInfo.OffsetX + (width * canvasInfo.ScaledWidth / 2)) / canvasInfo.ScaledWidth;
             var y = (e.Y - canvasInfo.OffsetY + (height * canvasInfo.ScaledHeight / 2)) / canvasInfo.ScaledHeight;
 
+            if (this._annotationImage.BoundingBoxes == null)
+            {
+                this._annotationImage.BoundingBoxes = new List<AnnotationBoundingBox>();
+            }
             this._annotationImage.BoundingBoxes.Add(new AnnotationBoundingBox
             {
                 CenterX = (float)x,
@@ -375,7 +379,8 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
         private void clearAnnotationsToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            this._annotationImage.BoundingBoxes.Clear();
+            this._annotationImage.BoundingBoxes = null;
+            this.PackageEdited?.Invoke(this._package);
         }
 
         private void checkBoxAutoPlace_CheckedChanged(object sender, EventArgs e)
