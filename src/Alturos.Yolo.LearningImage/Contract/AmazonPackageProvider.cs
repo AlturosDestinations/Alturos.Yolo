@@ -46,37 +46,38 @@ namespace Alturos.Yolo.LearningImage.Contract
         public async Task<AnnotationPackage[]> GetPackagesAsync()
         {
             // Retrieve unannotated metadata
-            var context = new DynamoDBContext(this._dynamoDbClient);
-
-            var packageInfos = context.ScanAsync<AnnotationPackageInfo>(new ScanCondition[] { new ScanCondition("IsAnnotated", ScanOperator.Equal, false) });
-
-            // Create packages
-            try
+            using (var context = new DynamoDBContext(this._dynamoDbClient))
             {
-                var packages = (await packageInfos.GetNextSetAsync()).Select(o => new AnnotationPackage
+                try
                 {
-                    Extracted = false,
-                    PackagePath = o.Id,
-                    DisplayName = Path.GetFileNameWithoutExtension(o.Id),
-                    Info = o
-                }).ToList();
+                    var packageInfos = context.ScanAsync<AnnotationPackageInfo>(new ScanCondition[] { new ScanCondition("IsAnnotated", ScanOperator.Equal, false) });
 
-                // Get local folder if the package was already downloaded
-                foreach (var package in packages)
-                {
-                    var path = Path.Combine(this._extractionFolder, Path.GetFileNameWithoutExtension(package.DisplayName));
-                    if (Directory.Exists(path))
+                    // Create packages
+                    var packages = (await packageInfos.GetNextSetAsync()).Select(o => new AnnotationPackage
                     {
-                        package.Extracted = true;
-                        package.PackagePath = path;
-                    }
-                }
+                        Extracted = false,
+                        PackagePath = o.Id,
+                        DisplayName = Path.GetFileNameWithoutExtension(o.Id),
+                        Info = o
+                    }).ToList();
 
-                return packages.ToArray();
-            }
-            catch (Exception ex)
-            {
-                throw;
+                    // Get local folder if the package was already downloaded
+                    foreach (var package in packages)
+                    {
+                        var path = Path.Combine(this._extractionFolder, Path.GetFileNameWithoutExtension(package.DisplayName));
+                        if (Directory.Exists(path))
+                        {
+                            package.Extracted = true;
+                            package.PackagePath = path;
+                        }
+                    }
+
+                    return packages.ToArray();
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
             }
         }
 
