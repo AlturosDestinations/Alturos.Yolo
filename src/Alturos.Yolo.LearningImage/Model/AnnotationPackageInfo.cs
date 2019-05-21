@@ -8,13 +8,9 @@ namespace Alturos.Yolo.LearningImage.Model
     {
         [DynamoDBHashKey]
         public string Id { get; set; }
-        public string Weather { get; set; }
-        public List<string> Color { get; set; }
-        public string Driver { get; set; }
-        public string Device { get; set; }
-        public string Flag { get; set; }
         public bool IsAnnotated { get; set; }
         public double AnnotationPercentage { get; set; }
-        public List<AnnotationImageDto> ImageDtos { get; set; }
+        public List<AnnotationImageDto> Images { get; set; }
+        public List<string> Tags { get; set; }
     }
 }

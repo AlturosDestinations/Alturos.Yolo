@@ -2,9 +2,9 @@
 using Alturos.Yolo.LearningImage.Helper;
 using Alturos.Yolo.LearningImage.Model;
 using log4net;
+using Mapster;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -24,7 +24,6 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
         public DataGridView DataGridView { get { return this.dataGridView1; } }
 
-        private IBoundingBoxReader _boundingBoxReader;
         private IAnnotationPackageProvider _annotationPackageProvider;
         private List<ObjectClass> _objectClasses;
 
@@ -35,9 +34,8 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             this.labelLoading.Location = new Point(5, 20);
         }
 
-        public void Setup(IBoundingBoxReader boundingBoxReader, IAnnotationPackageProvider annotationPackageProvider, List<ObjectClass> objectClasses)
+        public void Setup(IAnnotationPackageProvider annotationPackageProvider, List<ObjectClass> objectClasses)
         {
-            this._boundingBoxReader = boundingBoxReader;
             this._annotationPackageProvider = annotationPackageProvider;
             this._objectClasses = objectClasses;
         }
@@ -80,12 +78,11 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
             this.labelLoading.Invoke((MethodInvoker)delegate { this.labelLoading.Visible = false; });
 
-            //TODO:Check is required? If there a lot sessions local this job time increase
             foreach (var package in packages)
             {
                 if (package.Extracted && package.Images == null)
                 {
-                    this.AnalyzeAnnotationStatus(package);
+                    this.LoadAnnotationImages(package);
                 }
             }
 
@@ -99,22 +96,23 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             }
         }
 
-        public void AnalyzeAnnotationStatus(AnnotationPackage package)
+        public void LoadAnnotationImages(AnnotationPackage package)
         {
             if (!package.Extracted)
             {
                 return;
             }
 
-            var allowedImageFormats = new string[] { ".png" , ".jpg", ".bmp" };
+            var items = new List<AnnotationImage>();
 
-            var files = Directory.GetFiles(package.PackagePath, "*.*", SearchOption.TopDirectoryOnly).Select(file => new FileInfo(file));
-            var items = files.Where(file => allowedImageFormats.Contains(file.Extension)).Select(o => new AnnotationImage
+            foreach (var imageDto in package.Info.Images)
             {
-                FilePath = o.FullName,
-                DisplayName = o.Name,
-                BoundingBoxes = this._boundingBoxReader.GetBoxes(this._boundingBoxReader.GetDataPath(o.FullName)).ToList()
-            }).ToList();
+                var item = imageDto.Adapt<AnnotationImage>();
+                item.DisplayName = Path.GetFileName(imageDto.FilePath);
+                item.Package = package;
+
+                items.Add(item);
+            }
 
             if (items.Count == 0)
             {
@@ -122,25 +120,28 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             }
 
             package.Images = items;
-            this.UpdateAnnotationStatus(package);
+            this.UpdateAnnotationPercentage(package);
         }
 
-        public void UpdateAnnotationStatus(AnnotationPackage package)
+        public void UpdateAnnotationPercentage(AnnotationPackage package)
         {
-            // Check if package is annotated or not. 50% of images require to be annotated
             var annotatedImageCount = 0;
-            var requiredPercentage = 50;
+
+            if (package.Images == null)
+            {
+                return;
+            }
 
             foreach (var image in package.Images)
             {
-                if (image.BoundingBoxes?.Count > 0)
+                if (image.BoundingBoxes != null)
                 {
                     annotatedImageCount++;
                 }
             }
 
             package.Info.AnnotationPercentage = annotatedImageCount / ((double)package.Images.Count) * 100;
-            package.Info.IsAnnotated = package.Info.AnnotationPercentage >= requiredPercentage;
+            package.Info.IsAnnotated = package.Info.AnnotationPercentage >= 100;
         }
 
         public void UnzipPackage(AnnotationPackage package)
@@ -158,30 +159,6 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
             package.Extracted = true;
             package.PackagePath = extractedPackagePath;
-
-            if (package.Info.ImageDtos != null)
-            {
-                var customCulture = (CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
-                customCulture.NumberFormat.NumberDecimalSeparator = ".";
-
-                System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
-
-                foreach (var imageDto in package.Info.ImageDtos.Where(o => o.BoundingBoxes?.Count > 0))
-                {
-                    var sb = new StringBuilder();
-                    foreach (var boundingBox in imageDto.BoundingBoxes)
-                    {
-                        sb.Append(boundingBox.ObjectIndex).Append(" ");
-                        sb.Append(boundingBox.CenterX).Append(" ");
-                        sb.Append(boundingBox.CenterY).Append(" ");
-                        sb.Append(boundingBox.Width).Append(" ");
-                        sb.Append(boundingBox.Height).AppendLine();
-                    }
-
-                    var dataPath = this._boundingBoxReader.GetDataPath(imageDto.FilePath);
-                    File.WriteAllText(dataPath, sb.ToString());
-                }
-            }
         }
 
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)
@@ -192,74 +169,21 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
         private async void redownloadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.PackageSelected?.Invoke(null);
-
             var package = this.dataGridView1.Rows[this.dataGridView1.CurrentCell.RowIndex].DataBoundItem as AnnotationPackage;
+
+            if (package.Downloading)
+            {
+                return;
+            }
+
+            package.Downloading = true;
+            this.PackageSelected?.Invoke(package);
 
             var downloadedPackage = await this._annotationPackageProvider.RefreshPackageAsync(package);
             this.UnzipPackage(downloadedPackage);
 
             downloadedPackage.Images = null;
             this.PackageSelected?.Invoke(downloadedPackage);
-        }
-
-        private async void annotateToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            await this.AnnotatePackageAsync();
-        }
-
-        private async void dataGridView1_DoubleClick(object sender, EventArgs e)
-        {
-            await this.AnnotatePackageAsync();
-        }
-
-        private async Task AnnotatePackageAsync()
-        {
-            var package = this.dataGridView1.CurrentRow?.DataBoundItem as AnnotationPackage;
-            if (package == null)
-            {
-                return;
-            }
-
-            if (!package.Extracted)
-            {
-                MessageBox.Show("Please extract package first", "Package is not available");
-                return;
-            }
-
-            var yoloMarkPath = @"yolomark\yolo_mark.exe";
-            if (!File.Exists(yoloMarkPath))
-            {
-                MessageBox.Show("Please download Yolo_mark first (https://github.com/AlexeyAB/Yolo_mark)", "Cannot found Yolo_mark", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // Turn our indices to Yolo Mark indices
-            this.ChangeObjectClassIndices(package, true);
-
-            // Start Yolo Mark
-            var arguments = $@"""{package.PackagePath}"" yolomark\data\output.txt yolomark\data\obj.names";
-            var process = Process.Start(yoloMarkPath, arguments);
-
-            await process.WaitForExitAsync();
-
-            // Turn Yolo Mark indices to our indices
-            this.ChangeObjectClassIndices(package, false);
-
-            package.Images = null;
-            this.PackageSelected?.Invoke(package);
-
-            if (package.Info.IsAnnotated)
-            {
-                var dialogResult = MessageBox.Show("Do you want to sync the package now?", "Sync", MessageBoxButtons.YesNo);
-                if (dialogResult == DialogResult.Yes)
-                {
-                    var syncForm = new SyncForm(this._annotationPackageProvider);
-                    syncForm.Show();
-
-                    await syncForm.Sync(new AnnotationPackage[] { package });
-                }
-            }
         }
 
         private void ChangeObjectClassIndices(AnnotationPackage package, bool toYoloMark)

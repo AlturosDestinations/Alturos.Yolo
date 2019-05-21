@@ -28,8 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.contextMenuStripPicture = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.clearAnnotationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.contextMenuStripPicture.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -47,6 +51,20 @@
             this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
             this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
             // 
+            // contextMenuStripPicture
+            // 
+            this.contextMenuStripPicture.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.clearAnnotationsToolStripMenuItem});
+            this.contextMenuStripPicture.Name = "contextMenuStripPicture";
+            this.contextMenuStripPicture.Size = new System.Drawing.Size(170, 26);
+            // 
+            // clearAnnotationsToolStripMenuItem
+            // 
+            this.clearAnnotationsToolStripMenuItem.Name = "clearAnnotationsToolStripMenuItem";
+            this.clearAnnotationsToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.clearAnnotationsToolStripMenuItem.Text = "Clear Annotations";
+            this.clearAnnotationsToolStripMenuItem.Click += new System.EventHandler(this.clearAnnotationsToolStripMenuItem_Click);
+            // 
             // AnnotationImageControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -55,6 +73,7 @@
             this.Name = "AnnotationImageControl";
             this.Size = new System.Drawing.Size(624, 336);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.contextMenuStripPicture.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -62,5 +81,7 @@
         #endregion
 
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripPicture;
+        private System.Windows.Forms.ToolStripMenuItem clearAnnotationsToolStripMenuItem;
     }
 }

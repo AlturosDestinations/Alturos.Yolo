@@ -36,6 +36,9 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panelImageList = new System.Windows.Forms.Panel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoplaceAnnotationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showLabelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.downloadControl = new Alturos.Yolo.LearningImage.CustomControls.DownloadControl();
             this.annotationImageListControl = new Alturos.Yolo.LearningImage.CustomControls.AnnotationImageListControl();
             this.tagListControl = new Alturos.Yolo.LearningImage.CustomControls.TagListControl();
@@ -56,7 +59,8 @@
             this.loadToolStripMenuItem,
             this.syncToolStripMenuItem,
             this.exportToolStripMenuItem,
-            this.addPackageStripMenuItem});
+            this.addPackageStripMenuItem,
+            this.editToolStripMenuItem});
             this.menuStripMain.Location = new System.Drawing.Point(0, 0);
             this.menuStripMain.Name = "menuStripMain";
             this.menuStripMain.Size = new System.Drawing.Size(1334, 24);
@@ -75,7 +79,7 @@
             this.syncToolStripMenuItem.Enabled = false;
             this.syncToolStripMenuItem.Name = "syncToolStripMenuItem";
             this.syncToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.syncToolStripMenuItem.Text = "Sync";
+            this.syncToolStripMenuItem.Text = "&Sync";
             this.syncToolStripMenuItem.Click += new System.EventHandler(this.syncToolStripMenuItem_Click);
             // 
             // exportToolStripMenuItem
@@ -90,7 +94,7 @@
             // 
             this.addPackageStripMenuItem.Name = "addPackageStripMenuItem";
             this.addPackageStripMenuItem.Size = new System.Drawing.Size(88, 20);
-            this.addPackageStripMenuItem.Text = "Add Package";
+            this.addPackageStripMenuItem.Text = "&Add Package";
             this.addPackageStripMenuItem.Click += new System.EventHandler(this.addPackageStripMenuItem_Click);
             // 
             // tableLayoutPanel1
@@ -139,9 +143,33 @@
             this.splitContainer1.SplitterDistance = 300;
             this.splitContainer1.TabIndex = 0;
             // 
+            // editToolStripMenuItem
+            // 
+            this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.autoplaceAnnotationsToolStripMenuItem,
+            this.showLabelsToolStripMenuItem});
+            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.editToolStripMenuItem.Text = "E&dit";
+            // 
+            // autoplaceAnnotationsToolStripMenuItem
+            // 
+            this.autoplaceAnnotationsToolStripMenuItem.Name = "autoplaceAnnotationsToolStripMenuItem";
+            this.autoplaceAnnotationsToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.autoplaceAnnotationsToolStripMenuItem.Text = "Autoplace Annotations";
+            this.autoplaceAnnotationsToolStripMenuItem.Click += new System.EventHandler(this.AutoplaceAnnotationsToolStripMenuItem_Click);
+            // 
+            // showLabelsToolStripMenuItem
+            // 
+            this.showLabelsToolStripMenuItem.Name = "showLabelsToolStripMenuItem";
+            this.showLabelsToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.showLabelsToolStripMenuItem.Text = "Show Labels";
+            this.showLabelsToolStripMenuItem.Click += new System.EventHandler(this.ShowLabelsToolStripMenuItem_Click);
+            // 
             // downloadControl
             // 
             this.downloadControl.BackColor = System.Drawing.SystemColors.Control;
+            this.downloadControl.Enabled = false;
             this.downloadControl.ExtractionRequested = null;
             this.downloadControl.Location = new System.Drawing.Point(0, 0);
             this.downloadControl.Name = "downloadControl";
@@ -183,10 +211,14 @@
             this.annotationImageControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.annotationImageControl.AutoplaceAnnotations = false;
             this.annotationImageControl.Location = new System.Drawing.Point(703, 3);
             this.annotationImageControl.Name = "annotationImageControl";
+            this.annotationImageControl.PackageEdited = null;
+            this.annotationImageControl.ShowLabels = false;
             this.annotationImageControl.Size = new System.Drawing.Size(628, 524);
             this.annotationImageControl.TabIndex = 2;
+            this.annotationImageControl.Load += new System.EventHandler(this.annotationImageControl_Load);
             // 
             // Main
             // 
@@ -198,6 +230,7 @@
             this.MainMenuStrip = this.menuStripMain;
             this.Name = "Main";
             this.Text = "Alturos.Yolo.LearningImage";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Main_FormClosed);
             this.menuStripMain.ResumeLayout(false);
             this.menuStripMain.PerformLayout();
@@ -226,6 +259,9 @@
         private System.Windows.Forms.ToolStripMenuItem syncToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addPackageStripMenuItem;
         private CustomControls.DownloadControl downloadControl;
+        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem autoplaceAnnotationsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showLabelsToolStripMenuItem;
     }
 }
 

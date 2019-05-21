@@ -1,5 +1,6 @@
 ﻿using Alturos.Yolo.LearningImage.Contract;
 using Alturos.Yolo.LearningImage.Model;
+using Mapster;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -9,6 +10,7 @@ namespace Alturos.Yolo.LearningImage
     public partial class SyncForm : Form
     {
         private IAnnotationPackageProvider _annotationPackageProvider;
+        private bool _syncing;
 
         public SyncForm(IAnnotationPackageProvider annotationPackageProvider)
         {
@@ -21,39 +23,44 @@ namespace Alturos.Yolo.LearningImage
         {
             foreach (var package in packages)
             {
+                package.IsDirty = false;
                 this.AddImageDtos(package);
             }
 
-            _ = Task.Run(() => this._annotationPackageProvider.SyncPackagesAsync(packages));
+            this._syncing = true;
 
-            while (!this._annotationPackageProvider.IsSyncing)
-            {
-                await Task.Delay(100);
-            }
+            _ = Task.Run(() => this.UpdateProgressBar());
+            await this._annotationPackageProvider.SyncPackagesAsync(packages);
 
-            while (this._annotationPackageProvider.IsSyncing)
+            this._syncing = false;
+
+            this.Invoke((MethodInvoker)delegate { this.Close(); });
+        }
+
+        private async Task UpdateProgressBar()
+        {
+            while (this._syncing)
             {
                 var progress = this._annotationPackageProvider.GetSyncProgress();
                 this.progressBar.Invoke((MethodInvoker)delegate { this.progressBar.Value = (int)progress; });
 
                 await Task.Delay(100);
             }
-
-            this.Close();
         }
 
         private void AddImageDtos(AnnotationPackage package)
         {
+            if (package.Images == null)
+            {
+                return;
+            }
+
             var info = package.Info;
-            info.ImageDtos = new List<AnnotationImageDto>();
+            info.Images = new List<AnnotationImageDto>();
 
             foreach (var image in package.Images)
             {
-                info.ImageDtos.Add(new AnnotationImageDto
-                {
-                    FilePath = image.FilePath,
-                    BoundingBoxes = image.BoundingBoxes
-                });
+                info.Images.Add(image.Adapt<AnnotationImageDto>());
             }
         }
     }

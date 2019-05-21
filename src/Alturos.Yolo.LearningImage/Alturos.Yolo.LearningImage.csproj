@@ -54,6 +54,9 @@
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Mapster, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2f39883af23c29a8, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mapster.4.0.0\lib\net45\Mapster.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.WindowsAPICodePack-Core.1.1.0.2\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
     </Reference>
@@ -62,9 +65,6 @@
     </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack.ShellExtensions, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.WindowsAPICodePack-Shell.1.1.0.0\lib\Microsoft.WindowsAPICodePack.ShellExtensions.dll</HintPath>
-    </Reference>
-    <Reference Include="SimpleInjector, Version=4.5.1.0, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
-      <HintPath>..\packages\SimpleInjector.4.5.1\lib\net45\SimpleInjector.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -119,13 +119,12 @@
       <DependentUpon>TagListControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Helper\DrawHelper.cs" />
+    <Compile Include="Helper\MathHelper.cs" />
     <Compile Include="Helper\StringHelper.cs" />
     <Compile Include="Helper\TaskHelper.cs" />
     <Compile Include="Model\AnnotationImageDto.cs" />
     <Compile Include="Model\AnnotationImage.cs" />
     <Compile Include="Model\AnnotationPackage.cs" />
-    <Compile Include="Contract\IBoundingBoxReader.cs" />
-    <Compile Include="Contract\YoloBoundingBoxReader.cs" />
     <Compile Include="CustomControls\AnnotationPackageListControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -166,7 +165,9 @@
     <Compile Include="Model\CanvasInfo.cs" />
     <Compile Include="Model\DragPoint.cs" />
     <Compile Include="Model\DragPointPosition.cs" />
+    <Compile Include="Model\DragPointType.cs" />
     <Compile Include="Model\ObjectClass.cs" />
+    <Compile Include="Model\Tag.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\AnnotationBoundingBox.cs" />

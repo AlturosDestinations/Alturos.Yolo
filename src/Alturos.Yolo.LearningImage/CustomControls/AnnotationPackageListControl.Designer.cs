@@ -29,13 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.ColumnName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnPercentage = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.redownloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.annotateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.labelLoading = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -61,12 +60,11 @@
             this.dataGridView1.TabIndex = 2;
             this.dataGridView1.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.dataGridView1_RowPrePaint);
             this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
-            this.dataGridView1.DoubleClick += new System.EventHandler(this.dataGridView1_DoubleClick);
             // 
             // ColumnName
             // 
             this.ColumnName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnName.DataPropertyName = "DisplayName";
+            this.ColumnName.DataPropertyName = "DirtyDisplayName";
             this.ColumnName.HeaderText = "Name";
             this.ColumnName.Name = "ColumnName";
             this.ColumnName.ReadOnly = true;
@@ -74,9 +72,9 @@
             // ColumnPercentage
             // 
             this.ColumnPercentage.DataPropertyName = "AnnotationPercentage";
-            dataGridViewCellStyle3.Format = "0.00";
-            dataGridViewCellStyle3.NullValue = null;
-            this.ColumnPercentage.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Format = "0.00";
+            dataGridViewCellStyle1.NullValue = null;
+            this.ColumnPercentage.DefaultCellStyle = dataGridViewCellStyle1;
             this.ColumnPercentage.HeaderText = "Annotated (%)";
             this.ColumnPercentage.Name = "ColumnPercentage";
             this.ColumnPercentage.ReadOnly = true;
@@ -84,10 +82,9 @@
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.redownloadToolStripMenuItem,
-            this.annotateToolStripMenuItem});
+            this.redownloadToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(141, 48);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(141, 26);
             // 
             // redownloadToolStripMenuItem
             // 
@@ -95,13 +92,6 @@
             this.redownloadToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.redownloadToolStripMenuItem.Text = "&Redownload";
             this.redownloadToolStripMenuItem.Click += new System.EventHandler(this.redownloadToolStripMenuItem_Click);
-            // 
-            // annotateToolStripMenuItem
-            // 
-            this.annotateToolStripMenuItem.Name = "annotateToolStripMenuItem";
-            this.annotateToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
-            this.annotateToolStripMenuItem.Text = "&Annotate";
-            this.annotateToolStripMenuItem.Click += new System.EventHandler(this.annotateToolStripMenuItem_Click);
             // 
             // groupBox1
             // 
@@ -145,9 +135,8 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem redownloadToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem annotateToolStripMenuItem;
+        private System.Windows.Forms.Label labelLoading;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnName;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnPercentage;
-        private System.Windows.Forms.Label labelLoading;
     }
 }

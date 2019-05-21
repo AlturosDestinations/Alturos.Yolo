@@ -1,7 +1,7 @@
 ﻿using Alturos.Yolo.LearningImage.Model;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
-using System.Dynamic;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -9,31 +9,45 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 {
     public partial class TagListControl : UserControl
     {
+        private AnnotationPackage _package;
+
         public TagListControl()
         {
             this.InitializeComponent();
         }
 
-        public void SetTags(AnnotationPackageInfo info)
+        public void SetTags(AnnotationPackage package)
         {
-            if (info == null)
+            if (package == null || package.Info == null)
             {
                 return;
             }
 
-            dynamic tags = new ExpandoObject();
-            tags.Weather = info.Weather;
-            tags.Driver = info.Driver;
-            tags.Device = info.Device;
-            tags.Flag = info.Flag;
+            this._package = package;
 
-            var items = tags as IDictionary<string, object>;
-            for (var i = 0; i < info.Color?.Count; i++)
+            var dataBindings = package.Info.Tags?.Select(o => new Tag { Value = o }).ToList();
+            if (dataBindings == null) { dataBindings = new List<Tag>(); }
+
+            var bindingList = new BindingList<Tag>(dataBindings);
+            var bindingSource = new BindingSource(bindingList, null);
+
+            this.dataGridView1.DataSource = bindingSource;
+        }
+
+        private void DataGridView1_RowValidated(object sender, DataGridViewCellEventArgs e)
+        {
+            var list = new List<string>();
+
+            foreach (DataGridViewRow row in this.dataGridView1.Rows)
             {
-                items.Add($"Color {(i + 1).ToString()}", info.Color[i]);
+                var value = row.Cells[0].Value?.ToString();
+                if (!string.IsNullOrEmpty(value)) { list.Add(value); }
             }
 
-            this.dataGridView1.DataSource = items.Select(o => new { o.Key, o.Value }).ToList();
+            //TODO: Verify tags exist
+
+            this._package.IsDirty = true;
+            this._package.Info.Tags = list;
         }
     }
 }

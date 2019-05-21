@@ -46,30 +46,39 @@ namespace Alturos.Yolo.LearningImage.Contract
         public async Task<AnnotationPackage[]> GetPackagesAsync()
         {
             // Retrieve unannotated metadata
-            var context = new DynamoDBContext(this._dynamoDbClient);
-
-            var packageInfos = context.ScanAsync<AnnotationPackageInfo>(new ScanCondition[] { new ScanCondition("IsAnnotated", ScanOperator.Equal, false) });
-            
-            // Create packages
-            var packages = (await packageInfos.GetNextSetAsync()).Select(o => new AnnotationPackage {
-                Extracted = false,
-                PackagePath = o.Id,
-                DisplayName = Path.GetFileNameWithoutExtension(o.Id),
-                Info = o
-            }).ToList();
-
-            // Get local folder if the package was already downloaded
-            foreach (var package in packages)
+            using (var context = new DynamoDBContext(this._dynamoDbClient))
             {
-                var path = Path.Combine(this._extractionFolder, Path.GetFileNameWithoutExtension(package.DisplayName));
-                if (Directory.Exists(path))
+                try
                 {
-                    package.Extracted = true;
-                    package.PackagePath = path;
+                    var packageInfos = context.ScanAsync<AnnotationPackageInfo>(new ScanCondition[] { new ScanCondition("IsAnnotated", ScanOperator.Equal, false) });
+
+                    // Create packages
+                    var packages = (await packageInfos.GetNextSetAsync()).Select(o => new AnnotationPackage
+                    {
+                        Extracted = false,
+                        PackagePath = o.Id,
+                        DisplayName = Path.GetFileNameWithoutExtension(o.Id),
+                        Info = o
+                    }).ToList();
+
+                    // Get local folder if the package was already downloaded
+                    foreach (var package in packages)
+                    {
+                        var path = Path.Combine(this._extractionFolder, Path.GetFileNameWithoutExtension(package.DisplayName));
+                        if (Directory.Exists(path))
+                        {
+                            package.Extracted = true;
+                            package.PackagePath = path;
+                        }
+                    }
+
+                    return packages.ToArray();
+                }
+                catch (Exception ex)
+                {
+                    throw;
                 }
             }
-
-            return packages.ToArray();
         }
 
         public async Task<AnnotationPackage> RefreshPackageAsync(AnnotationPackage package)
@@ -92,12 +101,6 @@ namespace Alturos.Yolo.LearningImage.Contract
             var zipFilePath = Path.Combine(this._extractionFolder, file.Name);
 
             package.Downloading = true;
-
-            //FileInfo fileInfo = null;
-            //await Task.Run(() =>
-            //{
-            //    fileInfo = file.CopyToLocal(zipFilePath, true);
-            //});
 
             var request = new GetObjectRequest
             {
