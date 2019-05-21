@@ -19,7 +19,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
                 return;
             }
 
-            this.dataGridView1.DataSource = info.Tags?.OrderBy(o => o.Key).Select(o => new { o.Key, o.Value }).ToList();
+            this.dataGridView1.DataSource = info.Tags?.Select(o => new { Value = o }).ToList();
         }
     }
 }

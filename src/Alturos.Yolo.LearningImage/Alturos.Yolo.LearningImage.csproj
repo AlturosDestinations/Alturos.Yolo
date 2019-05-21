@@ -66,9 +66,6 @@
     <Reference Include="Microsoft.WindowsAPICodePack.ShellExtensions, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.WindowsAPICodePack-Shell.1.1.0.0\lib\Microsoft.WindowsAPICodePack.ShellExtensions.dll</HintPath>
     </Reference>
-    <Reference Include="SimpleInjector, Version=4.5.1.0, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
-      <HintPath>..\packages\SimpleInjector.4.5.1\lib\net45\SimpleInjector.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.4.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
@@ -122,15 +119,12 @@
       <DependentUpon>TagListControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Helper\DrawHelper.cs" />
-    <Compile Include="Helper\DynamoDBDictionaryConverter.cs" />
     <Compile Include="Helper\MathHelper.cs" />
     <Compile Include="Helper\StringHelper.cs" />
     <Compile Include="Helper\TaskHelper.cs" />
     <Compile Include="Model\AnnotationImageDto.cs" />
     <Compile Include="Model\AnnotationImage.cs" />
     <Compile Include="Model\AnnotationPackage.cs" />
-    <Compile Include="Contract\IBoundingBoxReader.cs" />
-    <Compile Include="Contract\YoloBoundingBoxReader.cs" />
     <Compile Include="CustomControls\AnnotationPackageListControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

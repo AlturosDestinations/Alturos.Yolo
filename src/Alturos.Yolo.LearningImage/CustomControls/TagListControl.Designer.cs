@@ -31,7 +31,6 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.ColumnKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -45,8 +44,7 @@
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ColumnKey,
-            this.ColumnValue});
+            this.ColumnKey});
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(3, 16);
             this.dataGridView1.Name = "dataGridView1";
@@ -68,20 +66,11 @@
             // 
             // ColumnKey
             // 
-            this.ColumnKey.DataPropertyName = "Key";
+            this.ColumnKey.DataPropertyName = "Value";
             this.ColumnKey.FillWeight = 54.53164F;
-            this.ColumnKey.HeaderText = "Key";
+            this.ColumnKey.HeaderText = "Value";
             this.ColumnKey.Name = "ColumnKey";
             this.ColumnKey.ReadOnly = true;
-            // 
-            // ColumnValue
-            // 
-            this.ColumnValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnValue.DataPropertyName = "Value";
-            this.ColumnValue.FillWeight = 56.21819F;
-            this.ColumnValue.HeaderText = "Value";
-            this.ColumnValue.Name = "ColumnValue";
-            this.ColumnValue.ReadOnly = true;
             // 
             // TagListControl
             // 
@@ -101,6 +90,5 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnKey;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnValue;
     }
 }

@@ -2,6 +2,7 @@
 using Alturos.Yolo.LearningImage.Helper;
 using Alturos.Yolo.LearningImage.Model;
 using log4net;
+using Mapster;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -23,7 +24,6 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
         public DataGridView DataGridView { get { return this.dataGridView1; } }
 
-        private IBoundingBoxReader _boundingBoxReader;
         private IAnnotationPackageProvider _annotationPackageProvider;
         private List<ObjectClass> _objectClasses;
 
@@ -34,9 +34,8 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             this.labelLoading.Location = new Point(5, 20);
         }
 
-        public void Setup(IBoundingBoxReader boundingBoxReader, IAnnotationPackageProvider annotationPackageProvider, List<ObjectClass> objectClasses)
+        public void Setup(IAnnotationPackageProvider annotationPackageProvider, List<ObjectClass> objectClasses)
         {
-            this._boundingBoxReader = boundingBoxReader;
             this._annotationPackageProvider = annotationPackageProvider;
             this._objectClasses = objectClasses;
         }
@@ -104,15 +103,15 @@ namespace Alturos.Yolo.LearningImage.CustomControls
                 return;
             }
 
-            var allowedImageFormats = new string[] { ".png" , ".jpg", ".bmp" };
+            var items = new List<AnnotationImage>();
 
-            var files = Directory.GetFiles(package.PackagePath, "*.*", SearchOption.TopDirectoryOnly).Select(file => new FileInfo(file));
-            var items = files.Where(file => allowedImageFormats.Contains(file.Extension)).Select(o => new AnnotationImage
+            foreach (var imageDto in package.Info.ImageDtos)
             {
-                FilePath = o.FullName,
-                DisplayName = o.Name,
-                BoundingBoxes = this._boundingBoxReader.GetBoxes(this._boundingBoxReader.GetDataPath(o.FullName))?.ToList()
-            }).ToList();
+                var item = imageDto.Adapt<AnnotationImage>();
+                item.DisplayName = Path.GetFileName(imageDto.FilePath);
+
+                items.Add(item);
+            }
 
             if (items.Count == 0)
             {
@@ -159,44 +158,6 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
             package.Extracted = true;
             package.PackagePath = extractedPackagePath;
-        }
-
-        public void SetAnnotationMetadata(AnnotationPackage package)
-        {
-            if (package.Info.ImageDtos != null)
-            {
-                // Clean up
-                var files = Directory.GetFiles(package.PackagePath, "*.txt");
-                foreach (var file in files)
-                {
-                    File.Delete(file);
-                }
-
-                // Write annotation metadata
-                var customCulture = (CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
-                customCulture.NumberFormat.NumberDecimalSeparator = ".";
-
-                System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
-
-                foreach (var imageDto in package.Info.ImageDtos.Where(o => o.BoundingBoxes != null))
-                {
-                    var sb = new StringBuilder();
-                    if (imageDto.BoundingBoxes != null)
-                    {
-                        foreach (var boundingBox in imageDto.BoundingBoxes)
-                        {
-                            sb.Append(boundingBox.ObjectIndex).Append(" ");
-                            sb.Append(boundingBox.CenterX).Append(" ");
-                            sb.Append(boundingBox.CenterY).Append(" ");
-                            sb.Append(boundingBox.Width).Append(" ");
-                            sb.Append(boundingBox.Height).AppendLine();
-                        }
-                    }
-
-                    var dataPath = this._boundingBoxReader.GetDataPath(imageDto.FilePath);
-                    File.WriteAllText(dataPath, sb.ToString());
-                }
-            }
         }
 
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)

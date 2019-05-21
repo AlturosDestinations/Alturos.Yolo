@@ -12,15 +12,12 @@ namespace Alturos.Yolo.LearningImage
 {
     public partial class Main : Form
     {
-        private readonly IBoundingBoxReader _boundingBoxReader;
         private readonly IAnnotationPackageProvider _annotationPackageProvider;
         private readonly List<ObjectClass> _objectClasses;
         private AnnotationPackage _selectedPackage;
 
-        public Main(IBoundingBoxReader boundingBoxReader)
+        public Main()
         {
-            this._boundingBoxReader = boundingBoxReader;
-
             var startupForm = new StartupForm();
             startupForm.StartPosition = FormStartPosition.CenterScreen;
             var dialogResult = startupForm.ShowDialog(this);
@@ -120,7 +117,7 @@ namespace Alturos.Yolo.LearningImage
 
         private async Task LoadPackagesAsync()
         {
-            this.annotationPackageListControl.Setup(this._boundingBoxReader, this._annotationPackageProvider, this._objectClasses);
+            this.annotationPackageListControl.Setup(this._annotationPackageProvider, this._objectClasses);
             await this.annotationPackageListControl.LoadPackagesAsync();
 
             this.Invoke((MethodInvoker)delegate {
@@ -230,8 +227,6 @@ namespace Alturos.Yolo.LearningImage
 
             if (package.Extracted)
             {
-                this.annotationPackageListControl.SetAnnotationMetadata(package);
-
                 if (package.Images == null)
                 {
                     this.annotationPackageListControl.LoadAnnotationImages(package);
