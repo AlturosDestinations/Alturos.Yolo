@@ -131,6 +131,7 @@ namespace Alturos.Yolo.LearningImage
                 this.exportToolStripMenuItem.Enabled = true;
                 this.downloadControl.Enabled = true;
             });
+
         }
 
         private void syncToolStripMenuItem_Click(object sender, EventArgs e)
@@ -244,7 +245,7 @@ namespace Alturos.Yolo.LearningImage
                 return;
             }
 
-            this.tagListControl.SetTags(package.Info);
+            this.tagListControl.SetTags(package);
 
             if (package.Extracted)
             {

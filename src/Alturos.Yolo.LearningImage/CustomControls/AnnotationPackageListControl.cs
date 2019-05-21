@@ -105,7 +105,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
             var items = new List<AnnotationImage>();
 
-            foreach (var imageDto in package.Info.ImageDtos)
+            foreach (var imageDto in package.Info.Images)
             {
                 var item = imageDto.Adapt<AnnotationImage>();
                 item.DisplayName = Path.GetFileName(imageDto.FilePath);

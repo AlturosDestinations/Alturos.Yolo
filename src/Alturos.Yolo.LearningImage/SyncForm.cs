@@ -50,12 +50,17 @@ namespace Alturos.Yolo.LearningImage
 
         private void AddImageDtos(AnnotationPackage package)
         {
+            if (package.Images == null)
+            {
+                return;
+            }
+
             var info = package.Info;
-            info.ImageDtos = new List<AnnotationImageDto>();
+            info.Images = new List<AnnotationImageDto>();
 
             foreach (var image in package.Images)
             {
-                info.ImageDtos.Add(image.Adapt<AnnotationImageDto>());
+                info.Images.Add(image.Adapt<AnnotationImageDto>());
             }
         }
     }
