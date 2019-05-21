@@ -25,7 +25,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
             this._package = package;
 
-            var dataBindings = package.Info.Tags?.Select(o => new Tag { Value = o }).ToList();
+            var dataBindings = package.Info.Tags?.Select(o => new Tag(o)).ToList();
             if (dataBindings == null) { dataBindings = new List<Tag>(); }
 
             var bindingList = new BindingList<Tag>(dataBindings);

@@ -25,7 +25,7 @@ namespace Alturos.Yolo.LearningImage
             var packageProviders = new List<IAnnotationPackageProvider>()
             {
                 new AmazonPackageProvider(),
-                new WindowsFileSystemPackageProvider()
+                //new WindowsFileSystemPackageProvider()
             };
 
             this.comboBoxAnnotationPackageProvider.DataSource = packageProviders;

@@ -19,13 +19,13 @@ namespace Alturos.Yolo.LearningImage
 
         public void CreateImages(List<AnnotationImage> images)
         {
-            var newImages = new List<AnnotationImage>();
-            foreach (var image in images)
-            {
-                newImages.Add(new AnnotationImage(image));
-            }
+            //var newImages = new List<AnnotationImage>();
+            //foreach (var image in images)
+            //{
+            //    newImages.Add(new AnnotationImage(image));
+            //}
 
-            this.annotationImageListControl.SetImages(newImages);
+            //this.annotationImageListControl.SetImages(newImages);
         }
 
         public void SetObjectClasses(List<ObjectClass> objectClasses)

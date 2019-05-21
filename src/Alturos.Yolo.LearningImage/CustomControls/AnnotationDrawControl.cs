@@ -9,9 +9,10 @@ using System.Windows.Forms;
 
 namespace Alturos.Yolo.LearningImage.CustomControls
 {
-    public partial class AnnotationImageControl : UserControl
+    public partial class AnnotationDrawControl : UserControl
     {
-        public Action<AnnotationPackage> PackageEdited { get; set; }
+        public event Action<AnnotationImage> ImageEdited;
+
         public bool AutoplaceAnnotations { get; set; }
         public bool ShowLabels { get; set; }
 
@@ -23,9 +24,8 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         private DragPoint _dragPoint;
         private AnnotationImage _annotationImage;
         private List<ObjectClass> _objectClasses;
-        private AnnotationPackage _package;
 
-        public AnnotationImageControl()
+        public AnnotationDrawControl()
         {
             this.InitializeComponent();
             this._rectangles.Add(new Rectangle(100, 100, 100, 100));
@@ -33,15 +33,20 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             this.pictureBox1.ContextMenuStrip = this.contextMenuStripPicture;
         }
 
-        public void SetPackage(AnnotationPackage package)
+        public void Reset()
         {
-            this._package = package;
+            this.SetImage(null);
+            this._cachedBoundingBox = null;
         }
 
-        public void SetImage(AnnotationImage image, List<ObjectClass> objectClasses)
+        public void SetObjectClasses(List<ObjectClass> objectClasses)
+        {
+            this._objectClasses = objectClasses;
+        }
+
+        public void SetImage(AnnotationImage image)
         {
             this._annotationImage = image;
-            this._objectClasses = objectClasses;
 
             var oldImage = this.pictureBox1.Image;
 
@@ -51,7 +56,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             }
             else
             {
-                this.pictureBox1.Image = DrawHelper.DrawBoxes(image, objectClasses);
+                this.pictureBox1.Image = DrawHelper.DrawBoxes(image, this._objectClasses);
             }
 
             if (oldImage != null)
@@ -77,6 +82,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
                 if (!this._annotationImage.BoundingBoxes.Any())
                 {
                     this._annotationImage.BoundingBoxes.Add(new AnnotationBoundingBox(this._cachedBoundingBox));
+                    this.ImageEdited?.Invoke(this._annotationImage);
                 }
             }
         }
@@ -245,7 +251,11 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             var canvasInfo = this.GetCanvasInformation();
 
             var boundingBoxes = this._annotationImage?.BoundingBoxes;
-            if (boundingBoxes == null) { return; }
+            if (boundingBoxes == null)
+            {
+                return;
+            }
+
             foreach (var boundingBox in boundingBoxes)
             {
                 var width = boundingBox.Width * canvasInfo.ScaledWidth;
@@ -290,14 +300,14 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             if (this._dragPoint?.Type == DragPointType.Delete) {
                 this._annotationImage?.BoundingBoxes.Remove(this._selectedBoundingBox);
                 this._cachedBoundingBox = null;
-
-                this.PackageEdited?.Invoke(this._package);
             }
 
             this._selectedBoundingBox = null;
 
             this._mousePosition = new Point(0,0);
             this.pictureBox1.Invalidate();
+
+            this.ImageEdited?.Invoke(this._annotationImage);
         }
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
@@ -355,7 +365,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
                 this._cachedBoundingBox.Width = this._selectedBoundingBox.Width;
                 this._cachedBoundingBox.Height = this._selectedBoundingBox.Height;
 
-                this.PackageEdited?.Invoke(this._package);
+                //this.ImageEdited?.Invoke(this._annotationImage);
             }
 
             this._mousePosition = e.Location;
@@ -389,13 +399,13 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
             this._dragPoint = null;
 
-            this.PackageEdited?.Invoke(this._package);
+            this.ImageEdited?.Invoke(this._annotationImage);
         }
 
         private void clearAnnotationsToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
             this._annotationImage.BoundingBoxes = null;
-            this.PackageEdited?.Invoke(this._package);
+            this.ImageEdited?.Invoke(this._annotationImage);
         }
     }
 }

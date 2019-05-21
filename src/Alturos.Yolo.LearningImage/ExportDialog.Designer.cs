@@ -96,7 +96,6 @@
             this.annotationImageListControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.annotationImageListControl.ImageSelected = null;
             this.annotationImageListControl.Location = new System.Drawing.Point(3, 16);
             this.annotationImageListControl.Name = "annotationImageListControl";
             this.annotationImageListControl.Size = new System.Drawing.Size(440, 368);

@@ -1,18 +1,14 @@
-﻿using Alturos.Yolo.LearningImage.Helper;
-using Alturos.Yolo.LearningImage.Model;
+﻿using Alturos.Yolo.LearningImage.Model;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace Alturos.Yolo.LearningImage.CustomControls
 {
     public partial class AnnotationImageListControl : UserControl
     {
-        public Action<AnnotationImage> ImageSelected { get; set; }
-
-        public DataGridView DataGridView { get { return this.dataGridView1; } }
+        public event Action<AnnotationImage> ImageSelected;
 
         public AnnotationImageListControl()
         {
@@ -22,31 +18,41 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
         public AnnotationImage[] GetAll()
         {
-            var items = new List<AnnotationImage>();
-
-            foreach (DataGridViewRow row in this.dataGridView1.Rows)
-            {
-                var item = row.DataBoundItem as AnnotationImage;
-                items.Add(item);
-            }
-
+            var items = this.dataGridView1.DataSource as List<AnnotationImage>;
             return items.ToArray();
         }
 
-        public void SetImages(List<AnnotationImage> images)
+        public void Reset()
         {
-            this.dataGridView1.DataSource = images?.OrderBy(o => o.DisplayName.GetFirstNumber()).ToList();
+            this.dataGridView1.DataSource = null;
+            this.dataGridView1.Refresh();
+        }
+
+        public void SetPackage(AnnotationPackage package)
+        {
+            this.dataGridView1.DataSource = package.GetImages();
+            this.dataGridView1.Refresh();
         }
 
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)
         {
             var image = this.dataGridView1.CurrentRow.DataBoundItem as AnnotationImage;
+            if (image == null)
+            {
+                return;
+            }
+
             this.ImageSelected?.Invoke(image);
         }
 
         private void dataGridView1_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
         {
             var item = this.dataGridView1.Rows[e.RowIndex].DataBoundItem as AnnotationImage;
+
+            if (item == null)
+            {
+                return;
+            }
 
             if (item.BoundingBoxes != null)
             {

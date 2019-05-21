@@ -33,17 +33,17 @@
             this.syncToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addPackageStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.configurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoplaceAnnotationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showLabelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panelImageList = new System.Windows.Forms.Panel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.autoplaceAnnotationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showLabelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.downloadControl = new Alturos.Yolo.LearningImage.CustomControls.DownloadControl();
             this.annotationImageListControl = new Alturos.Yolo.LearningImage.CustomControls.AnnotationImageListControl();
             this.tagListControl = new Alturos.Yolo.LearningImage.CustomControls.TagListControl();
             this.annotationPackageListControl = new Alturos.Yolo.LearningImage.CustomControls.AnnotationPackageListControl();
-            this.annotationImageControl = new Alturos.Yolo.LearningImage.CustomControls.AnnotationImageControl();
+            this.annotationDrawControl = new Alturos.Yolo.LearningImage.CustomControls.AnnotationDrawControl();
             this.menuStripMain.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panelImageList.SuspendLayout();
@@ -60,7 +60,7 @@
             this.syncToolStripMenuItem,
             this.exportToolStripMenuItem,
             this.addPackageStripMenuItem,
-            this.editToolStripMenuItem});
+            this.configurationToolStripMenuItem});
             this.menuStripMain.Location = new System.Drawing.Point(0, 0);
             this.menuStripMain.Name = "menuStripMain";
             this.menuStripMain.Size = new System.Drawing.Size(1334, 24);
@@ -97,6 +97,29 @@
             this.addPackageStripMenuItem.Text = "&Add Package";
             this.addPackageStripMenuItem.Click += new System.EventHandler(this.addPackageStripMenuItem_Click);
             // 
+            // configurationToolStripMenuItem
+            // 
+            this.configurationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.autoplaceAnnotationsToolStripMenuItem,
+            this.showLabelsToolStripMenuItem});
+            this.configurationToolStripMenuItem.Name = "configurationToolStripMenuItem";
+            this.configurationToolStripMenuItem.Size = new System.Drawing.Size(93, 20);
+            this.configurationToolStripMenuItem.Text = "&Configuration";
+            // 
+            // autoplaceAnnotationsToolStripMenuItem
+            // 
+            this.autoplaceAnnotationsToolStripMenuItem.Name = "autoplaceAnnotationsToolStripMenuItem";
+            this.autoplaceAnnotationsToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.autoplaceAnnotationsToolStripMenuItem.Text = "Autoplace Annotations";
+            this.autoplaceAnnotationsToolStripMenuItem.Click += new System.EventHandler(this.AutoplaceAnnotationsToolStripMenuItem_Click);
+            // 
+            // showLabelsToolStripMenuItem
+            // 
+            this.showLabelsToolStripMenuItem.Name = "showLabelsToolStripMenuItem";
+            this.showLabelsToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.showLabelsToolStripMenuItem.Text = "Show Labels";
+            this.showLabelsToolStripMenuItem.Click += new System.EventHandler(this.ShowLabelsToolStripMenuItem_Click);
+            // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 3;
@@ -105,7 +128,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.panelImageList, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.annotationPackageListControl, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.annotationImageControl, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.annotationDrawControl, 2, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 24);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -143,29 +166,6 @@
             this.splitContainer1.SplitterDistance = 300;
             this.splitContainer1.TabIndex = 0;
             // 
-            // editToolStripMenuItem
-            // 
-            this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.autoplaceAnnotationsToolStripMenuItem,
-            this.showLabelsToolStripMenuItem});
-            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
-            this.editToolStripMenuItem.Text = "E&dit";
-            // 
-            // autoplaceAnnotationsToolStripMenuItem
-            // 
-            this.autoplaceAnnotationsToolStripMenuItem.Name = "autoplaceAnnotationsToolStripMenuItem";
-            this.autoplaceAnnotationsToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.autoplaceAnnotationsToolStripMenuItem.Text = "Autoplace Annotations";
-            this.autoplaceAnnotationsToolStripMenuItem.Click += new System.EventHandler(this.AutoplaceAnnotationsToolStripMenuItem_Click);
-            // 
-            // showLabelsToolStripMenuItem
-            // 
-            this.showLabelsToolStripMenuItem.Name = "showLabelsToolStripMenuItem";
-            this.showLabelsToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.showLabelsToolStripMenuItem.Text = "Show Labels";
-            this.showLabelsToolStripMenuItem.Click += new System.EventHandler(this.ShowLabelsToolStripMenuItem_Click);
-            // 
             // downloadControl
             // 
             this.downloadControl.BackColor = System.Drawing.SystemColors.Control;
@@ -179,7 +179,6 @@
             // annotationImageListControl
             // 
             this.annotationImageListControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.annotationImageListControl.ImageSelected = null;
             this.annotationImageListControl.Location = new System.Drawing.Point(0, 0);
             this.annotationImageListControl.Name = "annotationImageListControl";
             this.annotationImageListControl.Size = new System.Drawing.Size(344, 300);
@@ -201,24 +200,22 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.annotationPackageListControl.Location = new System.Drawing.Point(3, 3);
             this.annotationPackageListControl.Name = "annotationPackageListControl";
-            this.annotationPackageListControl.PackageSelected = null;
             this.annotationPackageListControl.Size = new System.Drawing.Size(344, 524);
             this.annotationPackageListControl.TabIndex = 1;
             this.annotationPackageListControl.Load += new System.EventHandler(this.annotationPackageList_Load);
             // 
-            // annotationImageControl
+            // annotationDrawControl
             // 
-            this.annotationImageControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.annotationDrawControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.annotationImageControl.AutoplaceAnnotations = false;
-            this.annotationImageControl.Location = new System.Drawing.Point(703, 3);
-            this.annotationImageControl.Name = "annotationImageControl";
-            this.annotationImageControl.PackageEdited = null;
-            this.annotationImageControl.ShowLabels = false;
-            this.annotationImageControl.Size = new System.Drawing.Size(628, 524);
-            this.annotationImageControl.TabIndex = 2;
-            this.annotationImageControl.Load += new System.EventHandler(this.annotationImageControl_Load);
+            this.annotationDrawControl.AutoplaceAnnotations = false;
+            this.annotationDrawControl.Location = new System.Drawing.Point(703, 3);
+            this.annotationDrawControl.Name = "annotationDrawControl";
+            this.annotationDrawControl.ShowLabels = false;
+            this.annotationDrawControl.Size = new System.Drawing.Size(628, 524);
+            this.annotationDrawControl.TabIndex = 2;
+            this.annotationDrawControl.Load += new System.EventHandler(this.annotationImageControl_Load);
             // 
             // Main
             // 
@@ -252,14 +249,14 @@
         private CustomControls.AnnotationImageListControl annotationImageListControl;
         private CustomControls.AnnotationPackageListControl annotationPackageListControl;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private CustomControls.AnnotationImageControl annotationImageControl;
+        private CustomControls.AnnotationDrawControl annotationDrawControl;
         private System.Windows.Forms.Panel panelImageList;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private CustomControls.TagListControl tagListControl;
         private System.Windows.Forms.ToolStripMenuItem syncToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addPackageStripMenuItem;
         private CustomControls.DownloadControl downloadControl;
-        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem configurationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem autoplaceAnnotationsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showLabelsToolStripMenuItem;
     }

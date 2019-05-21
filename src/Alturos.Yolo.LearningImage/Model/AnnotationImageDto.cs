@@ -4,7 +4,7 @@ namespace Alturos.Yolo.LearningImage.Model
 {
     public class AnnotationImageDto
     {
-        public string FilePath { get; set; }
+        public string ImageName { get; set; }
         public List<AnnotationBoundingBox> BoundingBoxes { get; set; }
     }
 }

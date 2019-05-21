@@ -50,6 +50,7 @@ namespace Alturos.Yolo.LearningImage.Contract
             {
                 try
                 {
+                    //TODO: Annotated packages
                     var packageInfos = context.ScanAsync<AnnotationPackageInfo>(new ScanCondition[] { new ScanCondition("IsAnnotated", ScanOperator.Equal, false) });
 
                     // Create packages
@@ -74,9 +75,9 @@ namespace Alturos.Yolo.LearningImage.Contract
 
                     return packages.ToArray();
                 }
-                catch (Exception ex)
+                catch (Exception exception)
                 {
-                    throw;
+                    throw exception;
                 }
             }
         }

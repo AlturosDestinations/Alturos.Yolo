@@ -1,6 +1,6 @@
 ﻿namespace Alturos.Yolo.LearningImage.CustomControls
 {
-    partial class AnnotationImageControl
+    partial class AnnotationDrawControl
     {
         /// <summary> 
         /// Required designer variable.
