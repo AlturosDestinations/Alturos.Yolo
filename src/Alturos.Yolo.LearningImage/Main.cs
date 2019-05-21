@@ -33,6 +33,12 @@ namespace Alturos.Yolo.LearningImage
                 this.CreateYoloObjectNames();
                 Task.Run(async () => await this.LoadPackagesAsync());
             }
+
+            this.autoplaceAnnotationsToolStripMenuItem.Checked = true;
+            this.annotationImageControl.AutoplaceAnnotations = true;
+
+            this.showLabelsToolStripMenuItem.Checked = true;
+            this.annotationImageControl.ShowLabels = true;
         }
 
         #region Initialization and Cleanup
@@ -190,6 +196,21 @@ namespace Alturos.Yolo.LearningImage
 
         #endregion
 
+        #region Edit
+        private void AutoplaceAnnotationsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.autoplaceAnnotationsToolStripMenuItem.Checked = !this.autoplaceAnnotationsToolStripMenuItem.Checked;
+            this.annotationImageControl.AutoplaceAnnotations = this.autoplaceAnnotationsToolStripMenuItem.Checked;
+        }
+
+        private void ShowLabelsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.showLabelsToolStripMenuItem.Checked = !this.showLabelsToolStripMenuItem.Checked;
+            this.annotationImageControl.ShowLabels = this.showLabelsToolStripMenuItem.Checked;
+        }
+
+        #endregion
+
         #region Delegate Callbacks
 
         private void PackageSelected(AnnotationPackage package)
@@ -256,7 +277,7 @@ namespace Alturos.Yolo.LearningImage
             if (image.BoundingBoxes == null)
             {
                 image.BoundingBoxes = new List<AnnotationBoundingBox>();
-                this.PackageEdited(this._selectedPackage);
+                this.PackageEdited(image.Package);
             }
         }
 

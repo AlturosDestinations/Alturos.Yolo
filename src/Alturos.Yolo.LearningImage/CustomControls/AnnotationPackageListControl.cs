@@ -109,6 +109,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             {
                 var item = imageDto.Adapt<AnnotationImage>();
                 item.DisplayName = Path.GetFileName(imageDto.FilePath);
+                item.Package = package;
 
                 items.Add(item);
             }

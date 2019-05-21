@@ -12,6 +12,8 @@ namespace Alturos.Yolo.LearningImage.CustomControls
     public partial class AnnotationImageControl : UserControl
     {
         public Action<AnnotationPackage> PackageEdited { get; set; }
+        public bool AutoplaceAnnotations { get; set; }
+        public bool ShowLabels { get; set; }
 
         private Point _mousePosition = new Point(0, 0);
         private List<Rectangle> _rectangles = new List<Rectangle>();
@@ -22,7 +24,6 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         private AnnotationImage _annotationImage;
         private List<ObjectClass> _objectClasses;
         private AnnotationPackage _package;
-        private bool _autoPlace;
 
         public AnnotationImageControl()
         {
@@ -61,14 +62,22 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
         public void ApplyCachedBoundingBox()
         {
-            if (!this._autoPlace)
+            if (!this.AutoplaceAnnotations)
             {
                 return;
             }
 
-            if (this._cachedBoundingBox != null && !this._annotationImage.BoundingBoxes.Any())
+            if (this._cachedBoundingBox != null)
             {
-                this._annotationImage.BoundingBoxes.Add(new AnnotationBoundingBox(this._cachedBoundingBox));
+                if (this._annotationImage.BoundingBoxes == null)
+                {
+                    this._annotationImage.BoundingBoxes = new List<AnnotationBoundingBox>();
+                }
+
+                if (!this._annotationImage.BoundingBoxes.Any())
+                {
+                    this._annotationImage.BoundingBoxes.Add(new AnnotationBoundingBox(this._cachedBoundingBox));
+                }
             }
         }
 
@@ -207,14 +216,14 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
         private void DrawLabel(Graphics graphics, float x, float y, ObjectClass objectClass)
         {
-            if (objectClass == null)
+            if (objectClass == null || !this.ShowLabels)
             {
                 return;
             }
 
             using (var brush = new SolidBrush(DrawHelper.GetColorCode(objectClass.Id)))
             using (var bgBrush = new SolidBrush(Color.FromArgb(128, 255, 255, 255)))
-            using (var font = new Font("Arial", 20))
+            using (var font = new Font("Arial", 12))
             {
                 var text = $"{objectClass.Id} {objectClass.Name}";
                 var point = new PointF(x + 4, y + 4);
@@ -262,7 +271,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
                 if (startDrag)
                 {
                     this._selectedBoundingBox = boundingBox;
-                    this._cachedBoundingBox = new AnnotationBoundingBox(this._selectedBoundingBox);
+                    this._cachedBoundingBox = this._selectedBoundingBox;
                     break;
                 }
                 else
@@ -280,6 +289,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         {
             if (this._dragPoint?.Type == DragPointType.Delete) {
                 this._annotationImage?.BoundingBoxes.Remove(this._selectedBoundingBox);
+                this._cachedBoundingBox = null;
 
                 this.PackageEdited?.Invoke(this._package);
             }
@@ -345,7 +355,6 @@ namespace Alturos.Yolo.LearningImage.CustomControls
                 this._cachedBoundingBox.Width = this._selectedBoundingBox.Width;
                 this._cachedBoundingBox.Height = this._selectedBoundingBox.Height;
 
-
                 this.PackageEdited?.Invoke(this._package);
             }
 
@@ -366,13 +375,19 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             {
                 this._annotationImage.BoundingBoxes = new List<AnnotationBoundingBox>();
             }
-            this._annotationImage.BoundingBoxes.Add(new AnnotationBoundingBox
+
+            var newBoundingBox = new AnnotationBoundingBox
             {
                 CenterX = (float)x,
                 CenterY = (float)y,
                 Height = (float)height,
                 Width = (float)width
-            });
+            };
+
+            this._annotationImage.BoundingBoxes.Add(newBoundingBox);
+            this._cachedBoundingBox = newBoundingBox;
+
+            this._dragPoint = null;
 
             this.PackageEdited?.Invoke(this._package);
         }
@@ -381,11 +396,6 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         {
             this._annotationImage.BoundingBoxes = null;
             this.PackageEdited?.Invoke(this._package);
-        }
-
-        private void checkBoxAutoPlace_CheckedChanged(object sender, EventArgs e)
-        {
-            this._autoPlace = this.checkBoxAutoPlace.Checked;
         }
     }
 }
