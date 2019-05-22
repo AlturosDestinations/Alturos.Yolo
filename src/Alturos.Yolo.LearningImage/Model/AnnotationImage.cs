@@ -8,15 +8,5 @@ namespace Alturos.Yolo.LearningImage.Model
         public string DisplayName { get; set; }
         public List<AnnotationBoundingBox> BoundingBoxes { get; set; }
         public AnnotationPackage Package { get; set; }
-
-        //public AnnotationImage() { }
-
-        //public AnnotationImage(AnnotationImage image)
-        //{
-        //    this.FilePath = image.FilePath;
-        //    this.DisplayName = image.DisplayName;
-        //    this.BoundingBoxes = image.BoundingBoxes;
-        //    this.Package = image.Package;
-        //}
     }
 }
