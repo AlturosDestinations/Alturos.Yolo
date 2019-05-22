@@ -20,6 +20,8 @@ namespace Alturos.Yolo.LearningImage.Contract
     {
         public bool IsSyncing { get; set; }
 
+        private const string ConfigId = "AnnotationConfiguration";
+
         private readonly IAmazonS3 _client;
         private readonly IAmazonDynamoDB _dynamoDbClient;
         private readonly string _bucketName;
@@ -45,24 +47,29 @@ namespace Alturos.Yolo.LearningImage.Contract
 
         public async Task SetAnnotationConfig(AnnotationConfig config)
         {
-            var context = new DynamoDBContext(this._dynamoDbClient);
-            await context.SaveAsync(config);
+            config.Id = ConfigId;
+            using (var context = new DynamoDBContext(this._dynamoDbClient))
+            {
+                await context.SaveAsync(config);
+            }
         }
 
         public async Task<AnnotationConfig> GetAnnotationConfig()
         {
             try
             {
-                var context = new DynamoDBContext(this._dynamoDbClient);
-                return await context.LoadAsync<AnnotationConfig>("AnnotationConfiguration");
+                using (var context = new DynamoDBContext(this._dynamoDbClient))
+                {
+                    return await context.LoadAsync<AnnotationConfig>(ConfigId);
+                }
             }
-            catch (InvalidOperationException exception)
+            catch (Exception exception)
             {
                 return await Task.FromResult<AnnotationConfig>(null);
             }
         }
 
-        public async Task<AnnotationPackage[]> GetPackagesAsync()
+        public async Task<AnnotationPackage[]> GetPackagesAsync(bool annotated)
         {
             // Retrieve unannotated metadata
             using (var context = new DynamoDBContext(this._dynamoDbClient))
@@ -70,8 +77,7 @@ namespace Alturos.Yolo.LearningImage.Contract
                 try
                 {
                     //TODO: Annotated packages
-                    var packageInfos = context.ScanAsync<AnnotationPackageInfo>(new ScanCondition[] { new ScanCondition("IsAnnotated", ScanOperator.Equal, false) });
-                    //var packageInfos = context.ScanAsync<AnnotationPackageInfo>(new ScanCondition[] { new ScanCondition("IsAnnotated", ScanOperator.Equal, true) });
+                    var packageInfos = context.ScanAsync<AnnotationPackageInfo>(new ScanCondition[] { new ScanCondition("IsAnnotated", ScanOperator.Equal, annotated) });
 
                     // Create packages
                     var packages = (await packageInfos.GetNextSetAsync()).Select(o => new AnnotationPackage

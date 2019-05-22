@@ -292,7 +292,7 @@ namespace Alturos.Yolo.LearningImage
 
         private void ImageEdited(AnnotationImage annotationImage)
         {
-            //package.IsDirty = true;
+            annotationImage.Package.IsDirty = true;
 
             annotationImage.Package.UpdateAnnotationStatus(annotationImage);
             this.annotationPackageListControl.RefreshData();
