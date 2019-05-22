@@ -32,19 +32,19 @@
             this.splitContainerMain = new System.Windows.Forms.SplitContainer();
             this.splitContainerSettings = new System.Windows.Forms.SplitContainer();
             this.groupBoxObjectClasses = new System.Windows.Forms.GroupBox();
-            this.groupBoxTags = new System.Windows.Forms.GroupBox();
-            this.dataGridViewObjectClasses = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTags = new System.Windows.Forms.DataGridView();
-            this.buttonAddObjectClass = new System.Windows.Forms.Button();
-            this.buttonAddTag = new System.Windows.Forms.Button();
             this.textBoxObjectClass = new System.Windows.Forms.TextBox();
-            this.textBoxTag = new System.Windows.Forms.TextBox();
-            this.buttonSave = new System.Windows.Forms.Button();
+            this.buttonAddObjectClass = new System.Windows.Forms.Button();
+            this.dataGridViewObjectClasses = new System.Windows.Forms.DataGridView();
             this.ColumnId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.groupBoxTags = new System.Windows.Forms.GroupBox();
+            this.textBoxTag = new System.Windows.Forms.TextBox();
+            this.buttonAddTag = new System.Windows.Forms.Button();
+            this.dataGridViewTags = new System.Windows.Forms.DataGridView();
+            this.ColumnValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuStripTag = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ColumnValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.buttonSave = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
             this.splitContainerMain.Panel1.SuspendLayout();
             this.splitContainerMain.Panel2.SuspendLayout();
@@ -54,8 +54,8 @@
             this.splitContainerSettings.Panel2.SuspendLayout();
             this.splitContainerSettings.SuspendLayout();
             this.groupBoxObjectClasses.SuspendLayout();
-            this.groupBoxTags.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewObjectClasses)).BeginInit();
+            this.groupBoxTags.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTags)).BeginInit();
             this.contextMenuStripTag.SuspendLayout();
             this.SuspendLayout();
@@ -109,18 +109,25 @@
             this.groupBoxObjectClasses.TabStop = false;
             this.groupBoxObjectClasses.Text = "Object Classes";
             // 
-            // groupBoxTags
+            // textBoxObjectClass
             // 
-            this.groupBoxTags.Controls.Add(this.textBoxTag);
-            this.groupBoxTags.Controls.Add(this.buttonAddTag);
-            this.groupBoxTags.Controls.Add(this.dataGridViewTags);
-            this.groupBoxTags.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBoxTags.Location = new System.Drawing.Point(0, 0);
-            this.groupBoxTags.Name = "groupBoxTags";
-            this.groupBoxTags.Size = new System.Drawing.Size(276, 254);
-            this.groupBoxTags.TabIndex = 0;
-            this.groupBoxTags.TabStop = false;
-            this.groupBoxTags.Text = "Tags";
+            this.textBoxObjectClass.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxObjectClass.Location = new System.Drawing.Point(7, 227);
+            this.textBoxObjectClass.Name = "textBoxObjectClass";
+            this.textBoxObjectClass.Size = new System.Drawing.Size(183, 20);
+            this.textBoxObjectClass.TabIndex = 2;
+            // 
+            // buttonAddObjectClass
+            // 
+            this.buttonAddObjectClass.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonAddObjectClass.Location = new System.Drawing.Point(196, 226);
+            this.buttonAddObjectClass.Name = "buttonAddObjectClass";
+            this.buttonAddObjectClass.Size = new System.Drawing.Size(90, 21);
+            this.buttonAddObjectClass.TabIndex = 1;
+            this.buttonAddObjectClass.Text = "Add";
+            this.buttonAddObjectClass.UseVisualStyleBackColor = true;
+            this.buttonAddObjectClass.Click += new System.EventHandler(this.ButtonAddObjectClass_Click);
             // 
             // dataGridViewObjectClasses
             // 
@@ -138,9 +145,59 @@
             this.ColumnName});
             this.dataGridViewObjectClasses.Location = new System.Drawing.Point(7, 20);
             this.dataGridViewObjectClasses.Name = "dataGridViewObjectClasses";
+            this.dataGridViewObjectClasses.ReadOnly = true;
             this.dataGridViewObjectClasses.RowHeadersVisible = false;
             this.dataGridViewObjectClasses.Size = new System.Drawing.Size(279, 200);
             this.dataGridViewObjectClasses.TabIndex = 0;
+            // 
+            // ColumnId
+            // 
+            this.ColumnId.DataPropertyName = "Id";
+            this.ColumnId.FillWeight = 50.76142F;
+            this.ColumnId.HeaderText = "Id";
+            this.ColumnId.Name = "ColumnId";
+            this.ColumnId.ReadOnly = true;
+            // 
+            // ColumnName
+            // 
+            this.ColumnName.DataPropertyName = "Name";
+            this.ColumnName.FillWeight = 149.2386F;
+            this.ColumnName.HeaderText = "Name";
+            this.ColumnName.Name = "ColumnName";
+            this.ColumnName.ReadOnly = true;
+            // 
+            // groupBoxTags
+            // 
+            this.groupBoxTags.Controls.Add(this.textBoxTag);
+            this.groupBoxTags.Controls.Add(this.buttonAddTag);
+            this.groupBoxTags.Controls.Add(this.dataGridViewTags);
+            this.groupBoxTags.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBoxTags.Location = new System.Drawing.Point(0, 0);
+            this.groupBoxTags.Name = "groupBoxTags";
+            this.groupBoxTags.Size = new System.Drawing.Size(276, 254);
+            this.groupBoxTags.TabIndex = 0;
+            this.groupBoxTags.TabStop = false;
+            this.groupBoxTags.Text = "Tags";
+            // 
+            // textBoxTag
+            // 
+            this.textBoxTag.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxTag.Location = new System.Drawing.Point(6, 226);
+            this.textBoxTag.Name = "textBoxTag";
+            this.textBoxTag.Size = new System.Drawing.Size(168, 20);
+            this.textBoxTag.TabIndex = 3;
+            // 
+            // buttonAddTag
+            // 
+            this.buttonAddTag.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonAddTag.Location = new System.Drawing.Point(180, 226);
+            this.buttonAddTag.Name = "buttonAddTag";
+            this.buttonAddTag.Size = new System.Drawing.Size(90, 21);
+            this.buttonAddTag.TabIndex = 2;
+            this.buttonAddTag.Text = "Add";
+            this.buttonAddTag.UseVisualStyleBackColor = true;
+            this.buttonAddTag.Click += new System.EventHandler(this.ButtonAddTag_Click);
             // 
             // dataGridViewTags
             // 
@@ -158,74 +215,17 @@
             this.dataGridViewTags.ContextMenuStrip = this.contextMenuStripTag;
             this.dataGridViewTags.Location = new System.Drawing.Point(6, 20);
             this.dataGridViewTags.Name = "dataGridViewTags";
+            this.dataGridViewTags.ReadOnly = true;
             this.dataGridViewTags.RowHeadersVisible = false;
             this.dataGridViewTags.Size = new System.Drawing.Size(264, 200);
             this.dataGridViewTags.TabIndex = 1;
             // 
-            // buttonAddObjectClass
+            // ColumnValue
             // 
-            this.buttonAddObjectClass.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonAddObjectClass.Location = new System.Drawing.Point(196, 226);
-            this.buttonAddObjectClass.Name = "buttonAddObjectClass";
-            this.buttonAddObjectClass.Size = new System.Drawing.Size(90, 21);
-            this.buttonAddObjectClass.TabIndex = 1;
-            this.buttonAddObjectClass.Text = "Add";
-            this.buttonAddObjectClass.UseVisualStyleBackColor = true;
-            this.buttonAddObjectClass.Click += new System.EventHandler(this.ButtonAddObjectClass_Click);
-            // 
-            // buttonAddTag
-            // 
-            this.buttonAddTag.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonAddTag.Location = new System.Drawing.Point(180, 226);
-            this.buttonAddTag.Name = "buttonAddTag";
-            this.buttonAddTag.Size = new System.Drawing.Size(90, 21);
-            this.buttonAddTag.TabIndex = 2;
-            this.buttonAddTag.Text = "Add";
-            this.buttonAddTag.UseVisualStyleBackColor = true;
-            this.buttonAddTag.Click += new System.EventHandler(this.ButtonAddTag_Click);
-            // 
-            // textBoxObjectClass
-            // 
-            this.textBoxObjectClass.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxObjectClass.Location = new System.Drawing.Point(7, 227);
-            this.textBoxObjectClass.Name = "textBoxObjectClass";
-            this.textBoxObjectClass.Size = new System.Drawing.Size(183, 20);
-            this.textBoxObjectClass.TabIndex = 2;
-            // 
-            // textBoxTag
-            // 
-            this.textBoxTag.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxTag.Location = new System.Drawing.Point(6, 226);
-            this.textBoxTag.Name = "textBoxTag";
-            this.textBoxTag.Size = new System.Drawing.Size(168, 20);
-            this.textBoxTag.TabIndex = 3;
-            // 
-            // buttonSave
-            // 
-            this.buttonSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonSave.Location = new System.Drawing.Point(476, 3);
-            this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(90, 23);
-            this.buttonSave.TabIndex = 0;
-            this.buttonSave.Text = "Save";
-            this.buttonSave.UseVisualStyleBackColor = true;
-            this.buttonSave.Click += new System.EventHandler(this.ButtonSave_Click);
-            // 
-            // ColumnId
-            // 
-            this.ColumnId.DataPropertyName = "Id";
-            this.ColumnId.FillWeight = 50.76142F;
-            this.ColumnId.HeaderText = "Id";
-            this.ColumnId.Name = "ColumnId";
-            // 
-            // ColumnName
-            // 
-            this.ColumnName.DataPropertyName = "Name";
-            this.ColumnName.FillWeight = 149.2386F;
-            this.ColumnName.HeaderText = "Name";
-            this.ColumnName.Name = "ColumnName";
+            this.ColumnValue.DataPropertyName = "Value";
+            this.ColumnValue.HeaderText = "Value";
+            this.ColumnValue.Name = "ColumnValue";
+            this.ColumnValue.ReadOnly = true;
             // 
             // contextMenuStripTag
             // 
@@ -241,11 +241,16 @@
             this.removeToolStripMenuItem.Text = "&Remove";
             this.removeToolStripMenuItem.Click += new System.EventHandler(this.RemoveToolStripMenuItem_Click);
             // 
-            // ColumnValue
+            // buttonSave
             // 
-            this.ColumnValue.DataPropertyName = "Value";
-            this.ColumnValue.HeaderText = "Value";
-            this.ColumnValue.Name = "ColumnValue";
+            this.buttonSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonSave.Location = new System.Drawing.Point(476, 3);
+            this.buttonSave.Name = "buttonSave";
+            this.buttonSave.Size = new System.Drawing.Size(90, 23);
+            this.buttonSave.TabIndex = 0;
+            this.buttonSave.Text = "Save";
+            this.buttonSave.UseVisualStyleBackColor = true;
+            this.buttonSave.Click += new System.EventHandler(this.ButtonSave_Click);
             // 
             // ConfigurationForm
             // 
@@ -265,9 +270,9 @@
             this.splitContainerSettings.ResumeLayout(false);
             this.groupBoxObjectClasses.ResumeLayout(false);
             this.groupBoxObjectClasses.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewObjectClasses)).EndInit();
             this.groupBoxTags.ResumeLayout(false);
             this.groupBoxTags.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewObjectClasses)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTags)).EndInit();
             this.contextMenuStripTag.ResumeLayout(false);
             this.ResumeLayout(false);

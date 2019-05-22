@@ -14,9 +14,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Alturos.Yolo.LearningImage.Contract
+namespace Alturos.Yolo.LearningImage.Contract.Amazon
 {
-    public class AmazonPackageProvider : IAnnotationPackageProvider
+    public class AmazonAnnotationPackageProvider : IAnnotationPackageProvider
     {
         public bool IsSyncing { get; set; }
 
@@ -27,11 +27,12 @@ namespace Alturos.Yolo.LearningImage.Contract
         private readonly string _bucketName;
         private readonly string _extractionFolder;
         private readonly List<AnnotationPackage> _currentlyDownloadedPackages;
+        private readonly string _configHashKey = "AnnotationConfiguration";
 
         private int _packagesToSync;
         private int _syncedPackages;
 
-        public AmazonPackageProvider()
+        public AmazonAnnotationPackageProvider()
         {
             var accessKeyId = ConfigurationManager.AppSettings["accessKeyId"];
             var secretAccessKey = ConfigurationManager.AppSettings["secretAccessKey"];
@@ -45,22 +46,40 @@ namespace Alturos.Yolo.LearningImage.Contract
             this._currentlyDownloadedPackages = new List<AnnotationPackage>();
         }
 
-        public async Task SetAnnotationConfig(AnnotationConfig config)
+        public async Task SetAnnotationConfigAsync(AnnotationConfig config)
         {
-            config.Id = ConfigId;
-            using (var context = new DynamoDBContext(this._dynamoDbClient))
+            try
             {
-                await context.SaveAsync(config);
+                var annotationConfig = new AnnotationConfigDto
+                {
+                    Id = this._configHashKey,
+                    ObjectClasses = config.ObjectClasses,
+                    Tags = config.Tags.Select(o => o.Value).ToList()
+                };
+
+                using (var context = new DynamoDBContext(this._dynamoDbClient))
+                {
+                    await context.SaveAsync(annotationConfig).ConfigureAwait(false);
+                }
+            }
+            catch (Exception exception)
+            {
+
             }
         }
 
-        public async Task<AnnotationConfig> GetAnnotationConfig()
+        public async Task<AnnotationConfig> GetAnnotationConfigAsync()
         {
             try
             {
                 using (var context = new DynamoDBContext(this._dynamoDbClient))
                 {
-                    return await context.LoadAsync<AnnotationConfig>(ConfigId);
+                    var annotationConfig = await context.LoadAsync<AnnotationConfigDto>(this._configHashKey).ConfigureAwait(false);
+                    return new AnnotationConfig
+                    {
+                        ObjectClasses = annotationConfig.ObjectClasses,
+                        Tags = annotationConfig.Tags.Select(o => new Model.Tag { Value = o }).ToList()
+                    };
                 }
             }
             catch (Exception exception)
@@ -79,7 +98,7 @@ namespace Alturos.Yolo.LearningImage.Contract
                     var packageInfos = context.ScanAsync<AnnotationPackageInfo>(new ScanCondition[] { new ScanCondition("IsAnnotated", ScanOperator.Equal, annotated) });
 
                     // Create packages
-                    var packages = (await packageInfos.GetNextSetAsync()).Select(o => new AnnotationPackage
+                    var packages = (await packageInfos.GetNextSetAsync().ConfigureAwait(false)).Select(o => new AnnotationPackage
                     {
                         Extracted = false,
                         PackagePath = o.Id,
@@ -111,7 +130,7 @@ namespace Alturos.Yolo.LearningImage.Contract
         {
             package.Extracted = false;
             package.PackagePath = $"{package.DisplayName}.zip";
-            return await this.DownloadPackageAsync(package);
+            return await this.DownloadPackageAsync(package).ConfigureAwait(false);
         }
 
         public async Task<AnnotationPackage> DownloadPackageAsync(AnnotationPackage package)
@@ -138,7 +157,7 @@ namespace Alturos.Yolo.LearningImage.Contract
                 this._currentlyDownloadedPackages.Add(package);
                 response.WriteObjectProgressEvent += this.WriteObjectProgressEvent;
 
-                await response.WriteResponseStreamToFileAsync(zipFilePath, false, new System.Threading.CancellationToken());
+                await response.WriteResponseStreamToFileAsync(zipFilePath, false, new System.Threading.CancellationToken()).ConfigureAwait(false);
 
                 this._currentlyDownloadedPackages.Remove(package);
                 response.WriteObjectProgressEvent -= this.WriteObjectProgressEvent;
@@ -173,7 +192,7 @@ namespace Alturos.Yolo.LearningImage.Contract
                 BucketName = this._bucketName
             };
             uploadRequest.UploadProgressEvent += this.UploadProgress;
-            await fileTransferUtility.UploadAsync(uploadRequest);
+            await fileTransferUtility.UploadAsync(uploadRequest).ConfigureAwait(false);
         }
 
         private void UploadProgress(object sender, UploadProgressArgs e)
@@ -191,10 +210,10 @@ namespace Alturos.Yolo.LearningImage.Contract
             var tasks = new List<Task>();
             foreach (var package in packages)
             {
-                tasks.Add(Task.Run(() => this.SyncPackageAsync(package)));
+                tasks.Add(Task.Run(() => this.SyncPackageAsync(package).ConfigureAwait(false)));
             }
 
-            await Task.WhenAll(tasks);
+            await Task.WhenAll(tasks).ConfigureAwait(false);
 
             this.IsSyncing = false;
         }
@@ -208,7 +227,7 @@ namespace Alturos.Yolo.LearningImage.Contract
 
             using (var context = new DynamoDBContext(this._dynamoDbClient))
             {
-                await context.SaveAsync(package.Info);
+                await context.SaveAsync(package.Info).ConfigureAwait(false);
             }
 
             this._syncedPackages++;

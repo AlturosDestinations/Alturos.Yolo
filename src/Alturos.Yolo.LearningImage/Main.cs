@@ -1,4 +1,5 @@
 ﻿using Alturos.Yolo.LearningImage.Contract;
+using Alturos.Yolo.LearningImage.Contract.Amazon;
 using Alturos.Yolo.LearningImage.Model;
 using System;
 using System.Collections.Generic;
@@ -16,15 +17,15 @@ namespace Alturos.Yolo.LearningImage
 
         public Main()
         {
-            this._annotationPackageProvider = new AmazonPackageProvider();
+            this._annotationPackageProvider = new AmazonAnnotationPackageProvider();
 
-            this._annotationConfig = this._annotationPackageProvider.GetAnnotationConfig().GetAwaiter().GetResult();
+            this._annotationConfig = this._annotationPackageProvider.GetAnnotationConfigAsync().GetAwaiter().GetResult();
             if (this._annotationConfig == null)
             {
                 this._annotationConfig = new AnnotationConfig();
 
                 var configurationForm = new ConfigurationForm();
-                configurationForm.Setup(this._annotationPackageProvider, this._annotationConfig);
+                configurationForm.Setup(this._annotationConfig);
                 configurationForm.ShowDialog();
             }
 
@@ -218,11 +219,15 @@ namespace Alturos.Yolo.LearningImage
             this.annotationDrawControl.ShowLabels = this.showLabelsToolStripMenuItem.Checked;
         }
 
-        private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var configurationForm = new ConfigurationForm();
-            configurationForm.Setup(this._annotationPackageProvider, this._annotationConfig);
-            configurationForm.ShowDialog();
+            configurationForm.Setup(this._annotationConfig);
+            var dialogResult = configurationForm.ShowDialog();
+            if (dialogResult == DialogResult.OK)
+            {
+                await this._annotationPackageProvider.SetAnnotationConfigAsync(this._annotationConfig);
+            }
         }
 
         #endregion

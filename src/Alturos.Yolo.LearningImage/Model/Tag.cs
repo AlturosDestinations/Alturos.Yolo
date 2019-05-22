@@ -2,11 +2,6 @@
 {
     public class Tag
     {
-        public string Value { get; private set; }
-
-        public Tag(string value)
-        {
-            this.Value = value;
-        }
+        public string Value { get; set; }
     }
 }

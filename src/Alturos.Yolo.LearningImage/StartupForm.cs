@@ -1,4 +1,5 @@
 ﻿using Alturos.Yolo.LearningImage.Contract;
+using Alturos.Yolo.LearningImage.Contract.Amazon;
 using Alturos.Yolo.LearningImage.Model;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace Alturos.Yolo.LearningImage
             // Set package providers
             var packageProviders = new List<IAnnotationPackageProvider>()
             {
-                new AmazonPackageProvider(),
+                new AmazonAnnotationPackageProvider(),
                 //new WindowsFileSystemPackageProvider()
             };
 

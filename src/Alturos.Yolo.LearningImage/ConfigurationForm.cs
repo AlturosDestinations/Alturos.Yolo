@@ -1,8 +1,6 @@
 ﻿using Alturos.Yolo.LearningImage.Contract;
 using Alturos.Yolo.LearningImage.Model;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -10,7 +8,6 @@ namespace Alturos.Yolo.LearningImage
 {
     public partial class ConfigurationForm : Form
     {
-        private IAnnotationPackageProvider _provider;
         private AnnotationConfig _config;
         private BindingSource _bindingSourceObjectClasses;
         private BindingSource _bindingSourceTags;
@@ -23,9 +20,8 @@ namespace Alturos.Yolo.LearningImage
             this.dataGridViewTags.AutoGenerateColumns = false;
         }
 
-        public void Setup(IAnnotationPackageProvider provider, AnnotationConfig config)
+        public void Setup(AnnotationConfig config)
         {
-            this._provider = provider;
             this._config = config;
 
             this._bindingSourceObjectClasses = new BindingSource();
@@ -60,11 +56,10 @@ namespace Alturos.Yolo.LearningImage
 
         private void ButtonAddTag_Click(object sender, EventArgs e)
         {
-            var text = this.textBoxTag.Text;
-            if (!string.IsNullOrEmpty(text) && !this._config.Tags.Any(o => o.Value == text))
+            var tag = this.textBoxTag.Text;
+            if (!string.IsNullOrEmpty(tag) && !this._config.Tags.Any(o => o.Value.Equals(tag, StringComparison.OrdinalIgnoreCase)))
             {
-                var tag = new Tag(text);
-                this._config.Tags.Add(tag);
+                this._config.Tags.Add(new Tag { Value = tag });
             }
 
             this._bindingSourceTags.ResetBindings(false);
@@ -76,15 +71,13 @@ namespace Alturos.Yolo.LearningImage
 
         private void ButtonSave_Click(object sender, EventArgs e)
         {
-            this._provider.SetAnnotationConfig(this._config);
-
+            this.DialogResult = DialogResult.OK;
             this.Close();
         }
 
         private void RemoveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var row = this.dataGridViewTags.Rows[this.dataGridViewTags.CurrentCell.RowIndex];
-            var tag = row.DataBoundItem as Tag;
+            var tag = this.dataGridViewTags.CurrentRow.DataBoundItem as Tag;
 
             this._config.Tags.Remove(tag);
 
