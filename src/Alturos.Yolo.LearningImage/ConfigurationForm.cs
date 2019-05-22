@@ -59,7 +59,7 @@ namespace Alturos.Yolo.LearningImage
             var tag = this.textBoxTag.Text;
             if (!string.IsNullOrEmpty(tag) && !this._config.Tags.Any(o => o.Value.Equals(tag, StringComparison.OrdinalIgnoreCase)))
             {
-                this._config.Tags.Add(new Tag { Value = tag });
+                this._config.Tags.Add(new AnnotationPackageTag { Value = tag });
             }
 
             this._bindingSourceTags.ResetBindings(false);
@@ -77,7 +77,7 @@ namespace Alturos.Yolo.LearningImage
 
         private void RemoveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var tag = this.dataGridViewTags.CurrentRow.DataBoundItem as Tag;
+            var tag = this.dataGridViewTags.CurrentRow.DataBoundItem as AnnotationPackageTag;
 
             this._config.Tags.Remove(tag);
 

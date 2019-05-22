@@ -137,8 +137,8 @@
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 3;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 350F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 350F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.panelImageList, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.annotationPackageListControl, 0, 0);
@@ -155,9 +155,9 @@
             // 
             this.panelImageList.Controls.Add(this.splitContainer1);
             this.panelImageList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelImageList.Location = new System.Drawing.Point(353, 3);
+            this.panelImageList.Location = new System.Drawing.Point(253, 3);
             this.panelImageList.Name = "panelImageList";
-            this.panelImageList.Size = new System.Drawing.Size(344, 524);
+            this.panelImageList.Size = new System.Drawing.Size(194, 524);
             this.panelImageList.TabIndex = 4;
             // 
             // splitContainer1
@@ -177,7 +177,7 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.tagListControl);
-            this.splitContainer1.Size = new System.Drawing.Size(344, 524);
+            this.splitContainer1.Size = new System.Drawing.Size(194, 524);
             this.splitContainer1.SplitterDistance = 300;
             this.splitContainer1.TabIndex = 0;
             // 
@@ -196,7 +196,7 @@
             this.annotationImageListControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.annotationImageListControl.Location = new System.Drawing.Point(0, 0);
             this.annotationImageListControl.Name = "annotationImageListControl";
-            this.annotationImageListControl.Size = new System.Drawing.Size(344, 300);
+            this.annotationImageListControl.Size = new System.Drawing.Size(194, 300);
             this.annotationImageListControl.TabIndex = 0;
             // 
             // tagListControl
@@ -204,7 +204,7 @@
             this.tagListControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tagListControl.Location = new System.Drawing.Point(0, 0);
             this.tagListControl.Name = "tagListControl";
-            this.tagListControl.Size = new System.Drawing.Size(344, 220);
+            this.tagListControl.Size = new System.Drawing.Size(194, 220);
             this.tagListControl.TabIndex = 0;
             // 
             // annotationPackageListControl
@@ -214,7 +214,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.annotationPackageListControl.Location = new System.Drawing.Point(3, 3);
             this.annotationPackageListControl.Name = "annotationPackageListControl";
-            this.annotationPackageListControl.Size = new System.Drawing.Size(344, 524);
+            this.annotationPackageListControl.Size = new System.Drawing.Size(244, 524);
             this.annotationPackageListControl.TabIndex = 1;
             // 
             // annotationDrawControl
@@ -223,10 +223,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.annotationDrawControl.AutoplaceAnnotations = false;
-            this.annotationDrawControl.Location = new System.Drawing.Point(703, 3);
+            this.annotationDrawControl.Location = new System.Drawing.Point(453, 3);
             this.annotationDrawControl.Name = "annotationDrawControl";
             this.annotationDrawControl.ShowLabels = false;
-            this.annotationDrawControl.Size = new System.Drawing.Size(628, 524);
+            this.annotationDrawControl.Size = new System.Drawing.Size(878, 524);
             this.annotationDrawControl.TabIndex = 2;
             // 
             // Main

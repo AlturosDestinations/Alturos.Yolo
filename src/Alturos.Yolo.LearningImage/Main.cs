@@ -24,9 +24,11 @@ namespace Alturos.Yolo.LearningImage
             {
                 this._annotationConfig = new AnnotationConfig();
 
-                var configurationForm = new ConfigurationForm();
-                configurationForm.Setup(this._annotationConfig);
-                configurationForm.ShowDialog();
+                using (var configurationForm = new ConfigurationForm())
+                {
+                    configurationForm.Setup(this._annotationConfig);
+                    configurationForm.ShowDialog();
+                }
             }
 
             this.InitializeComponent();
@@ -177,10 +179,12 @@ namespace Alturos.Yolo.LearningImage
         {
             //var images = this.annotationPackageListControl.GetAllImages();
 
-            var exportDialog = new ExportDialog();
-            //exportDialog.CreateImages(images.ToList());
-            //exportDialog.SetObjectClasses(this._objectClasses);
-            exportDialog.Show();
+            using (var exportDialog = new ExportDialog(this._annotationPackageProvider))
+            {
+                //exportDialog.CreateImages(images.ToList());
+                //exportDialog.SetObjectClasses(this._objectClasses);
+                exportDialog.ShowDialog();
+            }
         }
 
         #endregion
@@ -189,17 +193,19 @@ namespace Alturos.Yolo.LearningImage
 
         private void addPackageStripMenuItem_Click(object sender, EventArgs e)
         {
-            var openFileDialog = new OpenFileDialog
+            using (var openFileDialog = new OpenFileDialog
             {
                 InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                 Filter = "ZIP files (*.zip)|*.zip"
-            };
-
-            var dialogResult = openFileDialog.ShowDialog();
-            if (dialogResult == DialogResult.OK)
+            })
             {
-                var file = openFileDialog.FileName;
-                this._annotationPackageProvider.UploadPackageAsync(file);
+
+                var dialogResult = openFileDialog.ShowDialog();
+                if (dialogResult == DialogResult.OK)
+                {
+                    var file = openFileDialog.FileName;
+                    this._annotationPackageProvider.UploadPackageAsync(file);
+                }
             }
         }
 
@@ -221,12 +227,14 @@ namespace Alturos.Yolo.LearningImage
 
         private async void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var configurationForm = new ConfigurationForm();
-            configurationForm.Setup(this._annotationConfig);
-            var dialogResult = configurationForm.ShowDialog();
-            if (dialogResult == DialogResult.OK)
+            using (var configurationForm = new ConfigurationForm())
             {
-                await this._annotationPackageProvider.SetAnnotationConfigAsync(this._annotationConfig);
+                configurationForm.Setup(this._annotationConfig);
+                var dialogResult = configurationForm.ShowDialog();
+                if (dialogResult == DialogResult.OK)
+                {
+                    await this._annotationPackageProvider.SetAnnotationConfigAsync(this._annotationConfig);
+                }
             }
         }
 
@@ -297,6 +305,11 @@ namespace Alturos.Yolo.LearningImage
 
         private void ImageEdited(AnnotationImage annotationImage)
         {
+            if (annotationImage == null)
+            {
+                return;
+            }
+
             annotationImage.Package.IsDirty = true;
 
             annotationImage.Package.UpdateAnnotationStatus(annotationImage);

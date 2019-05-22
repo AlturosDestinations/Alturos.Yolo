@@ -31,12 +31,12 @@
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.ColumnName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnPercentage = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.redownloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.labelLoading = new System.Windows.Forms.Label();
+            this.ColumnName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnPercentage = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -55,29 +55,13 @@
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(3, 16);
             this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView1.Size = new System.Drawing.Size(544, 281);
             this.dataGridView1.TabIndex = 2;
             this.dataGridView1.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.dataGridView1_RowPrePaint);
             this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
-            // 
-            // ColumnName
-            // 
-            this.ColumnName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnName.DataPropertyName = "DirtyDisplayName";
-            this.ColumnName.HeaderText = "Name";
-            this.ColumnName.Name = "ColumnName";
-            this.ColumnName.ReadOnly = true;
-            // 
-            // ColumnPercentage
-            // 
-            this.ColumnPercentage.DataPropertyName = "AnnotationPercentage";
-            dataGridViewCellStyle1.Format = "0.00";
-            dataGridViewCellStyle1.NullValue = null;
-            this.ColumnPercentage.DefaultCellStyle = dataGridViewCellStyle1;
-            this.ColumnPercentage.HeaderText = "Annotated (%)";
-            this.ColumnPercentage.Name = "ColumnPercentage";
-            this.ColumnPercentage.ReadOnly = true;
             // 
             // contextMenuStrip1
             // 
@@ -113,6 +97,26 @@
             this.labelLoading.Size = new System.Drawing.Size(203, 13);
             this.labelLoading.TabIndex = 3;
             this.labelLoading.Text = "Loading package information, please wait";
+            // 
+            // ColumnName
+            // 
+            this.ColumnName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnName.DataPropertyName = "DirtyDisplayName";
+            this.ColumnName.HeaderText = "Name";
+            this.ColumnName.Name = "ColumnName";
+            this.ColumnName.ReadOnly = true;
+            // 
+            // ColumnPercentage
+            // 
+            this.ColumnPercentage.DataPropertyName = "AnnotationPercentage";
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle1.Format = "0.00";
+            dataGridViewCellStyle1.NullValue = null;
+            this.ColumnPercentage.DefaultCellStyle = dataGridViewCellStyle1;
+            this.ColumnPercentage.HeaderText = "Progress";
+            this.ColumnPercentage.Name = "ColumnPercentage";
+            this.ColumnPercentage.ReadOnly = true;
+            this.ColumnPercentage.Width = 60;
             // 
             // AnnotationPackageListControl
             // 

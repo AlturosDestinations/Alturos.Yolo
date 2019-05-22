@@ -78,7 +78,7 @@ namespace Alturos.Yolo.LearningImage.Contract.Amazon
                     return new AnnotationConfig
                     {
                         ObjectClasses = annotationConfig.ObjectClasses,
-                        Tags = annotationConfig.Tags.Select(o => new Model.Tag { Value = o }).ToList()
+                        Tags = annotationConfig.Tags.Select(o => new Model.AnnotationPackageTag { Value = o }).ToList()
                     };
                 }
             }
@@ -88,14 +88,34 @@ namespace Alturos.Yolo.LearningImage.Contract.Amazon
             }
         }
 
+        public async Task<AnnotationPackage[]> GetPackagesAsync(AnnotationPackageTag[] tags)
+        {
+            var scanConditions = new List<ScanCondition>
+            {
+                new ScanCondition("Tags", ScanOperator.Contains, tags.Select(o => o.Value).ToArray())
+            };
+
+            return await this.GetPackagesAsync(scanConditions.ToArray()).ConfigureAwait(false);
+        }
+
         public async Task<AnnotationPackage[]> GetPackagesAsync(bool annotated)
+        {
+            var scanConditions = new ScanCondition[]
+            {
+                new ScanCondition("IsAnnotated", ScanOperator.Equal, annotated)
+            };
+
+            return await this.GetPackagesAsync(scanConditions).ConfigureAwait(false);
+        }
+
+        private async Task<AnnotationPackage[]> GetPackagesAsync(ScanCondition[] scanConditions)
         {
             // Retrieve unannotated metadata
             using (var context = new DynamoDBContext(this._dynamoDbClient))
             {
                 try
                 {
-                    var packageInfos = context.ScanAsync<AnnotationPackageInfo>(new ScanCondition[] { new ScanCondition("IsAnnotated", ScanOperator.Equal, annotated) });
+                    var packageInfos = context.ScanAsync<AnnotationPackageInfo>(scanConditions);
 
                     // Create packages
                     var packages = (await packageInfos.GetNextSetAsync().ConfigureAwait(false)).Select(o => new AnnotationPackage

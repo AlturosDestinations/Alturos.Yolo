@@ -133,7 +133,7 @@
     <Compile Include="Model\DragPointPosition.cs" />
     <Compile Include="Model\DragPointType.cs" />
     <Compile Include="Model\ObjectClass.cs" />
-    <Compile Include="Model\Tag.cs" />
+    <Compile Include="Model\AnnotationPackageTag.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\AnnotationBoundingBox.cs" />

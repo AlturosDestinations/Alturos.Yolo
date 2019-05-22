@@ -1,7 +1,5 @@
 ﻿using Alturos.Yolo.LearningImage.Model;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -25,31 +23,16 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
             this._package = package;
 
-            var items = package.Info.Tags;
+            var items = package.Info.Tags?.Select(o => new AnnotationPackageTag { Value = o });
             if (items == null)
             {
-                items = new List<string>();
+                items = new List<AnnotationPackageTag>();
             }
 
-            var bindingSource = new BindingSource(items, null);
+            var bindingSource = new BindingSource();
+            bindingSource.DataSource = items;
 
             this.dataGridView1.DataSource = bindingSource;
-        }
-
-        private void DataGridView1_RowValidated(object sender, DataGridViewCellEventArgs e)
-        {
-            var list = new List<string>();
-
-            foreach (DataGridViewRow row in this.dataGridView1.Rows)
-            {
-                var value = row.Cells[0].Value?.ToString();
-                if (!string.IsNullOrEmpty(value)) { list.Add(value); }
-            }
-
-            //TODO: Verify tags exist
-
-            this._package.IsDirty = true;
-            this._package.Info.Tags = list;
         }
     }
 }
