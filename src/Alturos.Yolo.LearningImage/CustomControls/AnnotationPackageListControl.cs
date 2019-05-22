@@ -51,28 +51,26 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
         public async Task LoadPackagesAsync()
         {
-            this.labelLoading.Invoke((MethodInvoker)delegate { this.labelLoading.Visible = true; });
-            this.dataGridView1.Invoke((MethodInvoker)delegate { this.dataGridView1.Visible = false; });
-
-            var packages = await this._annotationPackageProvider.GetPackagesAsync(true);
-
-            this.labelLoading.Invoke((MethodInvoker)delegate { this.labelLoading.Visible = false; });
-
-            //foreach (var package in packages)
-            //{
-            //    //if (package.Extracted && package.Images == null)
-            //    //{
-            //    //    //this.LoadAnnotationImages(package);
-            //    //}
-            //}
-
-            if (packages?.Length > 0)
+            try
             {
-                this.dataGridView1.Invoke((MethodInvoker)delegate
+                this.dataGridView1.Invoke((MethodInvoker)delegate { this.dataGridView1.Visible = false; });
+
+                this.labelLoading.Invoke((MethodInvoker)delegate { this.labelLoading.Visible = true; });
+                var packages = await this._annotationPackageProvider.GetPackagesAsync(false);
+                this.labelLoading.Invoke((MethodInvoker)delegate { this.labelLoading.Visible = false; });
+
+                if (packages?.Length > 0)
                 {
-                    this.dataGridView1.Visible = true;
-                    this.dataGridView1.DataSource = packages;
-                });
+                    this.dataGridView1.Invoke((MethodInvoker)delegate
+                    {
+                        this.dataGridView1.Visible = true;
+                        this.dataGridView1.DataSource = packages;
+                    });
+                }
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.ToString(), "Error on loading packages", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

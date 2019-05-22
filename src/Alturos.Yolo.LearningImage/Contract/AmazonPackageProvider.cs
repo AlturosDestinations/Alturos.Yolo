@@ -76,7 +76,6 @@ namespace Alturos.Yolo.LearningImage.Contract
             {
                 try
                 {
-                    //TODO: Annotated packages
                     var packageInfos = context.ScanAsync<AnnotationPackageInfo>(new ScanCondition[] { new ScanCondition("IsAnnotated", ScanOperator.Equal, annotated) });
 
                     // Create packages
@@ -200,12 +199,20 @@ namespace Alturos.Yolo.LearningImage.Contract
             this.IsSyncing = false;
         }
 
-        private async Task SyncPackageAsync(AnnotationPackage package)
+        private async Task<bool> SyncPackageAsync(AnnotationPackage package)
         {
-            var context = new DynamoDBContext(this._dynamoDbClient);
-            await context.SaveAsync(package.Info);
+            if (package.Info == null)
+            {
+                return false;
+            }
+
+            using (var context = new DynamoDBContext(this._dynamoDbClient))
+            {
+                await context.SaveAsync(package.Info);
+            }
 
             this._syncedPackages++;
+            return true;
         }
 
         public double GetSyncProgress()

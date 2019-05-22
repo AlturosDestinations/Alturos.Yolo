@@ -39,7 +39,12 @@ namespace Alturos.Yolo.LearningImage.Model
 
             if (this._files == null)
             {
-                this._files = Directory.GetFiles(this.PackagePath).Select(o => new FileInfo(o)).OrderBy(o => o.Name.GetFirstNumber()).ToArray();
+                var allowedExtensions = new[] { ".png", ".jpg", ".bmp" };
+                this._files = Directory.GetFiles(this.PackagePath)
+                    .Where(file => allowedExtensions.Any(file.ToLower().EndsWith))
+                    .Select(o => new FileInfo(o))
+                    .OrderBy(o => o.Name.GetFirstNumber())
+                    .ToArray();
             }
 
             var query = from file in this._files
