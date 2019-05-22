@@ -43,6 +43,25 @@ namespace Alturos.Yolo.LearningImage.Contract
             this._currentlyDownloadedPackages = new List<AnnotationPackage>();
         }
 
+        public async Task SetAnnotationConfig(AnnotationConfig config)
+        {
+            var context = new DynamoDBContext(this._dynamoDbClient);
+            await context.SaveAsync(config);
+        }
+
+        public async Task<AnnotationConfig> GetAnnotationConfig()
+        {
+            try
+            {
+                var context = new DynamoDBContext(this._dynamoDbClient);
+                return await context.LoadAsync<AnnotationConfig>("AnnotationConfiguration");
+            }
+            catch (InvalidOperationException exception)
+            {
+                return await Task.FromResult<AnnotationConfig>(null);
+            }
+        }
+
         public async Task<AnnotationPackage[]> GetPackagesAsync()
         {
             // Retrieve unannotated metadata

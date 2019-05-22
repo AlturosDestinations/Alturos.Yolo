@@ -7,6 +7,8 @@ namespace Alturos.Yolo.LearningImage.Contract
     {
         bool IsSyncing { get; set; }
 
+        Task SetAnnotationConfig(AnnotationConfig config);
+        Task<AnnotationConfig> GetAnnotationConfig();
         Task<AnnotationPackage[]> GetPackagesAsync();
         Task<AnnotationPackage> RefreshPackageAsync(AnnotationPackage package);
         Task<AnnotationPackage> DownloadPackageAsync(AnnotationPackage package);
