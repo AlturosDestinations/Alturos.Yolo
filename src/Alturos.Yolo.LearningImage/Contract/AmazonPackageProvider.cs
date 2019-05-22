@@ -52,6 +52,7 @@ namespace Alturos.Yolo.LearningImage.Contract
                 {
                     //TODO: Annotated packages
                     var packageInfos = context.ScanAsync<AnnotationPackageInfo>(new ScanCondition[] { new ScanCondition("IsAnnotated", ScanOperator.Equal, false) });
+                    //var packageInfos = context.ScanAsync<AnnotationPackageInfo>(new ScanCondition[] { new ScanCondition("IsAnnotated", ScanOperator.Equal, true) });
 
                     // Create packages
                     var packages = (await packageInfos.GetNextSetAsync()).Select(o => new AnnotationPackage

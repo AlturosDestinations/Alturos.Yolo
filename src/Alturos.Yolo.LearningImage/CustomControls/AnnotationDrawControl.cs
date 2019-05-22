@@ -360,10 +360,13 @@ namespace Alturos.Yolo.LearningImage.CustomControls
                 this._selectedBoundingBox.CenterX = (float)centerX;
                 this._selectedBoundingBox.CenterY = (float)centerY;
 
-                this._cachedBoundingBox.CenterX = this._selectedBoundingBox.CenterX;
-                this._cachedBoundingBox.CenterY = this._selectedBoundingBox.CenterY;
-                this._cachedBoundingBox.Width = this._selectedBoundingBox.Width;
-                this._cachedBoundingBox.Height = this._selectedBoundingBox.Height;
+                if (this._cachedBoundingBox != null)
+                {
+                    this._cachedBoundingBox.CenterX = this._selectedBoundingBox.CenterX;
+                    this._cachedBoundingBox.CenterY = this._selectedBoundingBox.CenterY;
+                    this._cachedBoundingBox.Width = this._selectedBoundingBox.Width;
+                    this._cachedBoundingBox.Height = this._selectedBoundingBox.Height;
+                }
 
                 //this.ImageEdited?.Invoke(this._annotationImage);
             }
