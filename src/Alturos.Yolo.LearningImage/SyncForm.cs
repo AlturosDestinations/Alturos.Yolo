@@ -22,7 +22,6 @@ namespace Alturos.Yolo.LearningImage
             foreach (var package in packages)
             {
                 package.IsDirty = false;
-                //this.AddImageDtos(package);
             }
 
             this._syncing = true;
@@ -45,21 +44,5 @@ namespace Alturos.Yolo.LearningImage
                 await Task.Delay(100);
             }
         }
-
-        //private void AddImageDtos(AnnotationPackage package)
-        //{
-        //    //if (package.Images == null)
-        //    //{
-        //    //    return;
-        //    //}
-
-        //    //var info = package.Info;
-        //    //info.Images = new List<AnnotationImageDto>();
-
-        //    //foreach (var image in package.Images)
-        //    //{
-        //    //    info.Images.Add(image.Adapt<AnnotationImageDto>());
-        //    //}
-        //}
     }
 }

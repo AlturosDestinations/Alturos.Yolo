@@ -12,56 +12,54 @@ namespace Alturos.Yolo.LearningImage
     public partial class Main : Form
     {
         private readonly IAnnotationPackageProvider _annotationPackageProvider;
-        private readonly List<ObjectClass> _objectClasses = new List<ObjectClass>();
-        //private AnnotationPackage _selectedPackage;
+        private readonly AnnotationConfig _annotationConfig;
 
         public Main()
         {
-            //var startupForm = new StartupForm();
-            //startupForm.StartPosition = FormStartPosition.CenterScreen;
-            //var dialogResult = startupForm.ShowDialog(this);
-
             this._annotationPackageProvider = new AmazonPackageProvider();
-            //this._objectClasses = startupForm.ObjectClasses;
+
+            this._annotationConfig = this._annotationPackageProvider.GetAnnotationConfig().GetAwaiter().GetResult();
+            if (this._annotationConfig == null)
+            {
+                this._annotationConfig = new AnnotationConfig();
+
+                var configurationForm = new ConfigurationForm();
+                configurationForm.Setup(this._annotationPackageProvider, this._annotationConfig);
+                configurationForm.ShowDialog();
+            }
 
             this.InitializeComponent();
             this.downloadControl.Dock = DockStyle.Fill;
 
-            //if (dialogResult == DialogResult.OK)
-            //{
-            //    this.CreateYoloObjectNames();
-            //    Task.Run(async () => await this.LoadPackagesAsync());
-            //}
-
-            Task.Run(async () => await this.LoadPackagesAsync());
+            this.annotationPackageListControl.Setup(this._annotationPackageProvider);
 
             this.autoplaceAnnotationsToolStripMenuItem.Checked = true;
+
             this.annotationDrawControl.AutoplaceAnnotations = true;
-            this.annotationDrawControl.SetObjectClasses(this._objectClasses);
+            this.annotationDrawControl.SetObjectClasses(this._annotationConfig.ObjectClasses);
+            this.annotationDrawControl.ShowLabels = true;
 
             this.showLabelsToolStripMenuItem.Checked = true;
-            this.annotationDrawControl.ShowLabels = true;
         }
 
         #region Initialization and Cleanup
 
-        private void annotationPackageList_Load(object sender, EventArgs e)
+        private void Main_Load(object sender, EventArgs e)
         {
-            this.annotationPackageListControl.PackageSelected += this.PackageSelected;
-        }
-
-        private void annotationImageList_Load(object sender, EventArgs e)
-        {
-            this.annotationImageListControl.ImageSelected += this.ImageSelected;
-            this.downloadControl.ExtractionRequested += this.ExtractionRequestedAsync;
-        }
-
-        private void annotationImageControl_Load(object sender, EventArgs e)
-        {
-            this.annotationDrawControl.ImageEdited += this.ImageEdited;
+            Task.Run(async () => await this.LoadPackagesAsync());
+            this.RegisterEvents();
         }
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            var confirmClosing = ConfirmDiscardingUnsavedChanges();
+            if (!confirmClosing)
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private bool ConfirmDiscardingUnsavedChanges()
         {
             var unsyncedPackages = this.annotationPackageListControl.GetAllPackages().Where(o => o.IsDirty);
             if (unsyncedPackages.Any())
@@ -82,12 +80,29 @@ namespace Alturos.Yolo.LearningImage
 
                 if (dialogResult == DialogResult.No)
                 {
-                    e.Cancel = true;
+                    return false;
                 }
             }
+
+            return true;
         }
 
         private void Main_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            this.UnregisterEvents();
+        }
+
+        private void RegisterEvents()
+        {
+            this.annotationPackageListControl.PackageSelected += this.PackageSelected;
+
+            this.annotationImageListControl.ImageSelected += this.ImageSelected;
+            this.downloadControl.ExtractionRequested += this.ExtractionRequestedAsync;
+
+            this.annotationDrawControl.ImageEdited += this.ImageEdited;
+        }
+
+        private void UnregisterEvents()
         {
             this.annotationPackageListControl.PackageSelected -= this.PackageSelected;
 
@@ -96,23 +111,6 @@ namespace Alturos.Yolo.LearningImage
 
             this.annotationDrawControl.ImageEdited -= this.ImageEdited;
         }
-
-        //private void CreateYoloObjectNames()
-        //{
-        //    var sb = new StringBuilder();
-        //    foreach (var objectClass in this._objectClasses)
-        //    {
-        //        sb.AppendLine(objectClass.Name);
-        //    }
-
-        //    var yoloMarkPath = @"yolomark\data";
-        //    if (!Directory.Exists(yoloMarkPath))
-        //    {
-        //        Directory.CreateDirectory(yoloMarkPath);
-        //    }
-
-        //    File.WriteAllText(Path.Combine(yoloMarkPath, "obj.names"), sb.ToString());
-        //}
 
         #endregion
 
@@ -125,19 +123,27 @@ namespace Alturos.Yolo.LearningImage
 
         private async Task LoadPackagesAsync()
         {
-            this.annotationPackageListControl.Setup(this._annotationPackageProvider);
+            this.EnableMainMenu(false);
             await this.annotationPackageListControl.LoadPackagesAsync();
+            this.EnableMainMenu(true);
+        }
 
+        private void EnableMainMenu(bool enable)
+        {
             this.Invoke((MethodInvoker)delegate {
-                this.syncToolStripMenuItem.Enabled = true;
-                this.exportToolStripMenuItem.Enabled = true;
-                this.downloadControl.Enabled = true;
+                this.menuStripMain.Enabled = enable;
+                this.exportToolStripMenuItem.Enabled = enable;
+                this.annotationPackageListControl.Enabled = enable;
+                this.annotationImageListControl.Enabled = enable;
+                this.annotationDrawControl.Enabled = enable;
+                this.downloadControl.Enabled = enable;
+                this.tagListControl.Enabled = enable;
             });
         }
 
         private void syncToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var packages = this.annotationPackageListControl.GetAllPackages().Where(o => o.Extracted && o.IsDirty).ToArray();
+            var packages = this.annotationPackageListControl.GetAllPackages().Where(o => o.IsDirty).ToArray();
             if (packages.Length > 0)
             {
                 // Proceed with syncing
@@ -198,7 +204,8 @@ namespace Alturos.Yolo.LearningImage
 
         #endregion
 
-        #region Edit
+        #region Configuration
+
         private void AutoplaceAnnotationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.autoplaceAnnotationsToolStripMenuItem.Checked = !this.autoplaceAnnotationsToolStripMenuItem.Checked;
@@ -209,6 +216,13 @@ namespace Alturos.Yolo.LearningImage
         {
             this.showLabelsToolStripMenuItem.Checked = !this.showLabelsToolStripMenuItem.Checked;
             this.annotationDrawControl.ShowLabels = this.showLabelsToolStripMenuItem.Checked;
+        }
+
+        private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var configurationForm = new ConfigurationForm();
+            configurationForm.Setup(this._annotationPackageProvider, this._annotationConfig);
+            configurationForm.ShowDialog();
         }
 
         #endregion
@@ -278,7 +292,7 @@ namespace Alturos.Yolo.LearningImage
 
         private void ImageEdited(AnnotationImage annotationImage)
         {
-            //package.IsDirty = true;
+            annotationImage.Package.IsDirty = true;
 
             annotationImage.Package.UpdateAnnotationStatus(annotationImage);
             this.annotationPackageListControl.RefreshData();

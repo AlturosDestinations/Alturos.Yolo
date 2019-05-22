@@ -54,7 +54,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             this.labelLoading.Invoke((MethodInvoker)delegate { this.labelLoading.Visible = true; });
             this.dataGridView1.Invoke((MethodInvoker)delegate { this.dataGridView1.Visible = false; });
 
-            var packages = await this._annotationPackageProvider.GetPackagesAsync();
+            var packages = await this._annotationPackageProvider.GetPackagesAsync(true);
 
             this.labelLoading.Invoke((MethodInvoker)delegate { this.labelLoading.Visible = false; });
 
