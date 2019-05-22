@@ -10,7 +10,6 @@ For every AnnotationPackage we have some Metadata, Weather, Color, ... this info
 ## Requirements
 
  - [Amazon AWS Account](https://aws.amazon.com/) (S3, DynamoDB)
- - [Yolo_mark](https://github.com/AlexeyAB/Yolo_mark)
  
 ## Features
 
