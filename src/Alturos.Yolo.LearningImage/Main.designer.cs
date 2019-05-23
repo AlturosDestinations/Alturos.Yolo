@@ -61,9 +61,9 @@
             this.menuStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.loadToolStripMenuItem,
             this.syncToolStripMenuItem,
-            this.exportToolStripMenuItem,
-            this.addPackageStripMenuItem,
             this.configurationToolStripMenuItem,
+            this.addPackageStripMenuItem,
+            this.exportToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStripMain.Location = new System.Drawing.Point(0, 0);
             this.menuStripMain.Name = "menuStripMain";
@@ -88,8 +88,8 @@
             // exportToolStripMenuItem
             // 
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
-            this.exportToolStripMenuItem.Text = "&Export";
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(125, 20);
+            this.exportToolStripMenuItem.Text = "&Export Training Data";
             this.exportToolStripMenuItem.Click += new System.EventHandler(this.ExportToolStripMenuItem_Click);
             // 
             // addPackageStripMenuItem
@@ -138,6 +138,7 @@
             // 
             // helpToolStripMenuItem
             // 
+            this.helpToolStripMenuItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "&Help";
@@ -197,7 +198,7 @@
             this.downloadControl.Enabled = false;
             this.downloadControl.Location = new System.Drawing.Point(0, 0);
             this.downloadControl.Name = "downloadControl";
-            this.downloadControl.Size = new System.Drawing.Size(344, 69);
+            this.downloadControl.Size = new System.Drawing.Size(191, 69);
             this.downloadControl.TabIndex = 1;
             // 
             // annotationImageListControl
@@ -248,7 +249,7 @@
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuStripMain;
             this.Name = "Main";
-            this.Text = "Alturos.Yolo.LearningImage";
+            this.Text = "Alturos Image Annotation";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Main_FormClosed);
             this.Load += new System.EventHandler(this.Main_Load);
