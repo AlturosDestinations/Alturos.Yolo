@@ -7,7 +7,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 {
     public partial class DownloadControl : UserControl
     {
-        public Func<AnnotationPackage, Task> ExtractionRequested { get; set; }
+        public event Func<AnnotationPackage, Task> ExtractionRequested;
 
         private AnnotationPackage _packageToExtract;
 
@@ -27,7 +27,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
             this.labelPercentage.Text = "";
             this.labelDownload.Text = "";
-            this.progressBarDownload.Value = 0;
+            this.progressBarDownload.Value = (int)package.DownloadProgress;
 
             this.Show();
 
@@ -49,11 +49,6 @@ namespace Alturos.Yolo.LearningImage.CustomControls
                 this.progressBarDownload.Invoke((MethodInvoker)delegate { this.progressBarDownload.Value = (int)package.DownloadProgress; });
                 await Task.Delay(200);
             }
-
-            await Task.Delay(200);
-            this.labelPercentage.Invoke((MethodInvoker)delegate { this.labelPercentage.Text = ""; });
-            this.labelDownload.Invoke((MethodInvoker)delegate { this.labelDownload.Text = ""; });
-            this.progressBarDownload.Invoke((MethodInvoker)delegate { this.progressBarDownload.Value = 0; });
         }
 
         private async void buttonDownload_Click(object sender, EventArgs e)

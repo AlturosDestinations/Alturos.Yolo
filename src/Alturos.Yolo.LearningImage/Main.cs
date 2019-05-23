@@ -64,6 +64,11 @@ namespace Alturos.Yolo.LearningImage
             }
         }
 
+        private void Main_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            this.UnregisterEvents();
+        }
+
         private bool ConfirmDiscardingUnsavedChanges()
         {
             var unsyncedPackages = this.annotationPackageListControl.GetAllPackages().Where(o => o.IsDirty);
@@ -90,11 +95,6 @@ namespace Alturos.Yolo.LearningImage
             }
 
             return true;
-        }
-
-        private void Main_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            this.UnregisterEvents();
         }
 
         private void RegisterEvents()
@@ -129,11 +129,6 @@ namespace Alturos.Yolo.LearningImage
 
         #region Load and Sync
 
-        private async void RefreshToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            await this.LoadPackagesAsync();
-        }
-
         private async Task LoadPackagesAsync()
         {
             this.EnableMainMenu(false);
@@ -141,17 +136,25 @@ namespace Alturos.Yolo.LearningImage
             this.EnableMainMenu(true);
         }
 
+        #endregion
+
+        #region Main Menu
+
         private void EnableMainMenu(bool enable)
         {
             this.Invoke((MethodInvoker)delegate {
                 this.menuStripMain.Enabled = enable;
-                this.exportToolStripMenuItem.Enabled = enable;
                 this.annotationPackageListControl.Enabled = enable;
-                this.annotationImageListControl.Enabled = enable;
-                this.annotationDrawControl.Enabled = enable;
-                this.downloadControl.Enabled = enable;
-                this.tagListControl.Enabled = enable;
+                this.annotationImageListControl.Visible = enable;
+                this.annotationDrawControl.Visible = enable;
+                this.downloadControl.Visible = enable;
+                this.tagListControl.Visible = enable;
             });
+        }
+
+        private async void RefreshToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            await this.LoadPackagesAsync();
         }
 
         private void SyncToolStripMenuItem_Click(object sender, EventArgs e)
@@ -183,10 +186,6 @@ namespace Alturos.Yolo.LearningImage
             }
         }
 
-        #endregion
-
-        #region Export
-
         private void ExportToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //var images = this.annotationPackageListControl.GetAllImages();
@@ -198,10 +197,6 @@ namespace Alturos.Yolo.LearningImage
                 exportDialog.ShowDialog();
             }
         }
-
-        #endregion
-
-        #region Upload
 
         private void AddPackageStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -220,10 +215,6 @@ namespace Alturos.Yolo.LearningImage
                 }
             }
         }
-
-        #endregion
-
-        #region Configuration
 
         private void AutoplaceAnnotationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -250,6 +241,14 @@ namespace Alturos.Yolo.LearningImage
             }
         }
 
+        private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var dialog = new HelpDialog())
+            {
+                dialog.ShowDialog();
+            }
+        }
+
         #endregion
 
         #region Delegate Callbacks
@@ -260,6 +259,7 @@ namespace Alturos.Yolo.LearningImage
 
             this.annotationImageListControl.Hide();
             this.downloadControl.Hide();
+            this.tagListControl.Hide();
 
             this.annotationImageListControl.Reset();
             this.annotationDrawControl.Reset();
@@ -274,6 +274,8 @@ namespace Alturos.Yolo.LearningImage
                     this.annotationImageListControl.Show();
 
                     this.annotationPackageListControl.RefreshData();
+
+                    this.tagListControl.Show();
                 }
                 else
                 {

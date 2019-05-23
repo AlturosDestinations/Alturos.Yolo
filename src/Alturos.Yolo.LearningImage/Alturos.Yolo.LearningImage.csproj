@@ -84,6 +84,12 @@
     <Compile Include="CustomControls\TagListControl.Designer.cs">
       <DependentUpon>TagListControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\HelpDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\HelpDialog.Designer.cs">
+      <DependentUpon>HelpDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Helper\DrawHelper.cs" />
     <Compile Include="Helper\MathExtension.cs" />
     <Compile Include="Helper\StringExtension.cs" />
@@ -178,6 +184,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ExportDialog.resx">
       <DependentUpon>ExportDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HelpDialog.resx">
+      <DependentUpon>HelpDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TagSelectionForm.resx">
       <DependentUpon>TagSelectionForm.cs</DependentUpon>

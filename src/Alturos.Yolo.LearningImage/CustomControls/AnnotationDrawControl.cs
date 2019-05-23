@@ -16,7 +16,6 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         public bool AutoplaceAnnotations { get; set; }
         public bool ShowLabels { get; set; }
 
-        private readonly List<Rectangle> _rectangles = new List<Rectangle>();
         private readonly int _mouseDragElementSize = 10;
 
         private bool _mouseOver;
@@ -30,9 +29,6 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         public AnnotationDrawControl()
         {
             this.InitializeComponent();
-            this._rectangles.Add(new Rectangle(100, 100, 100, 100));
-
-            this.pictureBox1.ContextMenuStrip = this.contextMenuStripPicture;
         }
 
         public void Reset()
@@ -49,7 +45,6 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         public void SetImage(AnnotationImage image)
         {
             this._annotationImage = image;
-
             var oldImage = this.pictureBox1.Image;
 
             if (image == null)
@@ -184,11 +179,11 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             foreach (var boundingBox in boundingBoxes)
             {
                 var rectangle = this.GetRectangle(boundingBox);
-
                 var brush = DrawHelper.GetColorCode(boundingBox.ObjectIndex);
+                var objectClass = this._objectClasses.FirstOrDefault(o => o.Id == boundingBox.ObjectIndex);
 
                 e.Graphics.DrawRectangle(new Pen(brush, 2), rectangle);
-                this.DrawLabel(e.Graphics, rectangle.X, rectangle.Y, this._objectClasses.FirstOrDefault(o => o.Id == boundingBox.ObjectIndex));
+                this.DrawLabel(e.Graphics, rectangle.X, rectangle.Y, objectClass);
 
                 var biggerRectangle = Rectangle.Inflate(rectangle, 20, 20);
                 if (biggerRectangle.Contains(this._mousePosition))
@@ -218,7 +213,8 @@ namespace Alturos.Yolo.LearningImage.CustomControls
                         {
                             e.Graphics.FillEllipse(Brushes.Red, dragPoint.Point.X - this._mouseDragElementSize / 3, dragPoint.Point.Y - this._mouseDragElementSize / 3, this._mouseDragElementSize * 1.5f, this._mouseDragElementSize * 1.5f);
 
-                            using (var pen = new Pen(Brushes.White, 4)) {
+                            using (var pen = new Pen(Brushes.White, 4))
+                            {
                                 var centerX = dragPoint.Point.X + this._mouseDragElementSize / 2;
                                 var centerY = dragPoint.Point.Y + this._mouseDragElementSize / 2;
                                 e.Graphics.DrawLine(pen, new Point(centerX - 4, centerY - 4), new Point(centerX + 4, centerY + 4));
@@ -311,14 +307,15 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
         private void PictureBox1_MouseUp(object sender, MouseEventArgs e)
         {
-            if (this._dragPoint?.Type == DragPointType.Delete) {
+            if (this._dragPoint?.Type == DragPointType.Delete)
+            {
                 this._annotationImage?.BoundingBoxes.Remove(this._selectedBoundingBox);
                 this._cachedBoundingBox = null;
             }
 
             this._selectedBoundingBox = null;
 
-            this._mousePosition = new Point(0,0);
+            this._mousePosition = new Point(0, 0);
             this.pictureBox1.Invalidate();
 
             this.ImageEdited?.Invoke(this._annotationImage);
@@ -381,8 +378,6 @@ namespace Alturos.Yolo.LearningImage.CustomControls
                     this._cachedBoundingBox.Width = this._selectedBoundingBox.Width;
                     this._cachedBoundingBox.Height = this._selectedBoundingBox.Height;
                 }
-
-                //this.ImageEdited?.Invoke(this._annotationImage);
             }
 
             this._mousePosition = e.Location;
@@ -443,15 +438,18 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             AnnotationBoundingBox currentBoundingBox = null;
 
             var boundingBoxes = this._annotationImage?.BoundingBoxes;
-            foreach (var boundingBox in boundingBoxes)
+            if (boundingBoxes != null)
             {
-                var rectangle = this.GetRectangle(boundingBox);
-
-                var biggerRectangle = Rectangle.Inflate(rectangle, 20, 20);
-                if (biggerRectangle.Contains(this._mousePosition))
+                foreach (var boundingBox in boundingBoxes)
                 {
-                    currentBoundingBox = boundingBox;
-                    break;
+                    var rectangle = this.GetRectangle(boundingBox);
+
+                    var biggerRectangle = Rectangle.Inflate(rectangle, 20, 20);
+                    if (biggerRectangle.Contains(this._mousePosition))
+                    {
+                        currentBoundingBox = boundingBox;
+                        break;
+                    }
                 }
             }
 
