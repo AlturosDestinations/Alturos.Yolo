@@ -16,6 +16,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         public bool AutoplaceAnnotations { get; set; }
         public bool ShowLabels { get; set; }
 
+        private bool _mouseOver;
         private Point _mousePosition = new Point(0, 0);
         private List<Rectangle> _rectangles = new List<Rectangle>();
         private int _mouseDragElementSize = 10;
@@ -155,6 +156,12 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             var canvasInfo = this.GetCanvasInformation();
 
             Cursor.Current = Cursors.Default;
+
+            if (this._mouseOver)
+            {
+                e.Graphics.DrawLine(Pens.Blue, new Point(this._mousePosition.X, this.pictureBox1.Top), new Point(this._mousePosition.X, this.pictureBox1.Bottom));
+                e.Graphics.DrawLine(Pens.Blue, new Point(this.pictureBox1.Left, this._mousePosition.Y), new Point(this.pictureBox1.Right, this._mousePosition.Y));
+            }
 
             var boundingBoxes = this._annotationImage?.BoundingBoxes;
             if (boundingBoxes == null)
@@ -403,6 +410,17 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             this._dragPoint = null;
 
             this.ImageEdited?.Invoke(this._annotationImage);
+        }
+
+        private void PictureBox1_MouseEnter(object sender, EventArgs e)
+        {
+            this._mouseOver = true;
+        }
+
+        private void PictureBox1_MouseLeave(object sender, EventArgs e)
+        {
+            this._mouseOver = false;
+            this.pictureBox1.Invalidate();
         }
 
         private void clearAnnotationsToolStripMenuItem_Click(object sender, System.EventArgs e)
