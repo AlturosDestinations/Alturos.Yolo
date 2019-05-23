@@ -186,8 +186,10 @@ namespace Alturos.Yolo
 
         private EnvironmentReport GetEnvironmentReport()
         {
-            var report = new EnvironmentReport();
-            report.MicrosoftVisualCPlusPlus2017RedistributableExists = this.IsMicrosoftVisualCPlusPlus2017Available();
+            var report = new EnvironmentReport
+            {
+                MicrosoftVisualCPlusPlus2017RedistributableExists = this.IsMicrosoftVisualCPlusPlus2017Available()
+            };
 
             if (File.Exists(@"x64\cudnn64_7.dll"))
             {
@@ -273,7 +275,7 @@ namespace Alturos.Yolo
                     throw new NotImplementedException("C++ dll compiled incorrectly");
                 }
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 return null;
             }

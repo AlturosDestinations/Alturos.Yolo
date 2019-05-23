@@ -74,28 +74,28 @@
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
             this.loadToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
             this.loadToolStripMenuItem.Text = "&Refresh";
-            this.loadToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
+            this.loadToolStripMenuItem.Click += new System.EventHandler(this.RefreshToolStripMenuItem_Click);
             // 
             // syncToolStripMenuItem
             // 
             this.syncToolStripMenuItem.Name = "syncToolStripMenuItem";
             this.syncToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.syncToolStripMenuItem.Text = "&Sync";
-            this.syncToolStripMenuItem.Click += new System.EventHandler(this.syncToolStripMenuItem_Click);
+            this.syncToolStripMenuItem.Click += new System.EventHandler(this.SyncToolStripMenuItem_Click);
             // 
             // exportToolStripMenuItem
             // 
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
             this.exportToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.exportToolStripMenuItem.Text = "&Export";
-            this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
+            this.exportToolStripMenuItem.Click += new System.EventHandler(this.ExportToolStripMenuItem_Click);
             // 
             // addPackageStripMenuItem
             // 
             this.addPackageStripMenuItem.Name = "addPackageStripMenuItem";
             this.addPackageStripMenuItem.Size = new System.Drawing.Size(88, 20);
             this.addPackageStripMenuItem.Text = "&Add Package";
-            this.addPackageStripMenuItem.Click += new System.EventHandler(this.addPackageStripMenuItem_Click);
+            this.addPackageStripMenuItem.Click += new System.EventHandler(this.AddPackageStripMenuItem_Click);
             // 
             // configurationToolStripMenuItem
             // 
@@ -236,6 +236,7 @@
             this.ClientSize = new System.Drawing.Size(1334, 554);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.menuStripMain);
+            this.KeyPreview = true;
             this.MainMenuStrip = this.menuStripMain;
             this.Name = "Main";
             this.Text = "Alturos.Yolo.LearningImage";

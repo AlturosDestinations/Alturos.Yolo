@@ -16,10 +16,11 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         public bool AutoplaceAnnotations { get; set; }
         public bool ShowLabels { get; set; }
 
+        private readonly List<Rectangle> _rectangles = new List<Rectangle>();
+        private readonly int _mouseDragElementSize = 10;
+
         private bool _mouseOver;
         private Point _mousePosition = new Point(0, 0);
-        private List<Rectangle> _rectangles = new List<Rectangle>();
-        private int _mouseDragElementSize = 10;
         private AnnotationBoundingBox _cachedBoundingBox;
         private AnnotationBoundingBox _selectedBoundingBox;
         private DragPoint _dragPoint;
@@ -57,7 +58,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             }
             else
             {
-                this.pictureBox1.Image = DrawHelper.DrawBoxes(image, this._objectClasses);
+                this.pictureBox1.Image = DrawHelper.DrawBoxes(image);
             }
 
             if (oldImage != null)
@@ -142,7 +143,19 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             };
         }
 
-        private void pictureBox1_Paint(object sender, PaintEventArgs e)
+        private Rectangle GetRectangle(AnnotationBoundingBox boundingBox)
+        {
+            var canvasInfo = this.GetCanvasInformation();
+
+            var width = boundingBox.Width * canvasInfo.ScaledWidth;
+            var height = (boundingBox.Height * canvasInfo.ScaledHeight);
+            var x = (boundingBox.CenterX * canvasInfo.ScaledWidth) - (width / 2) + canvasInfo.OffsetX;
+            var y = (boundingBox.CenterY * canvasInfo.ScaledHeight) - (height / 2) + canvasInfo.OffsetY;
+
+            return new Rectangle((int)x, (int)y, (int)width, (int)height);
+        }
+
+        private void PictureBox1_Paint(object sender, PaintEventArgs e)
         {
             if (this._annotationImage?.BoundingBoxes == null)
             {
@@ -153,7 +166,6 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             e.Graphics.InterpolationMode = InterpolationMode.High;
 
             var drawOffset = this._mouseDragElementSize / 2;
-            var canvasInfo = this.GetCanvasInformation();
 
             Cursor.Current = Cursors.Default;
 
@@ -171,17 +183,12 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
             foreach (var boundingBox in boundingBoxes)
             {
-                var width = boundingBox.Width * canvasInfo.ScaledWidth;
-                var height = (boundingBox.Height * canvasInfo.ScaledHeight);
-                var x = (boundingBox.CenterX * canvasInfo.ScaledWidth) - (width / 2) + canvasInfo.OffsetX;
-                var y = (boundingBox.CenterY * canvasInfo.ScaledHeight) - (height / 2) + canvasInfo.OffsetY;
-
-                var rectangle = new Rectangle((int)x, (int)y, (int)width, (int)height);
+                var rectangle = this.GetRectangle(boundingBox);
 
                 var brush = DrawHelper.GetColorCode(boundingBox.ObjectIndex);
 
                 e.Graphics.DrawRectangle(new Pen(brush, 2), rectangle);
-                this.DrawLabel(e.Graphics, (float)x, (float)y, this._objectClasses.FirstOrDefault(o => o.Id == boundingBox.ObjectIndex));
+                this.DrawLabel(e.Graphics, rectangle.X, rectangle.Y, this._objectClasses.FirstOrDefault(o => o.Id == boundingBox.ObjectIndex));
 
                 var biggerRectangle = Rectangle.Inflate(rectangle, 20, 20);
                 if (biggerRectangle.Contains(this._mousePosition))
@@ -247,7 +254,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             }
         }
 
-        private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
+        private void PictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
             if (this._annotationImage?.BoundingBoxes == null)
             {
@@ -302,7 +309,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             this.pictureBox1.Invalidate();
         }
 
-        private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
+        private void PictureBox1_MouseUp(object sender, MouseEventArgs e)
         {
             if (this._dragPoint?.Type == DragPointType.Delete) {
                 this._annotationImage?.BoundingBoxes.Remove(this._selectedBoundingBox);
@@ -317,7 +324,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             this.ImageEdited?.Invoke(this._annotationImage);
         }
 
-        private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
+        private void PictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
             if (this._selectedBoundingBox != null)
             {
@@ -382,7 +389,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             this.pictureBox1.Invalidate();
         }
 
-        private void pictureBox1_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void PictureBox1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             var canvasInfo = this.GetCanvasInformation();
             var width = 0.04;
@@ -423,10 +430,57 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             this.pictureBox1.Invalidate();
         }
 
-        private void clearAnnotationsToolStripMenuItem_Click(object sender, System.EventArgs e)
+        private void ClearAnnotationsToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
             this._annotationImage.BoundingBoxes = null;
             this.ImageEdited?.Invoke(this._annotationImage);
         }
+
+        #region Delegate callbacks
+
+        public void OnKeyDown(object sender, KeyEventArgs e)
+        {
+            AnnotationBoundingBox currentBoundingBox = null;
+
+            var boundingBoxes = this._annotationImage?.BoundingBoxes;
+            foreach (var boundingBox in boundingBoxes)
+            {
+                var rectangle = this.GetRectangle(boundingBox);
+
+                var biggerRectangle = Rectangle.Inflate(rectangle, 20, 20);
+                if (biggerRectangle.Contains(this._mousePosition))
+                {
+                    currentBoundingBox = boundingBox;
+                    break;
+                }
+            }
+
+            if (currentBoundingBox == null)
+            {
+                return;
+            }
+
+            var index = -1;
+            if (e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
+            {
+                index = (int)e.KeyCode - (int)Keys.D0;
+            }
+            else if (e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9)
+            {
+                index = (int)e.KeyCode - (int)Keys.NumPad0;
+            }
+
+            if (index == -1 || index >= this._objectClasses.Count)
+            {
+                return;
+            }
+
+            currentBoundingBox.ObjectIndex = index;
+            this.pictureBox1.Invalidate();
+
+            this.ImageEdited?.Invoke(this._annotationImage);
+        }
+
+        #endregion
     }
 }

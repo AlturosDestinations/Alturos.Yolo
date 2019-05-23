@@ -107,6 +107,8 @@ namespace Alturos.Yolo.LearningImage
             this.annotationDrawControl.ImageEdited += this.ImageEdited;
 
             this.tagListControl.TagsRequested += this.TagsRequested;
+
+            this.KeyDown += this.annotationDrawControl.OnKeyDown;
         }
 
         private void UnregisterEvents()
@@ -119,13 +121,15 @@ namespace Alturos.Yolo.LearningImage
             this.annotationDrawControl.ImageEdited -= this.ImageEdited;
 
             this.tagListControl.TagsRequested -= this.TagsRequested;
+
+            this.KeyDown -= this.annotationDrawControl.OnKeyDown;
         }
 
         #endregion
 
         #region Load and Sync
 
-        private async void refreshToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void RefreshToolStripMenuItem_Click(object sender, EventArgs e)
         {
             await this.LoadPackagesAsync();
         }
@@ -150,7 +154,7 @@ namespace Alturos.Yolo.LearningImage
             });
         }
 
-        private void syncToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SyncToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var packages = this.annotationPackageListControl.GetAllPackages().Where(o => o.IsDirty).ToArray();
             if (packages.Length > 0)
@@ -169,6 +173,8 @@ namespace Alturos.Yolo.LearningImage
                     syncForm.Show();
 
                     _ = Task.Run(() => syncForm.Sync(packages));
+
+                    this.annotationPackageListControl.RefreshData();
                 }
             }
             else
@@ -181,7 +187,7 @@ namespace Alturos.Yolo.LearningImage
 
         #region Export
 
-        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ExportToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //var images = this.annotationPackageListControl.GetAllImages();
 
@@ -197,7 +203,7 @@ namespace Alturos.Yolo.LearningImage
 
         #region Upload
 
-        private void addPackageStripMenuItem_Click(object sender, EventArgs e)
+        private void AddPackageStripMenuItem_Click(object sender, EventArgs e)
         {
             using (var openFileDialog = new OpenFileDialog
             {
@@ -280,6 +286,8 @@ namespace Alturos.Yolo.LearningImage
 
         private void ImageSelected(AnnotationImage image)
         {
+            this.annotationDrawControl.SetImage(image);
+
             // Failsafe, because ImageSelected is triggered when the package is changed. We don't want to select the image in this case.
             if (this._changedPackage)
             {
@@ -291,7 +299,6 @@ namespace Alturos.Yolo.LearningImage
                 return;
             }
 
-            this.annotationDrawControl.SetImage(image);
             this.annotationDrawControl.ApplyCachedBoundingBox();
 
             if (image.BoundingBoxes == null)
