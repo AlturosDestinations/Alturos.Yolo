@@ -172,6 +172,11 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
         private void PictureBox1_Paint(object sender, PaintEventArgs e)
         {
+            if (this.pictureBox1.Image == null)
+            {
+                return;
+            }
+
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             e.Graphics.InterpolationMode = InterpolationMode.High;
 

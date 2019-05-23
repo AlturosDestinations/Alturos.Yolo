@@ -31,13 +31,13 @@
             this.menuStripMain = new System.Windows.Forms.MenuStrip();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.syncToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.addPackageStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoplaceAnnotationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showLabelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addPackageStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panelImageList = new System.Windows.Forms.Panel();
@@ -85,20 +85,6 @@
             this.syncToolStripMenuItem.Text = "&Sync";
             this.syncToolStripMenuItem.Click += new System.EventHandler(this.SyncToolStripMenuItem_Click);
             // 
-            // exportToolStripMenuItem
-            // 
-            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(125, 20);
-            this.exportToolStripMenuItem.Text = "&Export Training Data";
-            this.exportToolStripMenuItem.Click += new System.EventHandler(this.ExportToolStripMenuItem_Click);
-            // 
-            // addPackageStripMenuItem
-            // 
-            this.addPackageStripMenuItem.Name = "addPackageStripMenuItem";
-            this.addPackageStripMenuItem.Size = new System.Drawing.Size(88, 20);
-            this.addPackageStripMenuItem.Text = "&Add Package";
-            this.addPackageStripMenuItem.Click += new System.EventHandler(this.AddPackageStripMenuItem_Click);
-            // 
             // configurationToolStripMenuItem
             // 
             this.configurationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -135,6 +121,20 @@
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.SettingsToolStripMenuItem_Click);
+            // 
+            // addPackageStripMenuItem
+            // 
+            this.addPackageStripMenuItem.Name = "addPackageStripMenuItem";
+            this.addPackageStripMenuItem.Size = new System.Drawing.Size(88, 20);
+            this.addPackageStripMenuItem.Text = "&Add Package";
+            this.addPackageStripMenuItem.Click += new System.EventHandler(this.AddPackageStripMenuItem_Click);
+            // 
+            // exportToolStripMenuItem
+            // 
+            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(125, 20);
+            this.exportToolStripMenuItem.Text = "&Export Training Data";
+            this.exportToolStripMenuItem.Click += new System.EventHandler(this.ExportToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -195,7 +195,6 @@
             // downloadControl
             // 
             this.downloadControl.BackColor = System.Drawing.SystemColors.Control;
-            this.downloadControl.Enabled = false;
             this.downloadControl.Location = new System.Drawing.Point(0, 0);
             this.downloadControl.Name = "downloadControl";
             this.downloadControl.Size = new System.Drawing.Size(191, 69);
