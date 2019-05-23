@@ -13,33 +13,30 @@ namespace Alturos.Yolo.LearningImage
     public partial class ExportDialog : Form
     {
         private readonly IAnnotationPackageProvider _annotationPackageProvider;
+        private AnnotationConfig _config;
 
         public ExportDialog(IAnnotationPackageProvider annotationPackageProvider)
         {
             this._annotationPackageProvider = annotationPackageProvider;
             this.InitializeComponent();
 
-            var config = this._annotationPackageProvider.GetAnnotationConfigAsync().GetAwaiter().GetResult();
-            this.dataGridViewTags.DataSource = config.Tags;
+            this._config = this._annotationPackageProvider.GetAnnotationConfigAsync().GetAwaiter().GetResult();
+            this.dataGridViewTags.DataSource = this._config.Tags;
+
+            this.dataGridViewTags.AutoGenerateColumns = false;
+            this.dataGridViewResult.AutoGenerateColumns = false;
         }
 
-        public void CreateImages(List<AnnotationImage> images)
+        private async void ButtonSearch_Click(object sender, EventArgs e)
         {
-            //var newImages = new List<AnnotationImage>();
-            //foreach (var image in images)
-            //{
-            //    newImages.Add(new AnnotationImage(image));
-            //}
+            var tags = this.dataGridViewTags.SelectedRows.Cast<DataGridViewRow>().Select(o => o.DataBoundItem as AnnotationPackageTag);
 
-            //this.annotationImageListControl.SetImages(newImages);
+            var items = await this._annotationPackageProvider.GetPackagesAsync(tags.ToArray());
+            this.dataGridViewResult.DataSource = items;
+            this.labelPackageCount.Text = items.Length.ToString();
         }
 
-        public void SetObjectClasses(List<ObjectClass> objectClasses)
-        {
-            //this.objectClassListControl.SetObjectClasses(objectClasses);
-        }
-
-        private void buttonExport_Click(object sender, EventArgs e)
+        private void ButtonExport_Click(object sender, EventArgs e)
         {
             this.Export();
             this.Close();
@@ -69,9 +66,6 @@ namespace Alturos.Yolo.LearningImage
             // Copy images and create file lists
             this.CreateFiles(dataPath, imagePath);
 
-            // Create meta data
-            this.CreateMetaData(dataPath);
-
             // Open folder
             Process.Start(dataPath);
         }
@@ -81,88 +75,56 @@ namespace Alturos.Yolo.LearningImage
         /// </summary>
         private void CreateFiles(string dataPath, string imagePath)
         {
-            //var images = this.annotationImageListControl.GetSelected();
-            //var objectClasses = this.objectClassListControl.GetSelected();
+            var stringBuilderDict = new Dictionary<int, StringBuilder>();
+            foreach (var objectClass in this._config.ObjectClasses)
+            {
+                stringBuilderDict[objectClass.Id] = new StringBuilder();
+            }
 
-            //var stringBuilderDict = new Dictionary<int, StringBuilder>();
-            //foreach (var objectClass in objectClasses)
-            //{
-            //    stringBuilderDict[objectClass.Id] = new StringBuilder();
-            //}
+            var usedFileNames = new List<string>();
+            var packages = this.dataGridViewResult.DataSource as List<AnnotationPackage>;
+            var images = packages.SelectMany(o => o.GetImages());
 
-            //var usedFileNames = new List<string>();
+            foreach (var image in images)
+            {
+                var boxes = image.BoundingBoxes;
+                boxes.RemoveAll(box => !this._config.ObjectClasses.Select(objectClass => objectClass.Id).Contains(box.ObjectIndex));
 
-            //foreach (var image in images)
-            //{
-            //    var boxes = image.BoundingBoxes;
-            //    boxes.RemoveAll(box => !objectClasses.Select(objectClass => objectClass.Id).Contains(box.ObjectIndex));
+                if (boxes.Count == 0)
+                {
+                    continue;
+                }
 
-            //    if (boxes.Count == 0)
-            //    {
-            //        continue;
-            //    }
+                var newFileName = Path.GetFileName(image.FilePath);
+                while (usedFileNames.Contains(newFileName))
+                {
+                    newFileName = Path.GetFileNameWithoutExtension(image.FilePath) + "(1)" + Path.GetExtension(image.FilePath);
+                }
 
-            //    var newFileName = Path.GetFileName(image.FilePath);
-            //    while (usedFileNames.Contains(newFileName))
-            //    {
-            //        newFileName = Path.GetFileNameWithoutExtension(image.FilePath) + "(1)" + Path.GetExtension(image.FilePath);
-            //    }
+                usedFileNames.Add(newFileName);
 
-            //    usedFileNames.Add(newFileName);
+                var newFilePath = Path.Combine(imagePath, newFileName);
 
-            //    var newFilePath = Path.Combine(imagePath, newFileName);
+                for (var i = 0; i < boxes.Count; i++)
+                {
+                    if (boxes[i] != null)
+                    {
+                        stringBuilderDict[boxes[i].ObjectIndex].AppendLine(Path.GetFullPath(newFilePath));
+                    }
+                }
 
-            //    for (var i = 0; i < boxes.Count; i++)
-            //    {
-            //        if (boxes[i] != null)
-            //        {
-            //            stringBuilderDict[boxes[i].ObjectIndex].AppendLine(Path.GetFullPath(newFilePath));
-            //        }
-            //    }
+                // Copy image
+                File.Copy(image.FilePath, newFilePath, true);
 
-            //    // Copy image
-            //    File.Copy(image.FilePath, newFilePath, true);
+                //Create bounding boxes
+                this.CreateBoundingBoxes(image.BoundingBoxes, Path.ChangeExtension(newFilePath, "txt"));
+            }
 
-            //    //Create bounding boxes
-            //    this.CreateBoundingBoxes(image.BoundingBoxes, Path.ChangeExtension(newFilePath, "txt"));
-            //}
-
-            //// Write object lists to file
-            //foreach (var objectClass in objectClasses)
-            //{
-            //    File.WriteAllText(Path.Combine(dataPath, $"{objectClass.Name}.txt"), stringBuilderDict[objectClass.Id].ToString());
-            //}
-        }
-
-        /// <summary>
-        /// Creates the obj.names and obj.data files
-        /// </summary>
-        private void CreateMetaData(string dataPath)
-        {
-            //var objectNames = this.objectClassListControl.GetSelected().Select(o => o.Name).ToArray();
-
-            //var namesFile = "obj.names";
-            //var dataFile = "obj.data";
-
-            //// Create obj.names
-            //var namesBuilder = new StringBuilder();
-            //foreach (var name in objectNames)
-            //{
-            //    namesBuilder.AppendLine(name);
-            //}
-            //File.WriteAllText(Path.Combine(dataPath, $"{namesFile}"), namesBuilder.ToString());
-
-            //// Create obj.data
-            //var relativeFolder = new DirectoryInfo(dataPath).Name;
-
-            //var dataBuilder = new StringBuilder();
-            //dataBuilder.AppendLine($"classes = {objectNames.Length}");
-            //foreach (var name in objectNames)
-            //{
-            //    dataBuilder.AppendLine($"{name} = {relativeFolder}/{name}.txt");
-            //}
-            //dataBuilder.AppendLine($"names = {relativeFolder}/{namesFile}");
-            //File.WriteAllText(Path.Combine(dataPath, $"{dataFile}"), dataBuilder.ToString());
+            // Write object lists to file
+            foreach (var objectClass in this._config.ObjectClasses)
+            {
+                File.WriteAllText(Path.Combine(dataPath, $"{objectClass.Name}.txt"), stringBuilderDict[objectClass.Id].ToString());
+            }
         }
 
         /// <summary>
@@ -182,15 +144,6 @@ namespace Alturos.Yolo.LearningImage
             }
 
             File.WriteAllText(filePath, sb.ToString());
-        }
-
-        private async void buttonSearch_Click(object sender, EventArgs e)
-        {
-            var tags = this.dataGridViewTags.SelectedRows.Cast<DataGridViewRow>().Select(o => o.DataBoundItem as AnnotationPackageTag);
-
-            var items = await this._annotationPackageProvider.GetPackagesAsync(tags.ToArray());
-            this.dataGridViewResult.DataSource = items;
-            this.label1.Text = items.Length.ToString();
         }
     }
 }

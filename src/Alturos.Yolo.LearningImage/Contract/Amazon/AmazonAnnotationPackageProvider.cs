@@ -20,8 +20,6 @@ namespace Alturos.Yolo.LearningImage.Contract.Amazon
     {
         public bool IsSyncing { get; set; }
 
-        private const string ConfigId = "AnnotationConfiguration";
-
         private readonly IAmazonS3 _client;
         private readonly IAmazonDynamoDB _dynamoDbClient;
         private readonly string _bucketName;
@@ -62,7 +60,7 @@ namespace Alturos.Yolo.LearningImage.Contract.Amazon
                     await context.SaveAsync(annotationConfig).ConfigureAwait(false);
                 }
             }
-            catch (Exception exception)
+            catch (Exception)
             {
 
             }
@@ -82,7 +80,7 @@ namespace Alturos.Yolo.LearningImage.Contract.Amazon
                     };
                 }
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 return await Task.FromResult<AnnotationConfig>(null);
             }
