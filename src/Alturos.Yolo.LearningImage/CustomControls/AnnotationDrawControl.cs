@@ -20,7 +20,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
         private bool _mouseOver;
         private Point _mousePosition = new Point(0, 0);
-        private AnnotationBoundingBox _cachedBoundingBox;
+        private AnnotationBoundingBox[] _cachedBoundingBoxes;
         private AnnotationBoundingBox _selectedBoundingBox;
         private DragPoint _dragPoint;
         private AnnotationImage _annotationImage;
@@ -34,7 +34,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
         public void Reset()
         {
             this.SetImage(null);
-            this._cachedBoundingBox = null;
+            this._cachedBoundingBoxes = null;
         }
 
         public void SetObjectClasses(List<ObjectClass> objectClasses)
@@ -42,8 +42,28 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             this._objectClasses = objectClasses;
         }
 
+        private void CacheLastBoundingBoxes()
+        {
+            if (this._annotationImage?.BoundingBoxes != null)
+            {
+                //Create a new copy of the object
+                var items = this._annotationImage.BoundingBoxes.Select(o => new AnnotationBoundingBox
+                {
+                    CenterX = o.CenterX,
+                    CenterY = o.CenterY,
+                    Width = o.Width,
+                    Height = o.Height,
+                    ObjectIndex = o.ObjectIndex
+                }).ToArray();
+
+                this._cachedBoundingBoxes = items;
+            }
+        }
+
         public void SetImage(AnnotationImage image)
         {
+            this.CacheLastBoundingBoxes();
+
             this._annotationImage = image;
             var oldImage = this.pictureBox1.Image;
 
@@ -69,7 +89,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
                 return;
             }
 
-            if (this._cachedBoundingBox != null)
+            if (this._cachedBoundingBoxes != null)
             {
                 if (this._annotationImage.BoundingBoxes == null)
                 {
@@ -78,7 +98,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
                 if (!this._annotationImage.BoundingBoxes.Any())
                 {
-                    this._annotationImage.BoundingBoxes.Add(new AnnotationBoundingBox(this._cachedBoundingBox));
+                    this._annotationImage.BoundingBoxes.AddRange(this._cachedBoundingBoxes);
                     this.ImageEdited?.Invoke(this._annotationImage);
                 }
             }
@@ -152,11 +172,6 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
         private void PictureBox1_Paint(object sender, PaintEventArgs e)
         {
-            if (this._annotationImage?.BoundingBoxes == null)
-            {
-                return;
-            }
-
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             e.Graphics.InterpolationMode = InterpolationMode.High;
 
@@ -168,6 +183,11 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             {
                 e.Graphics.DrawLine(Pens.Blue, new Point(this._mousePosition.X, this.pictureBox1.Top), new Point(this._mousePosition.X, this.pictureBox1.Bottom));
                 e.Graphics.DrawLine(Pens.Blue, new Point(this.pictureBox1.Left, this._mousePosition.Y), new Point(this.pictureBox1.Right, this._mousePosition.Y));
+            }
+
+            if (this._annotationImage?.BoundingBoxes == null)
+            {
+                return;
             }
 
             var boundingBoxes = this._annotationImage?.BoundingBoxes;
@@ -291,7 +311,6 @@ namespace Alturos.Yolo.LearningImage.CustomControls
                 if (startDrag)
                 {
                     this._selectedBoundingBox = boundingBox;
-                    this._cachedBoundingBox = this._selectedBoundingBox;
                     break;
                 }
                 else
@@ -310,7 +329,6 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             if (this._dragPoint?.Type == DragPointType.Delete)
             {
                 this._annotationImage?.BoundingBoxes.Remove(this._selectedBoundingBox);
-                this._cachedBoundingBox = null;
             }
 
             this._selectedBoundingBox = null;
@@ -370,14 +388,6 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
                 this._selectedBoundingBox.CenterX = (float)centerX;
                 this._selectedBoundingBox.CenterY = (float)centerY;
-
-                if (this._cachedBoundingBox != null)
-                {
-                    this._cachedBoundingBox.CenterX = this._selectedBoundingBox.CenterX;
-                    this._cachedBoundingBox.CenterY = this._selectedBoundingBox.CenterY;
-                    this._cachedBoundingBox.Width = this._selectedBoundingBox.Width;
-                    this._cachedBoundingBox.Height = this._selectedBoundingBox.Height;
-                }
             }
 
             this._mousePosition = e.Location;
@@ -407,10 +417,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             };
 
             this._annotationImage.BoundingBoxes.Add(newBoundingBox);
-            this._cachedBoundingBox = newBoundingBox;
-
             this._dragPoint = null;
-
             this.ImageEdited?.Invoke(this._annotationImage);
         }
 
