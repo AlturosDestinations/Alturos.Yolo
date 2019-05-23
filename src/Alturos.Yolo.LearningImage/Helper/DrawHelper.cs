@@ -1,5 +1,4 @@
 ﻿using Alturos.Yolo.LearningImage.Model;
-using System.Collections.Generic;
 using System.Drawing;
 
 namespace Alturos.Yolo.LearningImage.Helper
@@ -10,7 +9,7 @@ namespace Alturos.Yolo.LearningImage.Helper
 
         private static readonly string[] Colors = new string[] { "#E3330E", "#48E10F", "#D40FE1", "#24ECE3", "#EC2470" };
 
-        public static Image DrawBoxes(AnnotationImage image, List<ObjectClass> objectClasses)
+        public static Image DrawBoxes(AnnotationImage image)
         {
             var originalBitmap = new Bitmap(image.FilePath);
             var bitmap = new Bitmap(originalBitmap, ImageSize);

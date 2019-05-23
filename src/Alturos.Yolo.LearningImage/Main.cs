@@ -1,5 +1,6 @@
 ﻿using Alturos.Yolo.LearningImage.Contract;
 using Alturos.Yolo.LearningImage.Contract.Amazon;
+using Alturos.Yolo.LearningImage.Forms;
 using Alturos.Yolo.LearningImage.Model;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace Alturos.Yolo.LearningImage
     {
         private readonly IAnnotationPackageProvider _annotationPackageProvider;
         private readonly AnnotationConfig _annotationConfig;
+        private bool _changedPackage;
 
         public Main()
         {
@@ -55,7 +57,7 @@ namespace Alturos.Yolo.LearningImage
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
-            var confirmClosing = ConfirmDiscardingUnsavedChanges();
+            var confirmClosing = this.ConfirmDiscardingUnsavedChanges();
             if (!confirmClosing)
             {
                 e.Cancel = true;
@@ -103,6 +105,10 @@ namespace Alturos.Yolo.LearningImage
             this.downloadControl.ExtractionRequested += this.ExtractionRequestedAsync;
 
             this.annotationDrawControl.ImageEdited += this.ImageEdited;
+
+            this.tagListControl.TagsRequested += this.TagsRequested;
+
+            this.KeyDown += this.annotationDrawControl.OnKeyDown;
         }
 
         private void UnregisterEvents()
@@ -113,13 +119,17 @@ namespace Alturos.Yolo.LearningImage
             this.downloadControl.ExtractionRequested -= this.ExtractionRequestedAsync;
 
             this.annotationDrawControl.ImageEdited -= this.ImageEdited;
+
+            this.tagListControl.TagsRequested -= this.TagsRequested;
+
+            this.KeyDown -= this.annotationDrawControl.OnKeyDown;
         }
 
         #endregion
 
         #region Load and Sync
 
-        private async void refreshToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void RefreshToolStripMenuItem_Click(object sender, EventArgs e)
         {
             await this.LoadPackagesAsync();
         }
@@ -144,7 +154,7 @@ namespace Alturos.Yolo.LearningImage
             });
         }
 
-        private void syncToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SyncToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var packages = this.annotationPackageListControl.GetAllPackages().Where(o => o.IsDirty).ToArray();
             if (packages.Length > 0)
@@ -163,6 +173,8 @@ namespace Alturos.Yolo.LearningImage
                     syncForm.Show();
 
                     _ = Task.Run(() => syncForm.Sync(packages));
+
+                    this.annotationPackageListControl.RefreshData();
                 }
             }
             else
@@ -175,7 +187,7 @@ namespace Alturos.Yolo.LearningImage
 
         #region Export
 
-        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ExportToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //var images = this.annotationPackageListControl.GetAllImages();
 
@@ -191,7 +203,7 @@ namespace Alturos.Yolo.LearningImage
 
         #region Upload
 
-        private void addPackageStripMenuItem_Click(object sender, EventArgs e)
+        private void AddPackageStripMenuItem_Click(object sender, EventArgs e)
         {
             using (var openFileDialog = new OpenFileDialog
             {
@@ -244,21 +256,7 @@ namespace Alturos.Yolo.LearningImage
 
         private void PackageSelected(AnnotationPackage package)
         {
-            //// Sync
-            //if (this._selectedPackage != null && this._selectedPackage.IsDirty)
-            //{
-            //    var dialogResult = MessageBox.Show("Do you want to sync now?", "Sync Request", MessageBoxButtons.YesNo);
-            //    if (dialogResult == DialogResult.Yes)
-            //    {
-            //        var syncForm = new SyncForm(this._annotationPackageProvider);
-            //        syncForm.Show();
-
-            //        var packageEdited = this._selectedPackage;
-            //        Task.Run(() => syncForm.Sync(new AnnotationPackage[] { packageEdited }));
-            //    }
-            //}
-
-            //this._selectedPackage = package;
+            this._changedPackage = true;
 
             this.annotationImageListControl.Hide();
             this.downloadControl.Hide();
@@ -266,34 +264,41 @@ namespace Alturos.Yolo.LearningImage
             this.annotationImageListControl.Reset();
             this.annotationDrawControl.Reset();
 
-            if (package == null)
+            if (package != null)
             {
-                return;
+                this.tagListControl.SetTags(package);
+
+                if (package.Extracted)
+                {
+                    this.annotationImageListControl.SetPackage(package);
+                    this.annotationImageListControl.Show();
+
+                    this.annotationPackageListControl.RefreshData();
+                }
+                else
+                {
+                    this.downloadControl.ShowDownloadDialog(package);
+                }
             }
 
-            this.tagListControl.SetTags(package);
-
-            if (package.Extracted)
-            {
-                this.annotationImageListControl.SetPackage(package);
-                this.annotationImageListControl.Show();
-
-                this.annotationPackageListControl.RefreshData();
-            }
-            else
-            {
-                this.downloadControl.ShowDownloadDialog(package);
-            }
+            this._changedPackage = false;
         }
 
         private void ImageSelected(AnnotationImage image)
         {
+            this.annotationDrawControl.SetImage(image);
+
+            // Failsafe, because ImageSelected is triggered when the package is changed. We don't want to select the image in this case.
+            if (this._changedPackage)
+            {
+                return;
+            }
+
             if (image == null)
             {
                 return;
             }
 
-            this.annotationDrawControl.SetImage(image);
             this.annotationDrawControl.ApplyCachedBoundingBox();
 
             if (image.BoundingBoxes == null)
@@ -323,6 +328,15 @@ namespace Alturos.Yolo.LearningImage
 
             // Select folder to apply the images after extraction
             this.PackageSelected(downloadedPackage);
+        }
+
+        private List<string> TagsRequested()
+        {
+            var form = new TagSelectionForm();
+            form.Setup(this._annotationConfig);
+            form.ShowDialog();
+
+            return form.SelectedTags;
         }
 
         #endregion

@@ -34,7 +34,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             this.dataGridView1.Refresh();
         }
 
-        private void dataGridView1_SelectionChanged(object sender, EventArgs e)
+        private void DataGridView1_SelectionChanged(object sender, EventArgs e)
         {
             var image = this.dataGridView1.CurrentRow.DataBoundItem as AnnotationImage;
             if (image == null)
@@ -45,7 +45,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             this.ImageSelected?.Invoke(image);
         }
 
-        private void dataGridView1_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        private void DataGridView1_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
         {
             var item = this.dataGridView1.Rows[e.RowIndex].DataBoundItem as AnnotationImage;
 

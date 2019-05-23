@@ -1,4 +1,5 @@
 ﻿using Alturos.Yolo.LearningImage.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -7,6 +8,8 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 {
     public partial class TagListControl : UserControl
     {
+        public event Func<List<string>> TagsRequested;
+
         private AnnotationPackage _package;
 
         public TagListControl()
@@ -23,16 +26,47 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
             this._package = package;
 
-            var items = package.Info.Tags?.Select(o => new AnnotationPackageTag { Value = o });
-            if (items == null)
+            this.RefreshDatagrid();
+        }
+
+        private void ButtonAdd_Click(object sender, System.EventArgs e)
+        {
+            var results = this.TagsRequested?.Invoke();
+
+            if (results.Count > 0)
             {
-                items = new List<AnnotationPackageTag>();
+                if (this._package.Info.Tags == null)
+                {
+                    this._package.Info.Tags = new List<string>();
+                }
+
+                foreach (var tag in results)
+                {
+                    if (!this._package.Info.Tags.Contains(tag))
+                    {
+                        this._package.Info.Tags.Add(tag);
+                        this._package.IsDirty = true;
+                    }
+                }
             }
 
-            var bindingSource = new BindingSource();
-            bindingSource.DataSource = items;
+            this.RefreshDatagrid();
+        }
 
-            this.dataGridView1.DataSource = bindingSource;
+        private void RemoveTagToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var row = this.dataGridView1.Rows[this.dataGridView1.CurrentCell.RowIndex];
+            var tag = row.DataBoundItem as AnnotationPackageTag;
+
+            this._package.Info.Tags?.Remove(tag.Value);
+
+            this.RefreshDatagrid();
+        }
+
+        private void RefreshDatagrid()
+        {
+            var items = this._package.Info.Tags?.Select(o => new AnnotationPackageTag { Value = o });
+            this.dataGridView1.DataSource = items?.ToList();
         }
     }
 }

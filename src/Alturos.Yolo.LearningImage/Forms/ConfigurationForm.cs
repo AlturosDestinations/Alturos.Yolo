@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Alturos.Yolo.LearningImage
+namespace Alturos.Yolo.LearningImage.Forms
 {
     public partial class ConfigurationForm : Form
     {

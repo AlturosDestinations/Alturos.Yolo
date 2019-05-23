@@ -3,7 +3,7 @@ using Alturos.Yolo.LearningImage.Model;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Alturos.Yolo.LearningImage
+namespace Alturos.Yolo.LearningImage.Forms
 {
     public partial class SyncForm : Form
     {
