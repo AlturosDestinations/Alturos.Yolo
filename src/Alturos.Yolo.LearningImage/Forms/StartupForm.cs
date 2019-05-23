@@ -9,7 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace Alturos.Yolo.LearningImage
+namespace Alturos.Yolo.LearningImage.Forms
 {
     public partial class StartupForm : Form
     {

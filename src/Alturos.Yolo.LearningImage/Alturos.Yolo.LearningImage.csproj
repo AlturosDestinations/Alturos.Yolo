@@ -62,10 +62,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConfigurationForm.cs">
+    <Compile Include="Forms\ConfigurationForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ConfigurationForm.Designer.cs">
+    <Compile Include="Forms\ConfigurationForm.Designer.cs">
       <DependentUpon>ConfigurationForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Contract\Amazon\AmazonAnnotationPackageProvider.cs" />
@@ -115,10 +115,10 @@
     <Compile Include="CustomControls\AnnotationImageListControl.Designer.cs">
       <DependentUpon>AnnotationImageListControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="ExportDialog.cs">
+    <Compile Include="Forms\ExportDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ExportDialog.Designer.cs">
+    <Compile Include="Forms\ExportDialog.Designer.cs">
       <DependentUpon>ExportDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Main.cs">
@@ -137,19 +137,25 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\AnnotationBoundingBox.cs" />
-    <Compile Include="StartupForm.cs">
+    <Compile Include="Forms\StartupForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StartupForm.Designer.cs">
+    <Compile Include="Forms\StartupForm.Designer.cs">
       <DependentUpon>StartupForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SyncForm.cs">
+    <Compile Include="Forms\SyncForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SyncForm.Designer.cs">
+    <Compile Include="Forms\SyncForm.Designer.cs">
       <DependentUpon>SyncForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="ConfigurationForm.resx">
+    <Compile Include="Forms\TagSelectionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TagSelectionForm.Designer.cs">
+      <DependentUpon>TagSelectionForm.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Forms\ConfigurationForm.resx">
       <DependentUpon>ConfigurationForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CustomControls\AnnotationDrawControl.resx">
@@ -170,8 +176,11 @@
     <EmbeddedResource Include="CustomControls\TagListControl.resx">
       <DependentUpon>TagListControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ExportDialog.resx">
+    <EmbeddedResource Include="Forms\ExportDialog.resx">
       <DependentUpon>ExportDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TagSelectionForm.resx">
+      <DependentUpon>TagSelectionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
@@ -185,10 +194,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="StartupForm.resx">
+    <EmbeddedResource Include="Forms\StartupForm.resx">
       <DependentUpon>StartupForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SyncForm.resx">
+    <EmbeddedResource Include="Forms\SyncForm.resx">
       <DependentUpon>SyncForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />

@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Alturos.Yolo.LearningImage
+namespace Alturos.Yolo.LearningImage.Forms
 {
     public partial class ExportDialog : Form
     {
@@ -32,8 +32,8 @@ namespace Alturos.Yolo.LearningImage
             var tags = this.dataGridViewTags.SelectedRows.Cast<DataGridViewRow>().Select(o => o.DataBoundItem as AnnotationPackageTag);
 
             var items = await this._annotationPackageProvider.GetPackagesAsync(tags.ToArray());
-            this.dataGridViewResult.DataSource = items;
-            this.labelPackageCount.Text = items.Length.ToString();
+            this.dataGridViewResult.DataSource = items.Where(o => o.Extracted).ToList();
+            this.labelPackageCount.Text = $"{items.Length.ToString()} found, {items.Count(o => o.Extracted)} ready to export";
         }
 
         private void ButtonExport_Click(object sender, EventArgs e)
@@ -45,35 +45,23 @@ namespace Alturos.Yolo.LearningImage
         private void Export()
         {
             // Create folders
-            var rootPath = DateTime.Now.ToString("yyyy-MM-dd hh-mm-ss");
-            if (!Directory.Exists(rootPath))
+            var path = DateTime.Now.ToString("yyyy-MM-dd hh-mm-ss");
+            if (!Directory.Exists(path))
             {
-                Directory.CreateDirectory(rootPath);
-            }
-
-            var dataPath = Path.Combine(rootPath, "data");
-            if (!Directory.Exists(dataPath))
-            {
-                Directory.CreateDirectory(dataPath);
-            }
-
-            var imagePath = Path.Combine(dataPath, "img");
-            if (!Directory.Exists(imagePath))
-            {
-                Directory.CreateDirectory(imagePath);
+                Directory.CreateDirectory(path);
             }
 
             // Copy images and create file lists
-            this.CreateFiles(dataPath, imagePath);
+            this.CreateFiles(path);
 
             // Open folder
-            Process.Start(dataPath);
+            Process.Start(path);
         }
 
         /// <summary>
         /// Creates the images, the annotation info and a list for every object listing each image that features it
         /// </summary>
-        private void CreateFiles(string dataPath, string imagePath)
+        private void CreateFiles(string path)
         {
             var stringBuilderDict = new Dictionary<int, StringBuilder>();
             foreach (var objectClass in this._config.ObjectClasses)
@@ -87,10 +75,7 @@ namespace Alturos.Yolo.LearningImage
 
             foreach (var image in images)
             {
-                var boxes = image.BoundingBoxes;
-                boxes.RemoveAll(box => !this._config.ObjectClasses.Select(objectClass => objectClass.Id).Contains(box.ObjectIndex));
-
-                if (boxes.Count == 0)
+                if (image.BoundingBoxes == null || image.BoundingBoxes.Count == 0)
                 {
                     continue;
                 }
@@ -103,27 +88,21 @@ namespace Alturos.Yolo.LearningImage
 
                 usedFileNames.Add(newFileName);
 
-                var newFilePath = Path.Combine(imagePath, newFileName);
+                var newFilePath = Path.Combine(path, newFileName);
 
-                for (var i = 0; i < boxes.Count; i++)
+                for (var i = 0; i < image.BoundingBoxes.Count; i++)
                 {
-                    if (boxes[i] != null)
+                    if (image.BoundingBoxes[i] != null)
                     {
-                        stringBuilderDict[boxes[i].ObjectIndex].AppendLine(Path.GetFullPath(newFilePath));
+                        stringBuilderDict[image.BoundingBoxes[i].ObjectIndex].AppendLine(Path.GetFullPath(newFilePath));
                     }
                 }
 
                 // Copy image
                 File.Copy(image.FilePath, newFilePath, true);
 
-                //Create bounding boxes
+                // Create bounding boxes
                 this.CreateBoundingBoxes(image.BoundingBoxes, Path.ChangeExtension(newFilePath, "txt"));
-            }
-
-            // Write object lists to file
-            foreach (var objectClass in this._config.ObjectClasses)
-            {
-                File.WriteAllText(Path.Combine(dataPath, $"{objectClass.Name}.txt"), stringBuilderDict[objectClass.Id].ToString());
             }
         }
 

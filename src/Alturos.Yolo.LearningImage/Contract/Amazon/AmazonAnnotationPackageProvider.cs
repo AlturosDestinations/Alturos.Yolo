@@ -88,10 +88,11 @@ namespace Alturos.Yolo.LearningImage.Contract.Amazon
 
         public async Task<AnnotationPackage[]> GetPackagesAsync(AnnotationPackageTag[] tags)
         {
-            var scanConditions = new List<ScanCondition>
+            var scanConditions = new List<ScanCondition>();
+            foreach (var tag in tags)
             {
-                new ScanCondition("Tags", ScanOperator.Contains, tags.Select(o => o.Value).ToArray())
-            };
+                scanConditions.Add(new ScanCondition("Tags", ScanOperator.Contains, tag.Value));
+            }
 
             return await this.GetPackagesAsync(scanConditions.ToArray()).ConfigureAwait(false);
         }

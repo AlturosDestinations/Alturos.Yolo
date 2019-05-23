@@ -1,4 +1,4 @@
-﻿namespace Alturos.Yolo.LearningImage
+﻿namespace Alturos.Yolo.LearningImage.Forms
 {
     partial class ExportDialog
     {
@@ -50,7 +50,7 @@
             // 
             // buttonExport
             // 
-            this.buttonExport.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.buttonExport.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonExport.Location = new System.Drawing.Point(12, 362);
             this.buttonExport.Name = "buttonExport";
@@ -64,6 +64,7 @@
             // 
             this.dataGridViewTags.AllowUserToAddRows = false;
             this.dataGridViewTags.AllowUserToDeleteRows = false;
+            this.dataGridViewTags.AllowUserToResizeRows = false;
             this.dataGridViewTags.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -81,6 +82,7 @@
             // 
             this.dataGridViewResult.AllowUserToAddRows = false;
             this.dataGridViewResult.AllowUserToDeleteRows = false;
+            this.dataGridViewResult.AllowUserToResizeRows = false;
             this.dataGridViewResult.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewResult.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewResult.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -95,8 +97,8 @@
             // 
             // groupBoxTags
             // 
-            this.groupBoxTags.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBoxTags.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxTags.Controls.Add(this.dataGridViewTags);
             this.groupBoxTags.Location = new System.Drawing.Point(3, 3);
@@ -108,8 +110,8 @@
             // 
             // groupBoxResult
             // 
-            this.groupBoxResult.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBoxResult.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxResult.Controls.Add(this.dataGridViewResult);
             this.groupBoxResult.Location = new System.Drawing.Point(6, 3);
@@ -142,8 +144,8 @@
             // 
             // splitContainerMain
             // 
-            this.splitContainerMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.splitContainerMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainerMain.Location = new System.Drawing.Point(12, 12);
             this.splitContainerMain.Name = "splitContainerMain";

@@ -1,5 +1,6 @@
 ﻿using Alturos.Yolo.LearningImage.Contract;
 using Alturos.Yolo.LearningImage.Contract.Amazon;
+using Alturos.Yolo.LearningImage.Forms;
 using Alturos.Yolo.LearningImage.Model;
 using System;
 using System.Collections.Generic;
@@ -103,6 +104,8 @@ namespace Alturos.Yolo.LearningImage
             this.downloadControl.ExtractionRequested += this.ExtractionRequestedAsync;
 
             this.annotationDrawControl.ImageEdited += this.ImageEdited;
+
+            this.tagListControl.TagsRequested += this.TagsRequested;
         }
 
         private void UnregisterEvents()
@@ -113,6 +116,8 @@ namespace Alturos.Yolo.LearningImage
             this.downloadControl.ExtractionRequested -= this.ExtractionRequestedAsync;
 
             this.annotationDrawControl.ImageEdited -= this.ImageEdited;
+
+            this.tagListControl.TagsRequested -= this.TagsRequested;
         }
 
         #endregion
@@ -323,6 +328,15 @@ namespace Alturos.Yolo.LearningImage
 
             // Select folder to apply the images after extraction
             this.PackageSelected(downloadedPackage);
+        }
+
+        private List<string> TagsRequested()
+        {
+            var form = new TagSelectionForm();
+            form.Setup(this._annotationConfig);
+            form.ShowDialog();
+
+            return form.SelectedTags;
         }
 
         #endregion

@@ -1,4 +1,4 @@
-﻿namespace Alturos.Yolo.LearningImage
+﻿namespace Alturos.Yolo.LearningImage.Forms
 {
     partial class ConfigurationForm
     {
