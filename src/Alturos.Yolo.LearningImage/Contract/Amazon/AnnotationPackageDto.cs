@@ -1,10 +1,10 @@
 ﻿using Amazon.DynamoDBv2.DataModel;
 using System.Collections.Generic;
 
-namespace Alturos.Yolo.LearningImage.Model
+namespace Alturos.Yolo.LearningImage.Contract.Amazon
 {
     [DynamoDBTable("ObjectDetectionImageAnnotation")]
-    public class AnnotationPackageInfo
+    public class AnnotationPackageDto
     {
         [DynamoDBHashKey]
         public string Id { get; set; }

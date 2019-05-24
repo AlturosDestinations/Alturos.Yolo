@@ -1,6 +1,6 @@
 ﻿namespace Alturos.Yolo.LearningImage.Forms
 {
-    partial class TagSelectionForm
+    partial class TagSelectionDialog
     {
         /// <summary>
         /// Required designer variable.

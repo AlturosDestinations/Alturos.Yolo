@@ -6,12 +6,12 @@ using System.Windows.Forms;
 
 namespace Alturos.Yolo.LearningImage.Forms
 {
-    public partial class TagSelectionForm : Form
+    public partial class TagSelectionDialog : Form
     {
         public List<string> SelectedTags;
         private AnnotationConfig _config;
 
-        public TagSelectionForm()
+        public TagSelectionDialog()
         {
             this.InitializeComponent();
             this.SelectedTags = new List<string>();

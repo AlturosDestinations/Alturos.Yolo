@@ -114,15 +114,24 @@ namespace Alturos.Yolo.LearningImage.Contract.Amazon
             {
                 try
                 {
-                    var packageInfos = context.ScanAsync<AnnotationPackageInfo>(scanConditions);
+                    var packageInfos = context.ScanAsync<AnnotationPackageDto>(scanConditions);
 
                     // Create packages
-                    var packages = (await packageInfos.GetNextSetAsync().ConfigureAwait(false)).Select(o => new AnnotationPackage
+                    var retrievedPackages = await packageInfos.GetNextSetAsync().ConfigureAwait(false);
+                    var packages = retrievedPackages.Select(o => new AnnotationPackage
                     {
+                        ExternalId = o.Id,
                         Extracted = false,
                         PackagePath = o.Id,
                         DisplayName = Path.GetFileNameWithoutExtension(o.Id),
-                        Info = o
+                        IsAnnotated = o.IsAnnotated,
+                        AnnotationPercentage = o.AnnotationPercentage,
+                        Tags = o.Tags,
+                        Images = o.Images?.Select(x => new AnnotationImage
+                        {
+                            ImageName = x.ImageName,
+                            BoundingBoxes = x.BoundingBoxes
+                        }).ToList()
                     }).ToList();
 
                     // Get local folder if the package was already downloaded
@@ -133,6 +142,8 @@ namespace Alturos.Yolo.LearningImage.Contract.Amazon
                         {
                             package.Extracted = true;
                             package.PackagePath = path;
+
+                            package.PrepareImages();
                         }
                     }
 
@@ -239,14 +250,33 @@ namespace Alturos.Yolo.LearningImage.Contract.Amazon
 
         private async Task<bool> SyncPackageAsync(AnnotationPackage package)
         {
-            if (package.Info == null)
+            var info = new AnnotationPackageDto
             {
-                return false;
+                Id = package.ExternalId,
+                IsAnnotated = package.IsAnnotated,
+                AnnotationPercentage = package.AnnotationPercentage,
+                Tags = package.Tags
+            };
+
+            info.Images = new List<AnnotationImageDto>();
+            foreach (var image in package.Images.Where(o => o.BoundingBoxes != null))
+            {
+                info.Images.Add(new AnnotationImageDto
+                {
+                    ImageName = image.ImageName,
+                    BoundingBoxes = image.BoundingBoxes
+                });
             }
 
-            using (var context = new DynamoDBContext(this._dynamoDbClient))
+            try
             {
-                await context.SaveAsync(package.Info).ConfigureAwait(false);
+                using (var context = new DynamoDBContext(this._dynamoDbClient))
+                {
+                    await context.SaveAsync(info).ConfigureAwait(false);
+                }
+            } catch (Exception e)
+            {
+
             }
 
             this._syncedPackages++;

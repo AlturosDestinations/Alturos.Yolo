@@ -26,7 +26,7 @@ namespace Alturos.Yolo.LearningImage
             {
                 this._annotationConfig = new AnnotationConfig();
 
-                using (var configurationForm = new ConfigurationForm())
+                using (var configurationForm = new ConfigurationDialog())
                 {
                     configurationForm.Setup(this._annotationConfig);
                     configurationForm.ShowDialog();
@@ -47,12 +47,31 @@ namespace Alturos.Yolo.LearningImage
             this.showLabelsToolStripMenuItem.Checked = true;
         }
 
-        #region Initialization and Cleanup
+        #region Initialization and Closing
 
         private void Main_Load(object sender, EventArgs e)
         {
             Task.Run(async () => await this.LoadPackagesAsync());
             this.RegisterEvents();
+        }
+
+        private async Task LoadPackagesAsync()
+        {
+            this.EnableMainMenu(false);
+            await this.annotationPackageListControl.LoadPackagesAsync();
+            this.EnableMainMenu(true);
+        }
+
+        private void EnableMainMenu(bool enable)
+        {
+            this.Invoke((MethodInvoker)delegate {
+                this.menuStripMain.Enabled = enable;
+                this.annotationPackageListControl.Enabled = enable;
+                this.annotationImageListControl.Visible = enable;
+                this.annotationDrawControl.Visible = enable;
+                this.downloadControl.Visible = enable;
+                this.tagListControl.Visible = enable;
+            });
         }
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
@@ -64,37 +83,30 @@ namespace Alturos.Yolo.LearningImage
             }
         }
 
-        private void Main_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            this.UnregisterEvents();
-        }
-
         private bool ConfirmDiscardingUnsavedChanges()
         {
             var unsyncedPackages = this.annotationPackageListControl.GetAllPackages().Where(o => o.IsDirty);
             if (unsyncedPackages.Any())
             {
-                var sb = new StringBuilder();
-                foreach (var package in unsyncedPackages)
-                {
-                    sb.AppendLine(package.DisplayName);
-                }
+                var syncConfirmationDialog = new SyncConfirmationDialog();
+                syncConfirmationDialog.Text = "Confirm closing";
+                syncConfirmationDialog.SetDescriptions("The following packages still have unsaved changes", "Do you want to close and discard these changes?");
+                syncConfirmationDialog.SetUnsyncedPackages(unsyncedPackages.ToList());
 
-                var dialogResult = MessageBox.Show(
-                    "The following packages have been modified and not synced yet:\n\n" +
-                        $"{sb.ToString()}\n\n" +
-                        "If you close now any unsynced package will be lost.\n\nClose anyway and discard your changes?",
-                    "Discard unsynced changes?",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Warning);
+                var dialogResult = syncConfirmationDialog.ShowDialog();
 
-                if (dialogResult == DialogResult.No)
+                if (dialogResult == DialogResult.Cancel)
                 {
                     return false;
                 }
             }
 
             return true;
+        }
+
+        private void Main_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            this.UnregisterEvents();
         }
 
         private void RegisterEvents()
@@ -127,30 +139,7 @@ namespace Alturos.Yolo.LearningImage
 
         #endregion
 
-        #region Load and Sync
-
-        private async Task LoadPackagesAsync()
-        {
-            this.EnableMainMenu(false);
-            await this.annotationPackageListControl.LoadPackagesAsync();
-            this.EnableMainMenu(true);
-        }
-
-        #endregion
-
         #region Main Menu
-
-        private void EnableMainMenu(bool enable)
-        {
-            this.Invoke((MethodInvoker)delegate {
-                this.menuStripMain.Enabled = enable;
-                this.annotationPackageListControl.Enabled = enable;
-                this.annotationImageListControl.Visible = enable;
-                this.annotationDrawControl.Visible = enable;
-                this.downloadControl.Visible = enable;
-                this.tagListControl.Visible = enable;
-            });
-        }
 
         private async void RefreshToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -163,16 +152,15 @@ namespace Alturos.Yolo.LearningImage
             if (packages.Length > 0)
             {
                 // Proceed with syncing
-                var sb = new StringBuilder();
-                foreach (var package in packages)
-                {
-                    sb.AppendLine(package.DisplayName);
-                }
+                var syncConfirmationDialog = new SyncConfirmationDialog();
+                syncConfirmationDialog.Text = "Confirm syncing";
+                syncConfirmationDialog.SetDescriptions("Do you want to sync the following packages?", string.Empty);
+                syncConfirmationDialog.SetUnsyncedPackages(packages.ToList());
 
-                var dialogResult = MessageBox.Show($"Do you want to sync the following packages?\n\n{sb.ToString()}", "Confirm syncing", MessageBoxButtons.YesNo);
-                if (dialogResult == DialogResult.Yes)
+                var dialogResult = syncConfirmationDialog.ShowDialog();
+                if (dialogResult == DialogResult.OK)
                 {
-                    var syncForm = new SyncForm(this._annotationPackageProvider);
+                    var syncForm = new SyncProgressDialog(this._annotationPackageProvider);
                     syncForm.Show();
 
                     _ = Task.Run(() => syncForm.Sync(packages));
@@ -230,7 +218,7 @@ namespace Alturos.Yolo.LearningImage
 
         private async void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var configurationForm = new ConfigurationForm())
+            using (var configurationForm = new ConfigurationDialog())
             {
                 configurationForm.Setup(this._annotationConfig);
                 var dialogResult = configurationForm.ShowDialog();
@@ -334,7 +322,7 @@ namespace Alturos.Yolo.LearningImage
 
         private List<string> TagsRequested()
         {
-            var form = new TagSelectionForm();
+            var form = new TagSelectionDialog();
             form.Setup(this._annotationConfig);
             form.ShowDialog();
 

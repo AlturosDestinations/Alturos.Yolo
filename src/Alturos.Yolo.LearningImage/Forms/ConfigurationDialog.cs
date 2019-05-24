@@ -6,13 +6,13 @@ using System.Windows.Forms;
 
 namespace Alturos.Yolo.LearningImage.Forms
 {
-    public partial class ConfigurationForm : Form
+    public partial class ConfigurationDialog : Form
     {
         private AnnotationConfig _config;
         private BindingSource _bindingSourceObjectClasses;
         private BindingSource _bindingSourceTags;
 
-        public ConfigurationForm()
+        public ConfigurationDialog()
         {
             this.InitializeComponent();
 

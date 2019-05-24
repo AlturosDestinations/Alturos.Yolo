@@ -1,7 +1,8 @@
-﻿using Amazon.DynamoDBv2.DataModel;
+﻿using Alturos.Yolo.LearningImage.Model;
+using Amazon.DynamoDBv2.DataModel;
 using System.Collections.Generic;
 
-namespace Alturos.Yolo.LearningImage.Model
+namespace Alturos.Yolo.LearningImage.Contract.Amazon
 {
     [DynamoDBTable("ObjectDetectionImageAnnotation")]
     internal class AnnotationConfigDto

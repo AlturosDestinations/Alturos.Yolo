@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Alturos.Yolo.LearningImage.Model;
+using System.Collections.Generic;
 
-namespace Alturos.Yolo.LearningImage.Model
+namespace Alturos.Yolo.LearningImage.Contract.Amazon
 {
     public class AnnotationImageDto
     {

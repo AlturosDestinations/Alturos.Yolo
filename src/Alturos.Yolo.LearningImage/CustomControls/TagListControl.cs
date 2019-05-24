@@ -19,7 +19,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
         public void SetTags(AnnotationPackage package)
         {
-            if (package == null || package.Info == null)
+            if (package == null)
             {
                 return;
             }
@@ -35,16 +35,16 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
             if (results.Count > 0)
             {
-                if (this._package.Info.Tags == null)
+                if (this._package.Tags == null)
                 {
-                    this._package.Info.Tags = new List<string>();
+                    this._package.Tags = new List<string>();
                 }
 
                 foreach (var tag in results)
                 {
-                    if (!this._package.Info.Tags.Contains(tag))
+                    if (!this._package.Tags.Contains(tag))
                     {
-                        this._package.Info.Tags.Add(tag);
+                        this._package.Tags.Add(tag);
                         this._package.IsDirty = true;
                     }
                 }
@@ -58,14 +58,14 @@ namespace Alturos.Yolo.LearningImage.CustomControls
             var row = this.dataGridView1.Rows[this.dataGridView1.CurrentCell.RowIndex];
             var tag = row.DataBoundItem as AnnotationPackageTag;
 
-            this._package.Info.Tags?.Remove(tag.Value);
+            this._package.Tags?.Remove(tag.Value);
 
             this.RefreshDatagrid();
         }
 
         private void RefreshDatagrid()
         {
-            var items = this._package.Info.Tags?.Select(o => new AnnotationPackageTag { Value = o });
+            var items = this._package.Tags?.Select(o => new AnnotationPackageTag { Value = o });
             this.dataGridView1.DataSource = items?.ToList();
         }
     }

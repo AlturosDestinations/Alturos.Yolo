@@ -62,11 +62,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Forms\ConfigurationForm.cs">
+    <Compile Include="Contract\Amazon\AnnotationTagDto.cs" />
+    <Compile Include="Forms\ConfigurationDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\ConfigurationForm.Designer.cs">
-      <DependentUpon>ConfigurationForm.cs</DependentUpon>
+    <Compile Include="Forms\ConfigurationDialog.Designer.cs">
+      <DependentUpon>ConfigurationDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Contract\Amazon\AmazonAnnotationPackageProvider.cs" />
     <Compile Include="Contract\Amazon\AnnotationConfigDto.cs" />
@@ -90,11 +91,17 @@
     <Compile Include="Forms\HelpDialog.Designer.cs">
       <DependentUpon>HelpDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SyncConfirmationDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SyncConfirmationDialog.Designer.cs">
+      <DependentUpon>SyncConfirmationDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Helper\DrawHelper.cs" />
     <Compile Include="Helper\MathExtension.cs" />
     <Compile Include="Helper\StringExtension.cs" />
     <Compile Include="Model\AnnotationConfig.cs" />
-    <Compile Include="Model\AnnotationImageDto.cs" />
+    <Compile Include="Contract\Amazon\AnnotationImageDto.cs" />
     <Compile Include="Model\AnnotationImage.cs" />
     <Compile Include="Model\AnnotationPackage.cs" />
     <Compile Include="CustomControls\AnnotationPackageListControl.cs">
@@ -133,7 +140,7 @@
     <Compile Include="Main.designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model\AnnotationPackageInfo.cs" />
+    <Compile Include="Contract\Amazon\AnnotationPackageDto.cs" />
     <Compile Include="Model\CanvasInfo.cs" />
     <Compile Include="Model\DragPoint.cs" />
     <Compile Include="Model\DragPointPosition.cs" />
@@ -143,26 +150,26 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\AnnotationBoundingBox.cs" />
-    <Compile Include="Forms\StartupForm.cs">
+    <Compile Include="Forms\StartupDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\StartupForm.Designer.cs">
-      <DependentUpon>StartupForm.cs</DependentUpon>
+    <Compile Include="Forms\StartupDialog.Designer.cs">
+      <DependentUpon>StartupDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SyncForm.cs">
+    <Compile Include="Forms\SyncProgressDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\SyncForm.Designer.cs">
-      <DependentUpon>SyncForm.cs</DependentUpon>
+    <Compile Include="Forms\SyncProgressDialog.Designer.cs">
+      <DependentUpon>SyncProgressDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\TagSelectionForm.cs">
+    <Compile Include="Forms\TagSelectionDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\TagSelectionForm.Designer.cs">
-      <DependentUpon>TagSelectionForm.cs</DependentUpon>
+    <Compile Include="Forms\TagSelectionDialog.Designer.cs">
+      <DependentUpon>TagSelectionDialog.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Forms\ConfigurationForm.resx">
-      <DependentUpon>ConfigurationForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\ConfigurationDialog.resx">
+      <DependentUpon>ConfigurationDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CustomControls\AnnotationDrawControl.resx">
       <DependentUpon>AnnotationDrawControl.cs</DependentUpon>
@@ -188,8 +195,11 @@
     <EmbeddedResource Include="Forms\HelpDialog.resx">
       <DependentUpon>HelpDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\TagSelectionForm.resx">
-      <DependentUpon>TagSelectionForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\SyncConfirmationDialog.resx">
+      <DependentUpon>SyncConfirmationDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TagSelectionDialog.resx">
+      <DependentUpon>TagSelectionDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
@@ -203,11 +213,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Forms\StartupForm.resx">
-      <DependentUpon>StartupForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\StartupDialog.resx">
+      <DependentUpon>StartupDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SyncForm.resx">
-      <DependentUpon>SyncForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\SyncProgressDialog.resx">
+      <DependentUpon>SyncProgressDialog.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

@@ -5,12 +5,12 @@ using System.Windows.Forms;
 
 namespace Alturos.Yolo.LearningImage.Forms
 {
-    public partial class SyncForm : Form
+    public partial class SyncProgressDialog : Form
     {
         private IAnnotationPackageProvider _annotationPackageProvider;
         private bool _syncing;
 
-        public SyncForm(IAnnotationPackageProvider annotationPackageProvider)
+        public SyncProgressDialog(IAnnotationPackageProvider annotationPackageProvider)
         {
             this._annotationPackageProvider = annotationPackageProvider;
 
