@@ -113,7 +113,10 @@ yolo9000 require a `data` directory with this two files [coco9k.map](https://git
 
 ## Annotation Tool
 
-To marking bounded boxes of objects in images for training neural network you can use [VoTT](https://github.com/Microsoft/VoTT)
+To marking bounded boxes of objects in images for training neural network you can use 
+
+- [Alturos.ImageAnnotation](https://github.com/AlturosDestinations/Alturos.ImageAnnotation)
+- [VoTT](https://github.com/Microsoft/VoTT)
 
 ## Debugging Gpu Tool
 
