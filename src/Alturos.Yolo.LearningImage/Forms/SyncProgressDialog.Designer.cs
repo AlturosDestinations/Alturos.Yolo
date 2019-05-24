@@ -1,6 +1,6 @@
 ﻿namespace Alturos.Yolo.LearningImage.Forms
 {
-    partial class SyncForm
+    partial class SyncProgressDialog
     {
         /// <summary>
         /// Required designer variable.

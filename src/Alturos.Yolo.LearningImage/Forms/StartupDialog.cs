@@ -11,14 +11,14 @@ using System.Windows.Forms;
 
 namespace Alturos.Yolo.LearningImage.Forms
 {
-    public partial class StartupForm : Form
+    public partial class StartupDialog : Form
     {
         public IAnnotationPackageProvider AnnotationPackageProvider { get; private set; }
         public List<ObjectClass> ObjectClasses { get; private set; }
 
         private CheckBox[] _checkBoxes;
 
-        public StartupForm()
+        public StartupDialog()
         {
             this.InitializeComponent();
 

@@ -1,6 +1,6 @@
 ﻿namespace Alturos.Yolo.LearningImage.Forms
 {
-    partial class ConfigurationForm
+    partial class ConfigurationDialog
     {
         /// <summary>
         /// Required designer variable.
