@@ -7,8 +7,6 @@ namespace Alturos.Yolo.LearningImage.Model
 {
     public class AnnotationPackage
     {
-        private FileInfo[] _files;
-
         public string PackagePath { get; set; }
         public string DisplayName { get; set; }
         public long TotalBytes { get; set; }
@@ -20,21 +18,18 @@ namespace Alturos.Yolo.LearningImage.Model
         public bool Extracted { get; set; }
         public bool IsDirty { get; set; }
 
-        public AnnotationPackageInfo Info { get; set; }
+        public bool IsAnnotated { get; set; }
+        public double AnnotationPercentage { get; set; }
+        public List<AnnotationImage> Images { get; set; }
+        public List<string> Tags { get; set; }
 
-        public double AnnotationPercentage
-        {
-            get
-            {
-                return this.Info.AnnotationPercentage;
-            }
-        }
+        private FileInfo[] _files;
 
-        public AnnotationImage[] GetImages()
+        public void PrepareImages()
         {
-            if (this.Info.Images == null)
+            if (this.Images == null)
             {
-                this.Info.Images = new List<AnnotationImageDto>();
+                this.Images = new List<AnnotationImage>();
             }
 
             if (this._files == null)
@@ -48,38 +43,30 @@ namespace Alturos.Yolo.LearningImage.Model
             }
 
             var query = from file in this._files
-                        join image in this.Info.Images on file.Name equals image.ImageName into j1
-                        from annotationImage in j1.DefaultIfEmpty(new AnnotationImageDto())
+                        join image in this.Images on file.Name equals image.ImageName into j1
+                        from annotationImage in j1.DefaultIfEmpty(new AnnotationImage())
                         select new AnnotationImage
                         {
                             BoundingBoxes = annotationImage?.BoundingBoxes,
-                            DisplayName = file.Name,
-                            FilePath = file.FullName,
+                            ImageName = file.Name,
+                            ImagePath = file.FullName,
                             Package = this
                         };
 
-            return query.ToArray();
+            this.Images = query.ToList();
         }
 
         public void UpdateAnnotationStatus(AnnotationImage annotationImage)
         {
-            var image1 = this.Info.Images.Where(o => o.ImageName.Equals(annotationImage.DisplayName)).FirstOrDefault();
-            if (image1 == null)
+            if (!this.Images.Contains(annotationImage))
             {
-                image1 = new AnnotationImageDto { ImageName = annotationImage.DisplayName, BoundingBoxes = annotationImage.BoundingBoxes };
-                this.Info.Images.Add(image1);
-            }
-            else
-            {
-                image1.BoundingBoxes = annotationImage.BoundingBoxes;
+                this.Images.Add(annotationImage);
             }
             
-            var images = this.GetImages();
+            var annotationPercentage = this.Images.Count(o => o.BoundingBoxes != null) / (double)this.Images.Count * 100.0;
 
-            var annotationPercentage = this.Info.Images.Count / (double)images.Length * 100.0;
-
-            this.Info.AnnotationPercentage = annotationPercentage;
-            this.Info.IsAnnotated = annotationPercentage >= 100;
+            this.AnnotationPercentage = annotationPercentage;
+            this.IsAnnotated = annotationPercentage >= 100;
         }
 
         public string DirtyDisplayName

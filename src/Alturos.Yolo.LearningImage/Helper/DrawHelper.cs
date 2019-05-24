@@ -11,7 +11,7 @@ namespace Alturos.Yolo.LearningImage.Helper
 
         public static Image DrawBoxes(AnnotationImage image)
         {
-            var originalBitmap = new Bitmap(image.FilePath);
+            var originalBitmap = new Bitmap(image.ImagePath);
             var bitmap = new Bitmap(originalBitmap, ImageSize);
             originalBitmap.Dispose();
 

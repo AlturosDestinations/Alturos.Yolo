@@ -158,7 +158,7 @@ namespace Alturos.Yolo.LearningImage
                 syncConfirmationDialog.SetUnsyncedPackages(packages.ToList());
 
                 var dialogResult = syncConfirmationDialog.ShowDialog();
-                if (dialogResult == DialogResult.Yes)
+                if (dialogResult == DialogResult.OK)
                 {
                     var syncForm = new SyncProgressDialog(this._annotationPackageProvider);
                     syncForm.Show();

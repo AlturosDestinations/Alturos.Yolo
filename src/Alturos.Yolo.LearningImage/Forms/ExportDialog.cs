@@ -71,7 +71,7 @@ namespace Alturos.Yolo.LearningImage.Forms
 
             var usedFileNames = new List<string>();
             var packages = this.dataGridViewResult.DataSource as List<AnnotationPackage>;
-            var images = packages.SelectMany(o => o.GetImages());
+            var images = packages.SelectMany(o => o.Images);
 
             foreach (var image in images)
             {
@@ -80,10 +80,10 @@ namespace Alturos.Yolo.LearningImage.Forms
                     continue;
                 }
 
-                var newFileName = Path.GetFileName(image.FilePath);
+                var newFileName = Path.GetFileName(image.ImagePath);
                 while (usedFileNames.Contains(newFileName))
                 {
-                    newFileName = Path.GetFileNameWithoutExtension(image.FilePath) + "(1)" + Path.GetExtension(image.FilePath);
+                    newFileName = Path.GetFileNameWithoutExtension(image.ImagePath) + "(1)" + Path.GetExtension(image.ImagePath);
                 }
 
                 usedFileNames.Add(newFileName);
@@ -99,7 +99,7 @@ namespace Alturos.Yolo.LearningImage.Forms
                 }
 
                 // Copy image
-                File.Copy(image.FilePath, newFilePath, true);
+                File.Copy(image.ImageName, newFilePath, true);
 
                 // Create bounding boxes
                 this.CreateBoundingBoxes(image.BoundingBoxes, Path.ChangeExtension(newFilePath, "txt"));

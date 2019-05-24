@@ -100,7 +100,7 @@
     <Compile Include="Helper\MathExtension.cs" />
     <Compile Include="Helper\StringExtension.cs" />
     <Compile Include="Model\AnnotationConfig.cs" />
-    <Compile Include="Model\AnnotationImageDto.cs" />
+    <Compile Include="Contract\Amazon\AnnotationImageDto.cs" />
     <Compile Include="Model\AnnotationImage.cs" />
     <Compile Include="Model\AnnotationPackage.cs" />
     <Compile Include="CustomControls\AnnotationPackageListControl.cs">
@@ -139,7 +139,7 @@
     <Compile Include="Main.designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model\AnnotationPackageInfo.cs" />
+    <Compile Include="Contract\Amazon\AnnotationPackageDto.cs" />
     <Compile Include="Model\CanvasInfo.cs" />
     <Compile Include="Model\DragPoint.cs" />
     <Compile Include="Model\DragPointPosition.cs" />

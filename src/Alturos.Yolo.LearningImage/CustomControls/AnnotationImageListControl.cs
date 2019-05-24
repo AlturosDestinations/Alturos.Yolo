@@ -30,7 +30,7 @@ namespace Alturos.Yolo.LearningImage.CustomControls
 
         public void SetPackage(AnnotationPackage package)
         {
-            this.dataGridView1.DataSource = package.GetImages();
+            this.dataGridView1.DataSource = package.Images;
             this.dataGridView1.Refresh();
         }
 
