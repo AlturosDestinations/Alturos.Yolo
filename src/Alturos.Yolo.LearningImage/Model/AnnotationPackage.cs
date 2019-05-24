@@ -7,6 +7,8 @@ namespace Alturos.Yolo.LearningImage.Model
 {
     public class AnnotationPackage
     {
+        public string ExternalId { get; set; }
+
         public string PackagePath { get; set; }
         public string DisplayName { get; set; }
         public long TotalBytes { get; set; }

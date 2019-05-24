@@ -120,6 +120,7 @@ namespace Alturos.Yolo.LearningImage.Contract.Amazon
                     var retrievedPackages = await packageInfos.GetNextSetAsync().ConfigureAwait(false);
                     var packages = retrievedPackages.Select(o => new AnnotationPackage
                     {
+                        ExternalId = o.Id,
                         Extracted = false,
                         PackagePath = o.Id,
                         DisplayName = Path.GetFileNameWithoutExtension(o.Id),
@@ -251,7 +252,7 @@ namespace Alturos.Yolo.LearningImage.Contract.Amazon
         {
             var info = new AnnotationPackageDto
             {
-                Id = package.PackagePath,
+                Id = package.ExternalId,
                 IsAnnotated = package.IsAnnotated,
                 AnnotationPercentage = package.AnnotationPercentage,
                 Tags = package.Tags
@@ -267,9 +268,15 @@ namespace Alturos.Yolo.LearningImage.Contract.Amazon
                 });
             }
 
-            using (var context = new DynamoDBContext(this._dynamoDbClient))
+            try
             {
-                await context.SaveAsync(info).ConfigureAwait(false);
+                using (var context = new DynamoDBContext(this._dynamoDbClient))
+                {
+                    await context.SaveAsync(info).ConfigureAwait(false);
+                }
+            } catch (Exception e)
+            {
+
             }
 
             this._syncedPackages++;
