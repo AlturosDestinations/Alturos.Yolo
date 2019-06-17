@@ -10,9 +10,9 @@
     <licenseUrl>https://github.com/AlturosDestinations/Alturos.Yolo/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/AlturosDestinations/Alturos.Yolo</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/AlturosDestinations/Alturos.Yolo/master/doc/logo.png</iconUrl>
-    <tags>yolo darknet yolo3 yolov3 yolo2 yolov2 objectdetection wrapper</tags>
+    <tags>darknet yolo yolo3 yolov3 yolo2 yolov2 objectdetection object-detection neural-network dnn deep-learning </tags>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <releaseNotes>Update C++ dlls, optimize object type matching</releaseNotes>
+    <releaseNotes>Update Visual C++ detection</releaseNotes>
   </metadata>
   <files>
     <file src="readme.txt" target="" />

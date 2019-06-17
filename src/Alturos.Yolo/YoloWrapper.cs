@@ -111,7 +111,7 @@ namespace Alturos.Yolo
             this.EnvironmentReport = this.GetEnvironmentReport();
             if (!this.EnvironmentReport.MicrosoftVisualCPlusPlus2017RedistributableExists)
             {
-                throw new DllNotFoundException("Microsoft Visual C++ 2017 Redistributable (x64)");
+                throw new DllNotFoundException("Microsoft Visual C++ 2017-2019 Redistributable (x64)");
             }
 
             this.DetectionSystem = DetectionSystem.CPU;
@@ -151,12 +151,13 @@ namespace Alturos.Yolo
         private bool IsMicrosoftVisualCPlusPlus2017Available()
         {
             //Detect if Visual C++ Redistributable for Visual Studio is installed
-            //https://stackoverflow.com/questions/12206314/detect-if-visual-c-redistributable-for-visual-studio-2012-is-installed/34209692#34209692
+            //https://stackoverflow.com/questions/12206314/detect-if-visual-c-redistributable-for-visual-studio-2012-is-installed/
             var checkKeys = new string[]
             {
-                @"Installer\Dependencies\,,amd64,14.0,bundle",
-                @"Installer\Dependencies\VC,redist.x64,amd64,14.16,bundle",
-                @"Installer\Dependencies\VC,redist.x64,amd64,14.20,bundle",
+                @"Installer\Dependencies\,,amd64,14.0,bundle", //Visual C++ 2017 Redistributable (x64) 
+                @"Installer\Dependencies\VC,redist.x64,amd64,14.16,bundle", //Visual C++ 2017 Redistributable (x64) 
+                @"Installer\Dependencies\VC,redist.x64,amd64,14.20,bundle", //Visual C++ 2019 (2015-2019 bundle) (x64) 
+                @"Installer\Dependencies\VC,redist.x64,amd64,14.21,bundle" //Visual C++ 2019 (2015-2019 bundle) (x64) 
             };
 
             foreach (var checkKey in checkKeys)

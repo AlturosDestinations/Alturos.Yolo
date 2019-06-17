@@ -28,3 +28,7 @@ using (var yoloWrapper = new YoloWrapper(config))
 	//items[0].Width -> bounding box
 	//items[0].Height -> bounding box
 }
+
+
+How to train your custom objects check our other project
+https://github.com/AlturosDestinations/Alturos.ImageAnnotation
