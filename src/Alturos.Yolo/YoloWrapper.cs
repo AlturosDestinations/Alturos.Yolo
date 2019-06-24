@@ -175,7 +175,7 @@ namespace Alturos.Yolo
                         continue;
                     }
 
-                    if (displayName.StartsWith("Microsoft Visual C++ 2017 Redistributable (x64)", StringComparison.OrdinalIgnoreCase))
+                    if (displayName.StartsWith("Microsoft Visual C++ 2017 Redistributable (x64)", StringComparison.OrdinalIgnoreCase) || displayName.StartsWith("Microsoft Visual C++ 2015-2019 Redistributable (x64)", StringComparison.OrdinalIgnoreCase))
                     {
                         return true;
                     }
