@@ -256,11 +256,11 @@ namespace Alturos.Yolo
             var size = Marshal.SizeOf(imageData[0]) * imageData.Length;
             var pnt = Marshal.AllocHGlobal(size);
 
+            var count = 0;
             try
             {
                 // Copy the array to unmanaged memory.
                 Marshal.Copy(imageData, 0, pnt, imageData.Length);
-                var count = 0;
                 switch (this.DetectionSystem)
                 {
                     case DetectionSystem.CPU:
@@ -269,11 +269,6 @@ namespace Alturos.Yolo
                     case DetectionSystem.GPU:
                         count = DetectImageGpu(pnt, imageData.Length, ref container);
                         break;
-                }
-
-                if (count == -1)
-                {
-                    throw new NotImplementedException("C++ dll compiled incorrectly");
                 }
             }
             catch (Exception)
@@ -284,6 +279,11 @@ namespace Alturos.Yolo
             {
                 // Free the unmanaged memory.
                 Marshal.FreeHGlobal(pnt);
+            }
+
+            if (count == -1)
+            {
+                throw new NotImplementedException("C++ dll compiled incorrectly");
             }
 
             return this.Convert(container);

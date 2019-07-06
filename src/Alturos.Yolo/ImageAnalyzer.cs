@@ -21,6 +21,11 @@ namespace Alturos.Yolo
 
         public bool IsValidImageFormat(byte[] imageData)
         {
+            if (imageData == null)
+            {
+                return false;
+            }
+
             if (imageData.Length <= 3)
             {
                 return false;
