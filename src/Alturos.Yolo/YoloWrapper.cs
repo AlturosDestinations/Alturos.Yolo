@@ -152,17 +152,18 @@ namespace Alturos.Yolo
         {
             //Detect if Visual C++ Redistributable for Visual Studio is installed
             //https://stackoverflow.com/questions/12206314/detect-if-visual-c-redistributable-for-visual-studio-2012-is-installed/
-            var checkKeys = new string[]
+            var checkKeys = new Dictionary<string, string>
             {
-                @"Installer\Dependencies\,,amd64,14.0,bundle", //Visual C++ 2017 Redistributable (x64) 
-                @"Installer\Dependencies\VC,redist.x64,amd64,14.16,bundle", //Visual C++ 2017 Redistributable (x64) 
-                @"Installer\Dependencies\VC,redist.x64,amd64,14.20,bundle", //Visual C++ 2019 (2015-2019 bundle) (x64) 
-                @"Installer\Dependencies\VC,redist.x64,amd64,14.21,bundle" //Visual C++ 2019 (2015-2019 bundle) (x64) 
+                { @"Installer\Dependencies\,,amd64,14.0,bundle", "Microsoft Visual C++ 2017 Redistributable (x64)" },
+                { @"Installer\Dependencies\VC,redist.x64,amd64,14.16,bundle", "Microsoft Visual C++ 2017 Redistributable (x64)" },
+                { @"Installer\Dependencies\VC,redist.x64,amd64,14.20,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" }, 
+                { @"Installer\Dependencies\VC,redist.x64,amd64,14.21,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" },
+                { @"Installer\Dependencies\VC,redist.x64,amd64,14.22,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" },
             };
 
             foreach (var checkKey in checkKeys)
             {
-                using (var registryKey = Registry.ClassesRoot.OpenSubKey(checkKey, false))
+                using (var registryKey = Registry.ClassesRoot.OpenSubKey(checkKey.Key, false))
                 {
                     if (registryKey == null)
                     {
@@ -175,7 +176,7 @@ namespace Alturos.Yolo
                         continue;
                     }
 
-                    if (displayName.StartsWith("Microsoft Visual C++ 2017 Redistributable (x64)", StringComparison.OrdinalIgnoreCase) || displayName.StartsWith("Microsoft Visual C++ 2015-2019 Redistributable (x64)", StringComparison.OrdinalIgnoreCase))
+                    if (displayName.StartsWith(checkKey.Value, StringComparison.OrdinalIgnoreCase))
                     {
                         return true;
                     }
