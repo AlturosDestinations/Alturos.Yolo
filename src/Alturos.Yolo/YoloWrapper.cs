@@ -101,7 +101,7 @@ namespace Alturos.Yolo
             }
         }
 
-        private void Initialize(string configurationFilename, string weightsFilename, string namesFilename, int gpu = 0, bool ignoreGpu = false)
+        private void Initialize(string configurationFilename, string weightsFilename, string namesFilename, int gpu = 0, bool ignoreGpu = false, bool ignoreEnviormentReport = false)
         {
             if (IntPtr.Size != 8)
             {
@@ -109,15 +109,19 @@ namespace Alturos.Yolo
             }
 
             this.EnvironmentReport = this.GetEnvironmentReport();
-            if (!this.EnvironmentReport.MicrosoftVisualCPlusPlus2017RedistributableExists)
-            {
-                throw new DllNotFoundException("Microsoft Visual C++ 2017-2019 Redistributable (x64)");
-            }
-
             this.DetectionSystem = DetectionSystem.CPU;
-            if (!ignoreGpu && this.EnvironmentReport.CudaExists && this.EnvironmentReport.CudnnExists)
+
+            if (ignoreEnviormentReport)
             {
-                this.DetectionSystem = DetectionSystem.GPU;
+                if (!this.EnvironmentReport.MicrosoftVisualCPlusPlus2017RedistributableExists)
+                {
+                    throw new DllNotFoundException("Microsoft Visual C++ 2017-2019 Redistributable (x64)");
+                }
+
+                if (!ignoreGpu && this.EnvironmentReport.CudaExists && this.EnvironmentReport.CudnnExists)
+                {
+                    this.DetectionSystem = DetectionSystem.GPU;
+                }
             }
 
             switch (this.DetectionSystem)
@@ -159,6 +163,7 @@ namespace Alturos.Yolo
                 { @"Installer\Dependencies\VC,redist.x64,amd64,14.20,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" }, 
                 { @"Installer\Dependencies\VC,redist.x64,amd64,14.21,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" },
                 { @"Installer\Dependencies\VC,redist.x64,amd64,14.22,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" },
+                { @"Installer\Dependencies\VC,redist.x64,amd64,14.23,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" },
             };
 
             foreach (var checkKey in checkKeys)
