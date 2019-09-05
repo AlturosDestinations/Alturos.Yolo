@@ -124,7 +124,7 @@ Check graphic device usage `"%PROGRAMFILES%\NVIDIA Corporation\NVSMI\nvidia-smi.
 
 ## Troubleshooting
 
-If you have some error like `DllNotFoundException` use [Dependencies](https://github.com/lucasg/Dependencies) to check all references are available for `yolo_cpp_dll_gpu.dll`
+If you have some error like `DllNotFoundException` use [Dependencies](https://github.com/lucasg/Dependencies/releases) to check all references are available for `yolo_cpp_dll_gpu.dll`
 
 If you have some error like `NotSupportedException` check if you use the latest Nvidia driver
 
