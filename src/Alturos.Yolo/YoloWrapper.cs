@@ -101,7 +101,7 @@ namespace Alturos.Yolo
             }
         }
 
-        private void Initialize(string configurationFilename, string weightsFilename, string namesFilename, int gpu = 0, bool ignoreGpu = false, bool ignoreEnviormentReport = false)
+        private void Initialize(string configurationFilename, string weightsFilename, string namesFilename, int gpu = 0, bool ignoreGpu = false, bool ignoreCPlusPlusDetection = false)
         {
             if (IntPtr.Size != 8)
             {
@@ -111,17 +111,14 @@ namespace Alturos.Yolo
             this.EnvironmentReport = this.GetEnvironmentReport();
             this.DetectionSystem = DetectionSystem.CPU;
 
-            if (ignoreEnviormentReport)
+            if (!ignoreCPlusPlusDetection && !this.EnvironmentReport.MicrosoftVisualCPlusPlus2017RedistributableExists)
             {
-                if (!this.EnvironmentReport.MicrosoftVisualCPlusPlus2017RedistributableExists)
-                {
-                    throw new DllNotFoundException("Microsoft Visual C++ 2017-2019 Redistributable (x64)");
-                }
+                throw new DllNotFoundException("Microsoft Visual C++ 2017-2019 Redistributable (x64)");
+            }
 
-                if (!ignoreGpu && this.EnvironmentReport.CudaExists && this.EnvironmentReport.CudnnExists)
-                {
-                    this.DetectionSystem = DetectionSystem.GPU;
-                }
+            if (!ignoreGpu && this.EnvironmentReport.CudaExists && this.EnvironmentReport.CudnnExists)
+            {
+                this.DetectionSystem = DetectionSystem.GPU;
             }
 
             switch (this.DetectionSystem)
