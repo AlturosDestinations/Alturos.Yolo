@@ -12,12 +12,12 @@
     <iconUrl>https://raw.githubusercontent.com/AlturosDestinations/Alturos.Yolo/master/doc/logo.png</iconUrl>
     <tags>darknet yolo yolo3 yolov3 yolo2 yolov2 objectdetection object-detection neural-network dnn deep-learning </tags>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <releaseNotes>Update Visual C++ detection</releaseNotes>
+    <releaseNotes>Update C++ dlls darknet project, change to opencv 4.1.1, change to cuda 10.1</releaseNotes>
   </metadata>
   <files>
     <file src="readme.txt" target="" />
     <file src="Alturos.Yolo.targets" target="build\net461" />
-    <file src="dependencies\opencv_world340.dll" target="build\x64" />
+    <file src="dependencies\opencv_world411.dll" target="build\x64" />
     <file src="dependencies\yolo_cpp_dll_cpu.dll" target="build\x64" />
     <file src="dependencies\yolo_cpp_dll_gpu.dll" target="build\x64" />
     <file src="dependencies\pthreadGC2.dll" target="build\x64" />

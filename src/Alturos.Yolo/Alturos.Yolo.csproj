@@ -62,9 +62,9 @@
     <Compile Include="YoloWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ContentWithTargetPath Include="dependencies\opencv_world340.dll">
+    <ContentWithTargetPath Include="dependencies\opencv_world411.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>x64\opencv_world340.dll</TargetPath>
+      <TargetPath>x64\opencv_world411.dll</TargetPath>
     </ContentWithTargetPath>
     <ContentWithTargetPath Include="dependencies\yolo_cpp_dll_cpu.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

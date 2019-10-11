@@ -111,7 +111,7 @@ namespace Alturos.Yolo
             this.EnvironmentReport = this.GetEnvironmentReport();
             this.DetectionSystem = DetectionSystem.CPU;
 
-            if (!ignoreCPlusPlusDetection && !this.EnvironmentReport.MicrosoftVisualCPlusPlus2017RedistributableExists)
+            if (!ignoreCPlusPlusDetection && !this.EnvironmentReport.MicrosoftVisualCPlusPlusRedistributableExists)
             {
                 throw new DllNotFoundException("Microsoft Visual C++ 2017-2019 Redistributable (x64)");
             }
@@ -192,7 +192,7 @@ namespace Alturos.Yolo
         {
             var report = new EnvironmentReport
             {
-                MicrosoftVisualCPlusPlus2017RedistributableExists = this.IsMicrosoftVisualCPlusPlus2017Available()
+                MicrosoftVisualCPlusPlusRedistributableExists = this.IsMicrosoftVisualCPlusPlus2017Available()
             };
 
             if (File.Exists(@"x64\cudnn64_7.dll"))
@@ -202,6 +202,10 @@ namespace Alturos.Yolo
 
             var envirormentVariables = Environment.GetEnvironmentVariables(EnvironmentVariableTarget.Machine);
             if (envirormentVariables.Contains("CUDA_PATH"))
+            {
+                report.CudaExists = true;
+            }
+            if (envirormentVariables.Contains("CUDA_PATH_V10_1"))
             {
                 report.CudaExists = true;
             }
