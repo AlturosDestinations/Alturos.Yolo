@@ -7,7 +7,7 @@ A state of the art real-time object detection system for C# (Visual Studio). Thi
 ## nuget
 Quick install Alturos.Yolo over [nuget](https://www.nuget.org/packages/Alturos.Yolo)
 ```
-PM> install-package Alturos.Yolo (C# wrapper and C++ dlls 22MB)
+PM> install-package Alturos.Yolo (C# wrapper and C++ dlls 28MB)
 PM> install-package Alturos.YoloV2TinyVocData (YOLOv2-tiny Pre-Trained Dataset 56MB)
 ```
 
