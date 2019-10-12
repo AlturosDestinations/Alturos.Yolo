@@ -54,7 +54,7 @@ It is important to use GPU mode for fast object detection. It is also important 
 - .NET Framework 4.6.1
 - [Microsoft Visual C++ Redistributable for Visual Studio 2015, 2017 und 2019 x64](https://aka.ms/vs/16/release/vc_redist.x64.exe)
 
-## GPU requirements (optional)
+### GPU requirements (optional)
 1) Install the latest Nvidia driver for your graphic device
 2) [Install Nvidia CUDA Toolkit 10.1](https://developer.nvidia.com/cuda-downloads) (must be installed add a hardware driver for cuda support)
 3) [Download Nvidia cuDNN v7.6.3 for CUDA 10.1](https://developer.nvidia.com/rdp/cudnn-download)
@@ -96,6 +96,7 @@ NVIDIA GeForce GTX 1060 | 4372 GFLOPS | 6 GB | Dual | 25 ms | 100 ms | - |
 
 ## Pre-Trained Dataset
 
+A Pre-Trained Dataset contains the Informations about the recognizable objects. A higher `Processing Resolution` detects object also if they are smaller but this increases the processing time. The `Alturos.YoloV2TinyVocData` package is the same as `YOLOv2-tiny`.
 You can download the datasets manually or integrate them automatically into the code.
 
 ```cs
@@ -114,29 +115,20 @@ yolo9000 | 448x448 | [yolo9000.cfg](https://raw.githubusercontent.com/AlexeyAB/d
 
 yolo9000 require a `data` directory with this two files [coco9k.map](https://github.com/AlexeyAB/darknet/blob/master/data/coco9k.map) and [9k.tree](https://raw.githubusercontent.com/AlexeyAB/darknet/master/data/9k.tree). Merge files with this command `type xaa xab > yolo9000.weights`
 
-## Annotation Tool
-
-To marking bounded boxes of objects in images for training neural network you can use 
-
-- [Alturos.ImageAnnotation](https://github.com/AlturosDestinations/Alturos.ImageAnnotation)
-- [VoTT](https://github.com/Microsoft/VoTT)
-
-## Debugging Gpu Tool
-
-Check graphic device usage `"%PROGRAMFILES%\NVIDIA Corporation\NVSMI\nvidia-smi.exe"`
-
 ## Troubleshooting
 
 If you have some error like `DllNotFoundException` use [Dependencies](https://github.com/lucasg/Dependencies/releases) to check all references are available for `yolo_cpp_dll_gpu.dll`
 
 If you have some error like `NotSupportedException` check if you use the latest Nvidia driver
 
-## Dataset of tagged images
+### Debugging Tool for Nvidia Gpu
 
-- http://cocodataset.org/
-- https://storage.googleapis.com/openimages/web/index.html
+Check graphic device usage `"%PROGRAMFILES%\NVIDIA Corporation\NVSMI\nvidia-smi.exe"`
 
-## Directory Structure
+### Directory Structure
+
+You should have this files in your program directory.
+
     .
     ├── Alturos.Yolo.dll              # C# yolo wrapper
     ├── x64/
@@ -147,3 +139,15 @@ If you have some error like `NotSupportedException` check if you use the latest 
     │   ├── pthreadGC2.dll            # required by yolo_cpp_dll_xxx (POSIX Threads)
     │   ├── pthreadVC2.dll            # required by yolo_cpp_dll_xxx (POSIX Threads)
     │   ├── msvcr100.dll              # required by pthread (POSIX Threads)
+
+## Annotation Tool
+
+To marking bounded boxes of objects in images for training neural network you can use 
+
+- [Alturos.ImageAnnotation](https://github.com/AlturosDestinations/Alturos.ImageAnnotation)
+- [VoTT](https://github.com/Microsoft/VoTT)
+
+### Dataset of tagged images
+
+- http://cocodataset.org/
+- https://storage.googleapis.com/openimages/web/index.html
