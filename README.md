@@ -4,8 +4,8 @@
 
 A state of the art real-time object detection system for C# (Visual Studio). This project has CPU and GPU support, with GPU the detection works much faster. The primary goal of this project is an easy use of yolo, this package is available on nuget and you must only install two packages to start detection. In the background we are use the Windows Yolo version of [AlexeyAB/darknet](https://github.com/AlexeyAB/darknet). Send an image path or the byte array to [yolo](https://github.com/pjreddie/darknet) and receive the position of the detected objects. Our project is meant to return the object-type and -position as processable data. This library supports [YoloV3 and YoloV2 Pre-Trained Datasets](#pre-trained-dataset)
 
-## nuget
-Quick install Alturos.Yolo over [nuget](https://www.nuget.org/packages/Alturos.Yolo)
+## NuGet
+Quick install Alturos.Yolo over [NuGet](https://www.nuget.org/packages/Alturos.Yolo)
 ```
 PM> install-package Alturos.Yolo (C# wrapper and C++ dlls 28MB)
 PM> install-package Alturos.YoloV2TinyVocData (YOLOv2-tiny Pre-Trained Dataset 56MB)
@@ -46,6 +46,9 @@ using (var yoloWrapper = new YoloWrapper("yolov2-tiny-voc.cfg", "yolov2-tiny-voc
 	//items[0].Height -> bounding box
 }
 ```
+
+## Performance
+It is important to use GPU mode for fast object detection. It is also important not to instantiate the wrapper over and over again. A further optimization is to transfer the images as byte stream instead of passing a file path. GPU detection is usually 10 times faster!
 
 ## System requirements
 - .NET Framework 4.6.1
