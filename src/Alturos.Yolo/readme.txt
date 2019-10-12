@@ -1,16 +1,16 @@
 Thanks for using the Alturos.Yolo package (https://github.com/AlturosDestinations/Alturos.Yolo)
 ----------------------------------------------------------------
-Please star (★) this project on github!
+Please star (★) this project on GitHub!
 
 
-This package deliver all dependencies for cpu detection.
+This package deliver all dependencies for CPU detection.
 
-If you need gpu detection please install cuda and cudnn.
-Nvidia CUDA Toolkit 10.0 (must be installed add a hardware driver for cuda support)
-Nvidia cuDNN v7.4.2.24 for CUDA 10.0 (DLL cudnn64_7.dll required for gpu processing)
-And copy the cudnn64_7.dll in the x64 directory. (%cudnn%\bin)
+If you need GPU detection please install cuda and cudnn.
+Nvidia CUDA Toolkit 10.1 (must be installed add a hardware driver for cuda support)
+Nvidia cuDNN v7.6.3 for CUDA 10.1 (DLL cudnn64_7.dll required for gpu processing)
+After that copy the cudnn64_7.dll in the x64 directory of your programm. (source folder of the file %cudnn%\bin)
 
-If all dependencies available Alturos.Yolo switch automatic in gpu mode.
+If all dependencies available Alturos.Yolo switch automatic in GPU mode.
 For an easy start please install-package Alturos.YoloV2TinyVocData (Yolo Pre-trained model)
 
 Example code:
@@ -30,5 +30,5 @@ using (var yoloWrapper = new YoloWrapper(config))
 }
 
 
-How to train your custom objects check our other project
+If you are need more Informations about "how to train your custom objects" check our other project
 https://github.com/AlturosDestinations/Alturos.ImageAnnotation

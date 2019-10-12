@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Alturos.Yolo")]
-[assembly: AssemblyDescription("Yolo Darknet Wrapper, Real-Time Object Detection (yolo core of AlexeyAB/darknet)")]
+[assembly: AssemblyDescription("Yolo Darknet Wrapper, Real-Time Object Detection (yolo core of AlexeyAB/darknet), CUDA 10.1")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Alturos Destinations")]
 [assembly: AssemblyProduct("Alturos.Yolo")]
@@ -32,6 +32,6 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.6.0")]
-[assembly: AssemblyFileVersion("2.6.0")]
+[assembly: AssemblyVersion("2.6.1")]
+[assembly: AssemblyFileVersion("2.6.1")]
 [assembly: InternalsVisibleTo("Alturos.Yolo.UnitTest")]
