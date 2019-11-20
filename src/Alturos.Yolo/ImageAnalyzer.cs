@@ -8,6 +8,8 @@ namespace Alturos.Yolo
     {
         private Dictionary<string, byte[]> _imageFormats = new Dictionary<string, byte[]>();
 
+        public int MinHeaderSize { get; }
+
         public ImageAnalyzer()
         {
             var bmp = Encoding.ASCII.GetBytes("BM");  //BMP
@@ -17,6 +19,8 @@ namespace Alturos.Yolo
             this._imageFormats.Add("bmp", bmp);
             this._imageFormats.Add("png", png);
             this._imageFormats.Add("jpeg", jpeg);
+
+            this.MinHeaderSize = _imageFormats.Max(x => x.Value.Length);
         }
 
         public bool IsValidImageFormat(byte[] imageData)
@@ -26,7 +30,7 @@ namespace Alturos.Yolo
                 return false;
             }
 
-            if (imageData.Length <= 3)
+            if (imageData.Length < MinHeaderSize)
             {
                 return false;
             }

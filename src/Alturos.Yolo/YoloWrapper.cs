@@ -17,6 +17,7 @@ namespace Alturos.Yolo
 
         private readonly ImageAnalyzer _imageAnalyzer = new ImageAnalyzer();
         private YoloObjectTypeResolver _objectTypeResolver;
+        private readonly byte[] _headerBuffer;
 
         public DetectionSystem DetectionSystem { get; private set; } = DetectionSystem.Unknown;
         public EnvironmentReport EnvironmentReport { get; private set; }
@@ -86,6 +87,7 @@ namespace Alturos.Yolo
         public YoloWrapper(string configurationFilename, string weightsFilename, string namesFilename, int gpu = 0, bool ignoreGpu = false)
         {
             this.Initialize(configurationFilename, weightsFilename, namesFilename, gpu, ignoreGpu);
+            this._headerBuffer = new byte[_imageAnalyzer.MinHeaderSize];
         }
 
         public void Dispose()
@@ -286,6 +288,57 @@ namespace Alturos.Yolo
             {
                 // Free the unmanaged memory.
                 Marshal.FreeHGlobal(pnt);
+            }
+
+            if (count == -1)
+            {
+                throw new NotImplementedException("C++ dll compiled incorrectly");
+            }
+
+            return this.Convert(container);
+        }
+
+        /// <summary>
+        /// Detect objects on an image
+        /// </summary>
+        /// <param name="imageData"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException">Thrown when the yolo_cpp dll is wrong compiled</exception>
+        public IEnumerable<YoloItem> Detect(IntPtr imageData, int size)
+        {
+            int minHeaderSize = this._imageAnalyzer.MinHeaderSize;
+            bool ok = size >= minHeaderSize;
+
+            if (ok)
+            {
+                Marshal.Copy(imageData, _headerBuffer, 0, minHeaderSize);
+                ok = this._imageAnalyzer.IsValidImageFormat(_headerBuffer);
+            }
+
+            if (!ok)
+            {
+                throw new Exception("Invalid image data, wrong image format");
+            }
+
+            var container = new BboxContainer();
+            
+            var count = 0;
+            try
+            {
+                switch (this.DetectionSystem)
+                {
+                    case DetectionSystem.CPU:
+                        count = DetectImageCpu(imageData, size, ref container);
+                        break;
+                    case DetectionSystem.GPU:
+                        count = DetectImageGpu(imageData, size, ref container);
+                        break;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
             }
 
             if (count == -1)
