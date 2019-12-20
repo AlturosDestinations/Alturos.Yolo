@@ -1,66 +1,31 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BFDB287F-7E23-4D44-B114-DF2E05C2CF04}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Alturos.Yolo</RootNamespace>
-    <AssemblyName>Alturos.Yolo</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+    <Description>Yolo Darknet Wrapper, Real-Time Object Detection (yolo core of AlexeyAB/darknet), CUDA 10.1</Description>
+    <Authors>Alturos Destinations</Authors>
+    <Company>Alturos DestinationsAlturos Destinations</Company>
+    <PackageTags>darknet yolo yolo3 yolov3 yolo2 yolov2 objectdetection object-detection neural-network dnn deep-learning</PackageTags>
+    <PackageReleaseNotes>.netstandard 2.0 support</PackageReleaseNotes>
+    <PackageIconUrl>https://raw.githubusercontent.com/AlturosDestinations/Alturos.Yolo/master/doc/logo.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/AlturosDestinations/Alturos.Yolo</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/AlturosDestinations/Alturos.Yolo</RepositoryUrl>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>3.0.0</Version>
+    <AssemblyVersion>3.0.0</AssemblyVersion>
+    <FileVersion>3.0.0</FileVersion>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DocumentationFile>bin\Debug\Alturos.Yolo.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Alturos.Yolo.xml</DocumentationFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="Microsoft.Win32.Registry" Version="4.7.0" />
+    <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ConfigurationDetector.cs" />
-    <Compile Include="DetectionSystem.cs" />
-    <Compile Include="ImageAnalyzer.cs" />
-    <Compile Include="ImageResizer.cs" />
-    <Compile Include="Model\BboxContainer.cs" />
-    <Compile Include="Model\BboxT.cs" />
-    <Compile Include="Model\EnvironmentReport.cs" />
-    <Compile Include="Model\YoloItem.cs" />
-    <Compile Include="Model\YoloTrackingItem.cs" />
-    <Compile Include="Model\YoloPreTrainedData.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="YoloConfiguration.cs" />
-    <Compile Include="YoloObjectTypeResolver.cs" />
-    <Compile Include="YoloPreTrainedDatasetRepository.cs" />
-    <Compile Include="YoloTracking.cs" />
-    <Compile Include="YoloWrapper.cs" />
-  </ItemGroup>
+
   <ItemGroup>
     <ContentWithTargetPath Include="dependencies\opencv_world411.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -87,8 +52,82 @@
       <TargetPath>x64\msvcr100.dll</TargetPath>
     </ContentWithTargetPath>
   </ItemGroup>
+
   <ItemGroup>
-    <None Include="readme.txt" />
+    <Content Include="dependencies\opencv_world411.dll">
+      <PackagePath>lib/net461/x64/opencv_world411.dll</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+    <Content Include="dependencies\yolo_cpp_dll_cpu.dll">
+      <PackagePath>lib/net461/x64/yolo_cpp_dll_cpu.dll</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+    <Content Include="dependencies\yolo_cpp_dll_gpu.dll">
+      <PackagePath>lib/net461/x64/yolo_cpp_dll_gpu.dll</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+    <Content Include="dependencies\pthreadGC2.dll">
+      <PackagePath>lib/net461/x64/pthreadGC2.dll</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+    <Content Include="dependencies\pthreadVC2.dll">
+      <PackagePath>lib/net461/x64/pthreadVC2.dll</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+    <Content Include="dependencies\msvcr100.dll">
+      <PackagePath>lib/net461/x64/msvcr100.dll</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
+  <ItemGroup>
+    <Content Include="dependencies\opencv_world411.dll">
+      <PackagePath>lib/netstandard2.0/x64/opencv_world411.dll</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+    <Content Include="dependencies\yolo_cpp_dll_cpu.dll">
+      <PackagePath>lib/netstandard2.0/x64/yolo_cpp_dll_cpu.dll</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+    <Content Include="dependencies\yolo_cpp_dll_gpu.dll">
+      <PackagePath>lib/netstandard2.0/x64/yolo_cpp_dll_gpu.dll</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+    <Content Include="dependencies\pthreadGC2.dll">
+      <PackagePath>lib/netstandard2.0/x64/pthreadGC2.dll</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+    <Content Include="dependencies\pthreadVC2.dll">
+      <PackagePath>lib/netstandard2.0/x64/pthreadVC2.dll</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+    <Content Include="dependencies\msvcr100.dll">
+      <PackagePath>lib/netstandard2.0/x64/msvcr100.dll</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="readme.txt">
+      <Pack>true</Pack>
+      <PackagePath>/</PackagePath>
+    </Content>
+
+    <None Include="..\..\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+
+    <Content Include="Alturos.Yolo.targets">
+      <Pack>true</Pack>
+      <PackagePath>/build/</PackagePath>
+    </Content> 
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Alturos.Yolo.targets">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

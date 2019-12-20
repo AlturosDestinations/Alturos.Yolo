@@ -57,16 +57,16 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Alturos.Yolo\Alturos.Yolo.csproj">
-      <Project>{bfdb287f-7e23-4d44-b114-df2e05c2cf04}</Project>
-      <Name>Alturos.Yolo</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\..\Images\Motorbike1.png">
       <Link>Images\Motorbike1.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Alturos.Yolo\Alturos.Yolo.csproj">
+      <Project>{2c530266-a3da-4175-8311-06e5a2378f22}</Project>
+      <Name>Alturos.Yolo</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
