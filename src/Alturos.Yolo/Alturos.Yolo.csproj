@@ -55,54 +55,27 @@
 
   <ItemGroup>
     <Content Include="dependencies\opencv_world411.dll">
-      <PackagePath>lib/net461/x64/opencv_world411.dll</PackagePath>
+      <PackagePath>x64/opencv_world411.dll</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="dependencies\yolo_cpp_dll_cpu.dll">
-      <PackagePath>lib/net461/x64/yolo_cpp_dll_cpu.dll</PackagePath>
+      <PackagePath>x64/yolo_cpp_dll_cpu.dll</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="dependencies\yolo_cpp_dll_gpu.dll">
-      <PackagePath>lib/net461/x64/yolo_cpp_dll_gpu.dll</PackagePath>
+      <PackagePath>x64/yolo_cpp_dll_gpu.dll</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="dependencies\pthreadGC2.dll">
-      <PackagePath>lib/net461/x64/pthreadGC2.dll</PackagePath>
+      <PackagePath>x64/pthreadGC2.dll</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="dependencies\pthreadVC2.dll">
-      <PackagePath>lib/net461/x64/pthreadVC2.dll</PackagePath>
+      <PackagePath>x64/pthreadVC2.dll</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="dependencies\msvcr100.dll">
-      <PackagePath>lib/net461/x64/msvcr100.dll</PackagePath>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="dependencies\opencv_world411.dll">
-      <PackagePath>lib/netstandard2.0/x64/opencv_world411.dll</PackagePath>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </Content>
-    <Content Include="dependencies\yolo_cpp_dll_cpu.dll">
-      <PackagePath>lib/netstandard2.0/x64/yolo_cpp_dll_cpu.dll</PackagePath>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </Content>
-    <Content Include="dependencies\yolo_cpp_dll_gpu.dll">
-      <PackagePath>lib/netstandard2.0/x64/yolo_cpp_dll_gpu.dll</PackagePath>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </Content>
-    <Content Include="dependencies\pthreadGC2.dll">
-      <PackagePath>lib/netstandard2.0/x64/pthreadGC2.dll</PackagePath>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </Content>
-    <Content Include="dependencies\pthreadVC2.dll">
-      <PackagePath>lib/netstandard2.0/x64/pthreadVC2.dll</PackagePath>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </Content>
-    <Content Include="dependencies\msvcr100.dll">
-      <PackagePath>lib/netstandard2.0/x64/msvcr100.dll</PackagePath>
+      <PackagePath>x64/msvcr100.dll</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
   </ItemGroup>
