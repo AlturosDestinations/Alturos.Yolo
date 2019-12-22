@@ -55,6 +55,8 @@ It is important to use GPU mode for fast object detection. It is also important 
 - [Microsoft Visual C++ Redistributable for Visual Studio 2015, 2017 und 2019 x64](https://aka.ms/vs/16/release/vc_redist.x64.exe)
 
 ### GPU requirements (optional)
+It is important to use the mentioned version `10.1`
+
 1) Install the latest Nvidia driver for your graphic device
 2) [Install Nvidia CUDA Toolkit 10.1](https://developer.nvidia.com/cuda-downloads) (must be installed add a hardware driver for cuda support)
 3) [Download Nvidia cuDNN v7.6.3 for CUDA 10.1](https://developer.nvidia.com/rdp/cudnn-download)
