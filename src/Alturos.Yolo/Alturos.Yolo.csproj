@@ -6,15 +6,15 @@
     <Authors>Alturos Destinations</Authors>
     <Company>Alturos DestinationsAlturos Destinations</Company>
     <PackageTags>darknet yolo yolo3 yolov3 yolo2 yolov2 objectdetection object-detection neural-network dnn deep-learning</PackageTags>
-    <PackageReleaseNotes>.netstandard 2.0 support</PackageReleaseNotes>
+    <PackageReleaseNotes>.netstandard 2.0 support, add linux support</PackageReleaseNotes>
     <PackageIconUrl>https://raw.githubusercontent.com/AlturosDestinations/Alturos.Yolo/master/doc/logo.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/AlturosDestinations/Alturos.Yolo</PackageProjectUrl>
     <RepositoryUrl>https://github.com/AlturosDestinations/Alturos.Yolo</RepositoryUrl>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>3.0.2-alpha</Version>
-    <AssemblyVersion>3.0.1</AssemblyVersion>
-    <FileVersion>3.0.1</FileVersion>
+    <AssemblyVersion>3.0.2</AssemblyVersion>
+    <FileVersion>3.0.2</FileVersion>
   </PropertyGroup>
 
   <!-- Only for .netstandard 2.0 -->
