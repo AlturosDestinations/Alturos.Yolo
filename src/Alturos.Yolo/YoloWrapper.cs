@@ -153,37 +153,41 @@ namespace Alturos.Yolo
         {
             //Detect if Visual C++ Redistributable for Visual Studio is installed
             //https://stackoverflow.com/questions/12206314/detect-if-visual-c-redistributable-for-visual-studio-2012-is-installed/
-            var checkKeys = new Dictionary<string, string>
-            {
-                { @"Installer\Dependencies\,,amd64,14.0,bundle", "Microsoft Visual C++ 2017 Redistributable (x64)" },
-                { @"Installer\Dependencies\VC,redist.x64,amd64,14.16,bundle", "Microsoft Visual C++ 2017 Redistributable (x64)" },
-                { @"Installer\Dependencies\VC,redist.x64,amd64,14.20,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" }, 
-                { @"Installer\Dependencies\VC,redist.x64,amd64,14.21,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" },
-                { @"Installer\Dependencies\VC,redist.x64,amd64,14.22,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" },
-                { @"Installer\Dependencies\VC,redist.x64,amd64,14.23,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" },
-                { @"Installer\Dependencies\VC,redist.x64,amd64,14.24,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" },
-            };
 
-            foreach (var checkKey in checkKeys)
+            //Check New Versions
+            var newVerMinVer = 14.16; //Minimal VCRedist version to check
+            var newVerMaxVer = 14.30; //Maximal VCRedist version to check (Use a bigger value than the actual true last version in order to prevent update)
+
+            string newVerMinVerStr = null;
+
+            var index = 0;
+            //We dont need to check the key value because each version of VCResdist C++ is unique.
+            while (newVerMinVer < newVerMaxVer)
             {
-                using (var registryKey = Registry.ClassesRoot.OpenSubKey(checkKey.Key, false))
+                if (newVerMinVer.ToString().Length == 4)
+                    newVerMinVerStr = newVerMinVer.ToString() + "0";
+                else
+                    newVerMinVerStr = newVerMinVer.ToString();
+
+                string[] key =
                 {
-                    if (registryKey == null)
-                    {
-                        continue;
-                    }
+                    @"Installer\Dependencies\,,amd64,14.0,bundle", //Specific key name, no need to change the version.
+                    @"Installer\Dependencies\VC,redist.x64,amd64," + newVerMinVerStr.Replace(",", ".") + ",bundle",
+                };
 
-                    var displayName = registryKey.GetValue("DisplayName") as string;
-                    if (string.IsNullOrEmpty(displayName))
+                while (index < key.Length)
+                {
+                    using (var registryKey = Registry.ClassesRoot.OpenSubKey(key[index], false))
                     {
-                        continue;
+                        if (registryKey != null)
+                        {
+                            return true;
+                        }
                     }
-
-                    if (displayName.StartsWith(checkKey.Value, StringComparison.OrdinalIgnoreCase))
-                    {
-                        return true;
-                    }
+                    index++;
                 }
+                index = 0;
+                newVerMinVer += 0.01;
             }
 
             return false;
