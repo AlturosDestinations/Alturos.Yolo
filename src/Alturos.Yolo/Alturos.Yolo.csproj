@@ -12,20 +12,23 @@
     <RepositoryUrl>https://github.com/AlturosDestinations/Alturos.Yolo</RepositoryUrl>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.0.0-alpha</Version>
-    <AssemblyVersion>3.0.0</AssemblyVersion>
-    <FileVersion>3.0.0</FileVersion>
+    <Version>3.0.1-alpha</Version>
+    <AssemblyVersion>3.0.1</AssemblyVersion>
+    <FileVersion>3.0.1</FileVersion>
   </PropertyGroup>
 
+  <!-- Only for .netstandard 2.0 -->
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="Microsoft.Win32.Registry" Version="4.7.0" />
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
   </ItemGroup>
 
+  <!-- Only for .net4-->
   <ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
     <Reference Include="System.Net.Http" />
   </ItemGroup>
 
+  <!-- Only for current solution, copy files to x64 folder -->
   <ItemGroup>
     <ContentWithTargetPath Include="dependencies\opencv_world411.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -53,29 +56,30 @@
     </ContentWithTargetPath>
   </ItemGroup>
 
+  <!-- Required to copy files into the nuget package -->
   <ItemGroup>
     <Content Include="dependencies\opencv_world411.dll">
-      <PackagePath>x64/opencv_world411.dll</PackagePath>
+      <PackagePath>lib/win/x64/opencv_world411.dll</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="dependencies\yolo_cpp_dll_cpu.dll">
-      <PackagePath>x64/yolo_cpp_dll_cpu.dll</PackagePath>
+      <PackagePath>lib/win/x64/yolo_cpp_dll_cpu.dll</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="dependencies\yolo_cpp_dll_gpu.dll">
-      <PackagePath>x64/yolo_cpp_dll_gpu.dll</PackagePath>
+      <PackagePath>lib/win/x64/yolo_cpp_dll_gpu.dll</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="dependencies\pthreadGC2.dll">
-      <PackagePath>x64/pthreadGC2.dll</PackagePath>
+      <PackagePath>lib/win/x64/pthreadGC2.dll</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="dependencies\pthreadVC2.dll">
-      <PackagePath>x64/pthreadVC2.dll</PackagePath>
+      <PackagePath>lib/win/x64/pthreadVC2.dll</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="dependencies\msvcr100.dll">
-      <PackagePath>x64/msvcr100.dll</PackagePath>
+      <PackagePath>lib/win/x64/msvcr100.dll</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
   </ItemGroup>
@@ -86,21 +90,16 @@
       <PackagePath>/</PackagePath>
     </Content>
 
+    <!-- Required for the target project to know where to copy the files  -->
+    <Content Include="Alturos.Yolo.targets">
+      <Pack>true</Pack>
+      <PackagePath>build/</PackagePath>
+    </Content>
+
     <None Include="..\..\LICENSE.md">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
-    </None>
-
-    <Content Include="Alturos.Yolo.targets">
-      <Pack>true</Pack>
-      <PackagePath>/build/</PackagePath>
-    </Content> 
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Alturos.Yolo.targets">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </None> 
   </ItemGroup>
 
 </Project>
