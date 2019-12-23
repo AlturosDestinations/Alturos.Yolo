@@ -151,46 +151,31 @@ namespace Alturos.Yolo
 
         private bool IsMicrosoftVisualCPlusPlus2017Available()
         {
-            //Detect if Visual C++ Redistributable for Visual Studio is installed
-            //https://stackoverflow.com/questions/12206314/detect-if-visual-c-redistributable-for-visual-studio-2012-is-installed/
-
-            //Check New Versions
-            var newVerMinVer = 14.16; //Minimal VCRedist version to check
-            var newVerMaxVer = 14.30; //Maximal VCRedist version to check (Use a bigger value than the actual true last version in order to prevent update)
-
-            string newVerMinVerStr = null;
-
-            var index = 0;
-            //We dont need to check the key value because each version of VCResdist C++ is unique.
-            while (newVerMinVer < newVerMaxVer)
+            var index = 14; //Oldest version of VCRedist C++ working with Yolo
+            while (true)
             {
-                if (newVerMinVer.ToString().Length == 4)
-                    newVerMinVerStr = newVerMinVer.ToString() + "0";
-                else
-                    newVerMinVerStr = newVerMinVer.ToString();
-
-                string[] key =
+                if (GetRegKey(index) != null)
                 {
-                    @"Installer\Dependencies\,,amd64,14.0,bundle", //Specific key name, no need to change the version.
-                    @"Installer\Dependencies\VC,redist.x64,amd64," + newVerMinVerStr.Replace(",", ".") + ",bundle",
-                };
-
-                while (index < key.Length)
-                {
-                    using (var registryKey = Registry.ClassesRoot.OpenSubKey(key[index], false))
+                    if (GetRegKey(index).GetValue("Installed").ToString() == "1")
                     {
-                        if (registryKey != null)
+                        return true;
+                    }
+                    else
+                    {
+                        if (GetRegKey(index + 1) == null)
                         {
-                            return true;
+                            return false;
                         }
                     }
-                    index++;
                 }
-                index = 0;
-                newVerMinVer += 0.01;
+                index++;
             }
+        }
 
-            return false;
+        private RegistryKey GetRegKey(int index)
+        {
+            RegistryKey registryKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\WOW6432Node\Microsoft\VisualStudio\" + index + @".0\VC\Runtimes\x64", false);
+            return registryKey;
         }
 
         private EnvironmentReport GetEnvironmentReport()
