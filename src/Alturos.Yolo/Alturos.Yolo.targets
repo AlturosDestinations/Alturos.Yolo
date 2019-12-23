@@ -26,4 +26,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup Condition="'$(OS)' == 'Unix'">
+    <None Include="$(MSBuildThisFileDirectory)/../lib/unix/x64/yolo_cpp_dll_cpu.so">
+      <Link>x64/yolo_cpp_dll_cpu.so</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

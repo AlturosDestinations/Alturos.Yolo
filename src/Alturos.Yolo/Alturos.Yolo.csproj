@@ -12,7 +12,7 @@
     <RepositoryUrl>https://github.com/AlturosDestinations/Alturos.Yolo</RepositoryUrl>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.0.1-alpha</Version>
+    <Version>3.0.2-alpha</Version>
     <AssemblyVersion>3.0.1</AssemblyVersion>
     <FileVersion>3.0.1</FileVersion>
   </PropertyGroup>
@@ -37,6 +37,10 @@
     <ContentWithTargetPath Include="dependencies\yolo_cpp_dll_cpu.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>x64\yolo_cpp_dll_cpu.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="dependencies\yolo_cpp_dll_cpu.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>x64\yolo_cpp_dll_cpu.so</TargetPath>
     </ContentWithTargetPath>
     <ContentWithTargetPath Include="dependencies\yolo_cpp_dll_gpu.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -64,6 +68,10 @@
     </Content>
     <Content Include="dependencies\yolo_cpp_dll_cpu.dll">
       <PackagePath>lib/win/x64/yolo_cpp_dll_cpu.dll</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+    <Content Include="dependencies\yolo_cpp_dll_cpu.so">
+      <PackagePath>lib/unix/x64/yolo_cpp_dll_cpu.so</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="dependencies\yolo_cpp_dll_gpu.dll">
