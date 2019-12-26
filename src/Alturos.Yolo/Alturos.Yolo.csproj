@@ -6,15 +6,15 @@
     <Authors>Alturos Destinations</Authors>
     <Company>Alturos DestinationsAlturos Destinations</Company>
     <PackageTags>darknet yolo yolo3 yolov3 yolo2 yolov2 objectdetection object-detection neural-network dnn deep-learning</PackageTags>
-    <PackageReleaseNotes>.netstandard 2.0 support, add linux support</PackageReleaseNotes>
+    <PackageReleaseNotes>.netstandard 2.0 support, add linux support, optimize folder structure</PackageReleaseNotes>
     <PackageIconUrl>https://raw.githubusercontent.com/AlturosDestinations/Alturos.Yolo/master/doc/logo.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/AlturosDestinations/Alturos.Yolo</PackageProjectUrl>
     <RepositoryUrl>https://github.com/AlturosDestinations/Alturos.Yolo</RepositoryUrl>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.0.2-alpha</Version>
-    <AssemblyVersion>3.0.2</AssemblyVersion>
-    <FileVersion>3.0.2</FileVersion>
+    <Version>3.0.3-alpha</Version>
+    <AssemblyVersion>3.0.3</AssemblyVersion>
+    <FileVersion>3.0.3</FileVersion>
   </PropertyGroup>
 
   <!-- Only for .netstandard 2.0 -->
@@ -29,65 +29,67 @@
   </ItemGroup>
 
   <!-- Only for current solution, copy files to x64 folder -->
-  <ItemGroup>
-    <ContentWithTargetPath Include="dependencies\opencv_world411.dll">
+  <ItemGroup Condition="'$(OS)' != 'Unix'">
+    <ContentWithTargetPath Include="dependencies/win/opencv_world411.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>x64\opencv_world411.dll</TargetPath>
+      <TargetPath>opencv_world411.dll</TargetPath>
     </ContentWithTargetPath>
-    <ContentWithTargetPath Include="dependencies\yolo_cpp_dll_cpu.dll">
+    <ContentWithTargetPath Include="dependencies/win/yolo_cpp_dll_cpu.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>x64\yolo_cpp_dll_cpu.dll</TargetPath>
+      <TargetPath>yolo_cpp_dll_cpu.dll</TargetPath>
     </ContentWithTargetPath>
-    <ContentWithTargetPath Include="dependencies\yolo_cpp_dll_cpu.so">
+    <ContentWithTargetPath Include="dependencies/win/yolo_cpp_dll_gpu.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>x64\yolo_cpp_dll_cpu.so</TargetPath>
+      <TargetPath>yolo_cpp_dll_gpu.dll</TargetPath>
     </ContentWithTargetPath>
-    <ContentWithTargetPath Include="dependencies\yolo_cpp_dll_gpu.dll">
+    <ContentWithTargetPath Include="dependencies/win/pthreadGC2.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>x64\yolo_cpp_dll_gpu.dll</TargetPath>
+      <TargetPath>pthreadGC2.dll</TargetPath>
     </ContentWithTargetPath>
-    <ContentWithTargetPath Include="dependencies\pthreadGC2.dll">
+    <ContentWithTargetPath Include="dependencies/win/pthreadVC2.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>x64\pthreadGC2.dll</TargetPath>
+      <TargetPath>pthreadVC2.dll</TargetPath>
     </ContentWithTargetPath>
-    <ContentWithTargetPath Include="dependencies\pthreadVC2.dll">
+    <ContentWithTargetPath Include="dependencies/win/msvcr100.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>x64\pthreadVC2.dll</TargetPath>
+      <TargetPath>msvcr100.dll</TargetPath>
     </ContentWithTargetPath>
-    <ContentWithTargetPath Include="dependencies\msvcr100.dll">
+  </ItemGroup>
+  <ItemGroup Condition="'$(OS)' == 'Unix'">
+    <ContentWithTargetPath Include="dependencies/linux/yolo_cpp_dll_cpu.so">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>x64\msvcr100.dll</TargetPath>
+      <TargetPath>x64/yolo_cpp_dll_cpu.so</TargetPath>
     </ContentWithTargetPath>
   </ItemGroup>
 
   <!-- Required to copy files into the nuget package -->
   <ItemGroup>
-    <Content Include="dependencies\opencv_world411.dll">
-      <PackagePath>lib/win/x64/opencv_world411.dll</PackagePath>
+    <Content Include="dependencies/win/opencv_world411.dll">
+      <PackagePath>runtimes/win-x64/native/opencv_world411.dll</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
-    <Content Include="dependencies\yolo_cpp_dll_cpu.dll">
-      <PackagePath>lib/win/x64/yolo_cpp_dll_cpu.dll</PackagePath>
+    <Content Include="dependencies/win/yolo_cpp_dll_cpu.dll">
+      <PackagePath>runtimes/win-x64/native/yolo_cpp_dll_cpu.dll</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
-    <Content Include="dependencies\yolo_cpp_dll_cpu.so">
-      <PackagePath>lib/unix/x64/yolo_cpp_dll_cpu.so</PackagePath>
+    <Content Include="dependencies/win/yolo_cpp_dll_gpu.dll">
+      <PackagePath>runtimes/win-x64/native/yolo_cpp_dll_gpu.dll</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
-    <Content Include="dependencies\yolo_cpp_dll_gpu.dll">
-      <PackagePath>lib/win/x64/yolo_cpp_dll_gpu.dll</PackagePath>
+    <Content Include="dependencies/win/pthreadGC2.dll">
+      <PackagePath>runtimes/win-x64/native/pthreadGC2.dll</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
-    <Content Include="dependencies\pthreadGC2.dll">
-      <PackagePath>lib/win/x64/pthreadGC2.dll</PackagePath>
+    <Content Include="dependencies/win/pthreadVC2.dll">
+      <PackagePath>runtimes/win-x64/native/pthreadVC2.dll</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
-    <Content Include="dependencies\pthreadVC2.dll">
-      <PackagePath>lib/win/x64/pthreadVC2.dll</PackagePath>
+    <Content Include="dependencies/win/msvcr100.dll">
+      <PackagePath>runtimes/win-x64/native/msvcr100.dll</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
-    <Content Include="dependencies\msvcr100.dll">
-      <PackagePath>lib/win/x64/msvcr100.dll</PackagePath>
+    <Content Include="dependencies/linux/yolo_cpp_dll_cpu.so">
+      <PackagePath>runtimes/linux-x64/native/yolo_cpp_dll_cpu.so</PackagePath>
       <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
   </ItemGroup>

@@ -14,26 +14,23 @@ namespace Alturos.Yolo.TestConsole
         {
             Console.WriteLine("CPU");
             Console.WriteLine("---------------------------------------------------------------");
-            this.Check(true);
+            this.Check(null);
             Console.WriteLine("GPU");
             Console.WriteLine("---------------------------------------------------------------");
-            this.Check(false);
+            this.Check(new GpuConfig());
         }
 
-        private void Check(bool ignoreGpu)
+        private void Check(GpuConfig gpuConfig)
         {
-            var yoloWrapper = new YoloWrapper("yolov2-tiny-voc.cfg", "yolov2-tiny-voc.weights", "voc.names", ignoreGpu: ignoreGpu);
+            var yoloWrapper = new YoloWrapper("yolov2-tiny-voc.cfg", "yolov2-tiny-voc.weights", "voc.names", gpuConfig);
             var files = Directory.GetFiles(@".\Images");
 
             var retrys = 10;
 
             var sw = new Stopwatch();
-            var elapsed = 0.0;
-
             foreach (var file in files)
             {
-                elapsed = 0.0;
-
+                var elapsed = 0.0;
                 var fileInfo = new FileInfo(file);
                 var imageData = File.ReadAllBytes(file);
 

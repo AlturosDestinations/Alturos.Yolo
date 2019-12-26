@@ -1,5 +1,4 @@
 ﻿using Alturos.Yolo.Model;
-using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,19 +11,19 @@ namespace Alturos.Yolo
     public class YoloWrapper : IDisposable
     {
         public const int MaxObjects = 1000;
-        private const string YoloLibraryCpu = @"x64/yolo_cpp_dll_cpu";
-        private const string YoloLibraryGpu = @"x64/yolo_cpp_dll_gpu";
+        private const string YoloLibraryCpu = "yolo_cpp_dll_cpu";
+        private const string YoloLibraryGpu = "yolo_cpp_dll_gpu";
 
         private readonly ImageAnalyzer _imageAnalyzer = new ImageAnalyzer();
+        private readonly IYoloSystemValidator _yoloSystemValidator;
         private YoloObjectTypeResolver _objectTypeResolver;
 
         public DetectionSystem DetectionSystem { get; private set; } = DetectionSystem.Unknown;
-        public EnvironmentReport EnvironmentReport { get; private set; }
 
-        #region DllImport Cpu
+#region DllImport Cpu
 
         [DllImport(YoloLibraryCpu, EntryPoint = "init")]
-        private static extern int InitializeYoloCpu(string configurationFilename, string weightsFilename, int gpu);
+        private static extern int InitializeYoloCpu(string configurationFilename, string weightsFilename, int gpuIndex);
 
         [DllImport(YoloLibraryCpu, EntryPoint = "detect_image")]
         internal static extern int DetectImageCpu(string filename, ref BboxContainer container);
@@ -35,12 +34,12 @@ namespace Alturos.Yolo
         [DllImport(YoloLibraryCpu, EntryPoint = "dispose")]
         internal static extern int DisposeYoloCpu();
 
-        #endregion
+#endregion
 
-        #region DllImport Gpu
+#region DllImport Gpu
 
         [DllImport(YoloLibraryGpu, EntryPoint = "init")]
-        internal static extern int InitializeYoloGpu(string configurationFilename, string weightsFilename, int gpu);
+        internal static extern int InitializeYoloGpu(string configurationFilename, string weightsFilename, int gpuIndex);
 
         [DllImport(YoloLibraryGpu, EntryPoint = "detect_image")]
         internal static extern int DetectImageGpu(string filename, ref BboxContainer container);
@@ -57,7 +56,7 @@ namespace Alturos.Yolo
         [DllImport(YoloLibraryGpu, EntryPoint = "get_device_name")]
         internal static extern int GetDeviceName(int gpu, StringBuilder deviceName);
 
-        #endregion
+#endregion
 
         /// <summary>
         /// Initialize Yolo
@@ -65,11 +64,15 @@ namespace Alturos.Yolo
         /// <param name="yoloConfiguration"></param>
         /// <param name="ignoreGpu">Disable automatic gpu detection</param>
         /// <exception cref="NotSupportedException">Thrown when the process not run in 64bit</exception>
-        /// <exception cref="DllNotFoundException">Thrown when Microsoft Visual C++ 2017 Redistributable not available</exception>
-        /// <exception cref="IndexOutOfRangeException">Thrown when the gpu index is not valid</exception>
-        public YoloWrapper(YoloConfiguration yoloConfiguration, bool ignoreGpu = false)
+        /// <exception cref="YoloInitializeException">Thrown if an error occurs during initialization</exception>
+        public YoloWrapper(YoloConfiguration yoloConfiguration, GpuConfig gpuConfig = null, IYoloSystemValidator yoloSystemValidator = null)
         {
-            this.Initialize(yoloConfiguration.ConfigFile, yoloConfiguration.WeightsFile, yoloConfiguration.NamesFile, 0, ignoreGpu);
+            if (yoloSystemValidator == null)
+            {
+                this._yoloSystemValidator = new DefaultYoloSystemValidator();
+            }
+
+            this.Initialize(yoloConfiguration.ConfigFile, yoloConfiguration.WeightsFile, yoloConfiguration.NamesFile, gpuConfig);
         }
 
         /// <summary>
@@ -81,11 +84,15 @@ namespace Alturos.Yolo
         /// <param name="gpu">Gpu Index if multiple graphic devices available</param>
         /// <param name="ignoreGpu">Disable automatic gpu detection</param>
         /// <exception cref="NotSupportedException">Thrown when the process not run in 64bit</exception>
-        /// <exception cref="DllNotFoundException">Thrown when Microsoft Visual C++ 2017 Redistributable not available</exception>
-        /// <exception cref="IndexOutOfRangeException">Thrown when the gpu index is not valid</exception>
-        public YoloWrapper(string configurationFilename, string weightsFilename, string namesFilename, int gpu = 0, bool ignoreGpu = false)
+        /// <exception cref="YoloInitializeException">Thrown if an error occurs during initialization</exception>
+        public YoloWrapper(string configurationFilename, string weightsFilename, string namesFilename, GpuConfig gpuConfig = null, IYoloSystemValidator yoloSystemValidator = null)
         {
-            this.Initialize(configurationFilename, weightsFilename, namesFilename, gpu, ignoreGpu);
+            if (yoloSystemValidator == null)
+            {
+                this._yoloSystemValidator = new DefaultYoloSystemValidator();
+            }
+
+            this.Initialize(configurationFilename, weightsFilename, namesFilename, gpuConfig);
         }
 
         public void Dispose()
@@ -101,23 +108,44 @@ namespace Alturos.Yolo
             }
         }
 
-        private void Initialize(string configurationFilename, string weightsFilename, string namesFilename, int gpu = 0, bool ignoreGpu = false, bool ignoreCPlusPlusDetection = false)
+        private void Initialize(string configurationFilename, string weightsFilename, string namesFilename, GpuConfig gpuConfig)
         {
             if (IntPtr.Size != 8)
             {
                 throw new NotSupportedException("Only 64-bit processes are supported");
             }
 
-            this.EnvironmentReport = this.GetEnvironmentReport();
-            this.DetectionSystem = DetectionSystem.CPU;
-
-            if (!ignoreCPlusPlusDetection && !this.EnvironmentReport.MicrosoftVisualCPlusPlusRedistributableExists)
+            var systemReport = this._yoloSystemValidator.Validate();
+            if (!systemReport.MicrosoftVisualCPlusPlusRedistributableExists)
             {
-                throw new DllNotFoundException("Microsoft Visual C++ 2017-2019 Redistributable (x64)");
+                throw new YoloInitializeException("Microsoft Visual C++ 2017-2019 Redistributable (x64)");
             }
 
-            if (!ignoreGpu && this.EnvironmentReport.CudaExists && this.EnvironmentReport.CudnnExists)
+            this.DetectionSystem = DetectionSystem.CPU;
+
+            if (gpuConfig != null)
             {
+                if (!systemReport.CudaExists)
+                {
+                    throw new YoloInitializeException("Cuda files not found");
+                }
+
+                if (!systemReport.CudnnExists)
+                {
+                    throw new YoloInitializeException("Cudnn not found");
+                }
+
+                var deviceCount = GetDeviceCount();
+                if (deviceCount == 0)
+                {
+                    throw new YoloInitializeException("No Nvidia graphic device is available");
+                }
+
+                if (gpuConfig.GpuIndex > (deviceCount - 1))
+                {
+                    throw new YoloInitializeException("Graphic device index is out of range");
+                }
+
                 this.DetectionSystem = DetectionSystem.GPU;
             }
 
@@ -127,105 +155,11 @@ namespace Alturos.Yolo
                     InitializeYoloCpu(configurationFilename, weightsFilename, 0);
                     break;
                 case DetectionSystem.GPU:
-                    var deviceCount = GetDeviceCount();
-                    if (deviceCount == 0)
-                    {
-                        throw new NotSupportedException("No graphic device is available");
-                    }
-
-                    if (gpu > (deviceCount - 1))
-                    {
-                        throw new IndexOutOfRangeException("Graphic device index is out of range");
-                    }
-
-                    var deviceName = new StringBuilder(); //allocate memory for string
-                    GetDeviceName(gpu, deviceName);
-                    this.EnvironmentReport.GraphicDeviceName = deviceName.ToString();
-
-                    InitializeYoloGpu(configurationFilename, weightsFilename, gpu);
+                    InitializeYoloGpu(configurationFilename, weightsFilename, gpuConfig.GpuIndex);
                     break;
             }
 
             this._objectTypeResolver = new YoloObjectTypeResolver(namesFilename);
-        }
-
-        private bool IsMicrosoftVisualCPlusPlus2017Available()
-        {
-            //Detect if Visual C++ Redistributable for Visual Studio is installed
-            //https://stackoverflow.com/questions/12206314/detect-if-visual-c-redistributable-for-visual-studio-2012-is-installed/
-            var checkKeys = new Dictionary<string, string>
-            {
-                { @"Installer\Dependencies\,,amd64,14.0,bundle", "Microsoft Visual C++ 2017 Redistributable (x64)" },
-                { @"Installer\Dependencies\VC,redist.x64,amd64,14.16,bundle", "Microsoft Visual C++ 2017 Redistributable (x64)" },
-                { @"Installer\Dependencies\VC,redist.x64,amd64,14.20,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" }, 
-                { @"Installer\Dependencies\VC,redist.x64,amd64,14.21,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" },
-                { @"Installer\Dependencies\VC,redist.x64,amd64,14.22,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" },
-                { @"Installer\Dependencies\VC,redist.x64,amd64,14.23,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" },
-                { @"Installer\Dependencies\VC,redist.x64,amd64,14.24,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" },
-            };
-
-            foreach (var checkKey in checkKeys)
-            {
-                using (var registryKey = Registry.ClassesRoot.OpenSubKey(checkKey.Key, false))
-                {
-                    if (registryKey == null)
-                    {
-                        continue;
-                    }
-
-                    var displayName = registryKey.GetValue("DisplayName") as string;
-                    if (string.IsNullOrEmpty(displayName))
-                    {
-                        continue;
-                    }
-
-                    if (displayName.StartsWith(checkKey.Value, StringComparison.OrdinalIgnoreCase))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        private EnvironmentReport GetEnvironmentReport()
-        {
-            var report = new EnvironmentReport();
-
-#if NETSTANDARD
-
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                report.MicrosoftVisualCPlusPlusRedistributableExists = this.IsMicrosoftVisualCPlusPlus2017Available();
-            }
-            else
-            {
-                report.MicrosoftVisualCPlusPlusRedistributableExists = true;
-            }
-
-#endif
-
-#if NET461
-            report.MicrosoftVisualCPlusPlusRedistributableExists = this.IsMicrosoftVisualCPlusPlus2017Available();
-#endif
-
-            if (File.Exists(@"x64\cudnn64_7.dll"))
-            {
-                report.CudnnExists = true;
-            }
-
-            var envirormentVariables = Environment.GetEnvironmentVariables(EnvironmentVariableTarget.Machine);
-            if (envirormentVariables.Contains("CUDA_PATH"))
-            {
-                report.CudaExists = true;
-            }
-            if (envirormentVariables.Contains("CUDA_PATH_V10_1"))
-            {
-                report.CudaExists = true;
-            }
-
-            return report;
         }
 
         /// <summary>
@@ -311,25 +245,38 @@ namespace Alturos.Yolo
             return this.Convert(container);
         }
 
-        private IEnumerable<YoloItem> Convert(BboxContainer container)
+        public string GetGraphicDeviceName(GpuConfig gpuConfig)
         {
-            var yoloItems = new List<YoloItem>();
-            foreach (var item in container.candidates.Where(o => o.h > 0 || o.w > 0))
+            if (gpuConfig == null)
             {
-                var yoloItem = new YoloItem
-                {
-                    X = (int)item.x,
-                    Y = (int)item.y,
-                    Height = (int)item.h,
-                    Width = (int)item.w,
-                    Confidence = item.prob,
-                    Type = this._objectTypeResolver.Resolve((int)item.obj_id)
-                };
-
-                yoloItems.Add(yoloItem);
+                return string.Empty;
             }
 
-            return yoloItems;
+            var systemReport = this._yoloSystemValidator.Validate();
+            if (!systemReport.CudaExists || !systemReport.CudnnExists)
+            {
+                return "unknown";
+            }
+
+            var deviceName = new StringBuilder(); //allocate memory for string
+            GetDeviceName(gpuConfig.GpuIndex, deviceName);
+            return deviceName.ToString();
+        }
+
+        private IEnumerable<YoloItem> Convert(BboxContainer container)
+        {
+            return container.candidates.Where(o => o.h > 0 || o.w > 0).Select(o =>
+
+                new YoloItem
+                {
+                    X = (int)o.x,
+                    Y = (int)o.y,
+                    Height = (int)o.h,
+                    Width = (int)o.w,
+                    Confidence = o.prob,
+                    Type = this._objectTypeResolver.Resolve((int)o.obj_id)
+                }
+            );
         }
     }
 }

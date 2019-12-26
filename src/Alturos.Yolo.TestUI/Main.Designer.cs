@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.buttonSendImage = new System.Windows.Forms.Button();
             this.dataGridViewResult = new System.Windows.Forms.DataGridView();
             this.ColumnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -114,9 +114,9 @@
             // ColumnConfidence
             // 
             this.ColumnConfidence.DataPropertyName = "Confidence";
-            dataGridViewCellStyle4.Format = "N3";
-            dataGridViewCellStyle4.NullValue = null;
-            this.ColumnConfidence.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.Format = "N3";
+            dataGridViewCellStyle1.NullValue = null;
+            this.ColumnConfidence.DefaultCellStyle = dataGridViewCellStyle1;
             this.ColumnConfidence.HeaderText = "Confidence";
             this.ColumnConfidence.Name = "ColumnConfidence";
             this.ColumnConfidence.ReadOnly = true;
@@ -198,8 +198,8 @@
             // ColumnWidth
             // 
             this.ColumnWidth.DataPropertyName = "Width";
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.ColumnWidth.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ColumnWidth.DefaultCellStyle = dataGridViewCellStyle2;
             this.ColumnWidth.HeaderText = "Width";
             this.ColumnWidth.Name = "ColumnWidth";
             this.ColumnWidth.ReadOnly = true;
@@ -208,8 +208,8 @@
             // ColumnHeight
             // 
             this.ColumnHeight.DataPropertyName = "Height";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.ColumnHeight.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ColumnHeight.DefaultCellStyle = dataGridViewCellStyle3;
             this.ColumnHeight.HeaderText = "Height";
             this.ColumnHeight.Name = "ColumnHeight";
             this.ColumnHeight.ReadOnly = true;
@@ -317,6 +317,8 @@
             // 
             // cpuToolStripMenuItem
             // 
+            this.cpuToolStripMenuItem.Checked = true;
+            this.cpuToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cpuToolStripMenuItem.Name = "cpuToolStripMenuItem";
             this.cpuToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.cpuToolStripMenuItem.Text = "Use only cpu";

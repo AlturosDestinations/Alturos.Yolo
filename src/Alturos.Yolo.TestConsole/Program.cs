@@ -20,7 +20,7 @@ namespace Alturos.Yolo.TestConsole
 
         static void TestLogic2()
         {
-            var configurationDetector = new ConfigurationDetector();
+            var configurationDetector = new YoloConfigurationDetector();
             var config = configurationDetector.Detect();
 
             using (var yoloWrapper = new YoloWrapper(config))
@@ -33,7 +33,7 @@ namespace Alturos.Yolo.TestConsole
         {
             Directory.CreateDirectory("trackingImages");
 
-            var configurationDetector = new ConfigurationDetector();
+            var configurationDetector = new YoloConfigurationDetector();
             var config = configurationDetector.Detect();
             using (var yoloWrapper = new YoloWrapper(config))
             {

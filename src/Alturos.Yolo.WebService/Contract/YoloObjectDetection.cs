@@ -10,7 +10,7 @@ namespace Alturos.Yolo.WebService.Contract
 
         public YoloObjectDetection()
         {
-            var configurationDetector = new ConfigurationDetector();
+            var configurationDetector = new YoloConfigurationDetector();
             var configuration = configurationDetector.Detect();
             this._yoloWrapper = new YoloWrapper(configuration);
         }
