@@ -58,10 +58,10 @@ It is important to use GPU mode for fast object detection. It is also important 
 1) Install the latest Nvidia driver for your graphic device
 2) [Install Nvidia CUDA Toolkit 10.1](https://developer.nvidia.com/cuda-downloads) (must be installed add a hardware driver for cuda support)
 3) [Download Nvidia cuDNN v7.6.3 for CUDA 10.1](https://developer.nvidia.com/rdp/cudnn-download)
-4) Copy the `cudnn64_7.dll` from the output directory of point 2. into the `x64` folder of your project.
+4) Copy the `cudnn64_7.dll` from the output directory of point 2. into the project folder.
 
 ## Build requirements
-- Visual Studio 2017
+- Visual Studio 2017/2019
 
 ## Benchmark / Performance
 Average processing speed of test images bird1.png, bird2.png, car1.png, motorbike1.png
@@ -131,14 +131,13 @@ You should have this files in your program directory.
 
     .
     ├── Alturos.Yolo.dll              # C# yolo wrapper
-    ├── x64/
-    │   ├── yolo_cpp_dll_cpu.dll      # yolo runtime for cpu
-    │   ├── yolo_cpp_dll_gpu.dll      # yolo runtime for gpu
-    │   ├── cudnn64_7.dll             # required by yolo_cpp_dll_gpu (optional only required for gpu processig)
-    │   ├── opencv_world340.dll       # required by yolo_cpp_dll_xxx (process image as byte data detect_mat)
-    │   ├── pthreadGC2.dll            # required by yolo_cpp_dll_xxx (POSIX Threads)
-    │   ├── pthreadVC2.dll            # required by yolo_cpp_dll_xxx (POSIX Threads)
-    │   ├── msvcr100.dll              # required by pthread (POSIX Threads)
+    ├── yolo_cpp_dll_cpu.dll      # yolo runtime for cpu
+    ├── yolo_cpp_dll_gpu.dll      # yolo runtime for gpu
+    ├── cudnn64_7.dll             # required by yolo_cpp_dll_gpu (optional only required for gpu processig)
+    ├── opencv_world340.dll       # required by yolo_cpp_dll_xxx (process image as byte data detect_mat)
+    ├── pthreadGC2.dll            # required by yolo_cpp_dll_xxx (POSIX Threads)
+    ├── pthreadVC2.dll            # required by yolo_cpp_dll_xxx (POSIX Threads)
+    ├── msvcr100.dll              # required by pthread (POSIX Threads)
 
 ## Annotation Tool
 
