@@ -8,6 +8,7 @@
     <PackageTags>darknet yolo yolo3 yolov3 yolo2 yolov2 objectdetection object-detection neural-network dnn deep-learning</PackageTags>
     <PackageReleaseNotes>.netstandard 2.0 support, add linux support, optimize folder structure</PackageReleaseNotes>
     <PackageIconUrl>https://raw.githubusercontent.com/AlturosDestinations/Alturos.Yolo/master/doc/logo.png</PackageIconUrl>
+    <PackageIcon>logo.png</PackageIcon>
     <PackageProjectUrl>https://github.com/AlturosDestinations/Alturos.Yolo</PackageProjectUrl>
     <RepositoryUrl>https://github.com/AlturosDestinations/Alturos.Yolo</RepositoryUrl>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
@@ -107,9 +108,15 @@
     </Content>
 
     <None Include="..\..\LICENSE.md">
-      <Pack>True</Pack>
+      <Pack>true</Pack>
       <PackagePath></PackagePath>
-    </None> 
+    </None>
+
+    <None Include="..\..\doc\logo.png">
+      <Pack>true</Pack>
+      <Visible>false</Visible>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
