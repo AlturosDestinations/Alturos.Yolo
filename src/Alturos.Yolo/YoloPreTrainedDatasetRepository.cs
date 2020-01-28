@@ -105,7 +105,7 @@ namespace Alturos.Yolo
                 {
                     if (!httpResponseMessage.IsSuccessStatusCode)
                     {
-                        return false; ;
+                        return false;
                     }
 
                     var fileContentStream = await httpResponseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false);
