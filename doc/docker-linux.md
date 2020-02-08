@@ -2,18 +2,14 @@ Checkout and build darknet
 ```
 docker pull gcc
 docker run -it gcc /bin/bash
-apt-get update
-apt-get install cmake -y
+apt-get update && apt-get install build-essential cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev libopencv-dev -y
 
 git clone https://github.com/AlexeyAB/darknet.git
 cd darknet
 sed -i 's/LIBSO=0/LIBSO=1/g' Makefile
+sed -i 's/OPENCV=0/OPENCV=1/g' Makefile
 
-mkdir build-release
-cd build-release
-cmake ..
 make
-make install
 ```
 
 

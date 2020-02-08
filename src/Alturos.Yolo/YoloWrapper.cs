@@ -20,7 +20,7 @@ namespace Alturos.Yolo
 
         public DetectionSystem DetectionSystem { get; private set; } = DetectionSystem.Unknown;
 
-#region DllImport Cpu
+        #region DllImport Cpu
 
         [DllImport(YoloLibraryCpu, EntryPoint = "init")]
         private static extern int InitializeYoloCpu(string configurationFilename, string weightsFilename, int gpuIndex);
@@ -34,9 +34,12 @@ namespace Alturos.Yolo
         [DllImport(YoloLibraryCpu, EntryPoint = "dispose")]
         internal static extern int DisposeYoloCpu();
 
-#endregion
+        [DllImport(YoloLibraryCpu, EntryPoint = "built_with_opencv")]
+        internal static extern bool BuiltWithOpenCV();
 
-#region DllImport Gpu
+        #endregion
+
+        #region DllImport Gpu
 
         [DllImport(YoloLibraryGpu, EntryPoint = "init")]
         internal static extern int InitializeYoloGpu(string configurationFilename, string weightsFilename, int gpuIndex);
@@ -261,6 +264,11 @@ namespace Alturos.Yolo
             var deviceName = new StringBuilder(); //allocate memory for string
             GetDeviceName(gpuConfig.GpuIndex, deviceName);
             return deviceName.ToString();
+        }
+
+        public bool IsBuiltWithOpenCV()
+        {
+            return BuiltWithOpenCV();
         }
 
         private IEnumerable<YoloItem> Convert(BboxContainer container)
