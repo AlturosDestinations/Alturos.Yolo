@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -20,7 +19,9 @@ namespace Alturos.Yolo.TestUI
         {
             this.InitializeComponent();
 
-            this.buttonSendImage.Enabled = false;
+            this.buttonProcessImage.Enabled = false;
+            this.buttonStartTracking.Enabled = false;
+
             this.menuStrip1.Visible = false;
 
             this.toolStripStatusLabelYoloInfo.Text = string.Empty;
@@ -88,7 +89,7 @@ namespace Alturos.Yolo.TestUI
         {
             if (e.KeyCode == Keys.Space)
             {
-                this.Detect();
+                this.DetectSelectedImage();
             }
         }
 
@@ -101,7 +102,7 @@ namespace Alturos.Yolo.TestUI
 
             var items = this.dataGridViewResult.DataSource as List<YoloItem>;
             var selectedItem = this.dataGridViewResult.CurrentRow?.DataBoundItem as YoloItem;
-            this.DrawBorder2Image(items, selectedItem);
+            this.DrawBoundingBoxes(items, selectedItem);
         }
 
         private void openFolderToolStripMenuItem_Click(object sender, EventArgs e)
@@ -116,12 +117,76 @@ namespace Alturos.Yolo.TestUI
             this.dataGridViewFiles.DataSource = imageInfos.ToList();
         }
 
-        private void buttonSendImage_Click(object sender, EventArgs e)
+        private void buttonProcessImage_Click(object sender, EventArgs e)
         {
-            this.Detect();
+            this.DetectSelectedImage();
         }
 
-        private void DrawBorder2Image(List<YoloItem> items, YoloItem selectedItem = null)
+        private async void buttonStartTracking_Click(object sender, EventArgs e)
+        {
+            await this.StartTrackingAsync();
+        }
+
+        private async Task StartTrackingAsync()
+        {
+            var yoloTracking = new YoloTracking();
+            var count = this.dataGridViewFiles.RowCount;
+            for (var i = 0; i < count; i++)
+            {
+                if (i > 0)
+                {
+                    this.dataGridViewFiles.Rows[i - 1].Selected = false;
+                }
+                this.dataGridViewFiles.Rows[i].Selected = true;
+                this.dataGridViewFiles.CurrentCell = this.dataGridViewFiles.Rows[i].Cells[0];
+
+                var items = this.Detect();
+
+                var trackingItems = yoloTracking.Analyse(items);
+                this.DrawBoundingBoxes(trackingItems);
+
+                await Task.Delay(100);
+            }
+        }
+
+        private void DrawBoundingBoxes(IEnumerable<YoloTrackingItem> items)
+        {
+            var imageInfo = this.GetCurrentImage();
+            //Load the image(probably from your stream)
+            var image = Image.FromFile(imageInfo.Path);
+
+            using (var font = new Font(FontFamily.GenericSansSerif, 16))
+            using (var canvas = Graphics.FromImage(image))
+            {
+                // Modify the image using g here... 
+                // Create a brush with an alpha value and use the g.FillRectangle function
+                foreach (var item in items)
+                {
+                    var x = item.X;
+                    var y = item.Y;
+                    var width = item.Width;
+                    var height = item.Height;
+
+                    var brush = this.GetBrush(item.Confidence);
+                    var penSize = image.Width / 100.0f;
+
+                    using (var pen = new Pen(brush, penSize))
+                    {
+                        canvas.DrawRectangle(pen, x, y, width, height);
+
+                        canvas.FillRectangle(brush, x - (penSize / 2), y - 15, width + penSize, 25);
+                        canvas.DrawString(item.ObjectId.ToString(), font, Brushes.White, x, y - 12);
+                        canvas.Flush();
+                    }
+                }
+            }
+
+            var oldImage = this.pictureBox1.Image;
+            this.pictureBox1.Image = image;
+            oldImage?.Dispose();
+        }
+
+        private void DrawBoundingBoxes(List<YoloItem> items, YoloItem selectedItem = null)
         {
             var imageInfo = this.GetCurrentImage();
             //Load the image(probably from your stream)
@@ -137,9 +202,12 @@ namespace Alturos.Yolo.TestUI
                     var y = item.Y;
                     var width = item.Width;
                     var height = item.Height;
+                    
+                    var brush = this.GetBrush(item.Confidence);
+                    var penSize = image.Width / 100.0f;
 
+                    using (var pen = new Pen(brush, penSize))
                     using (var overlayBrush = new SolidBrush(Color.FromArgb(150, 255, 255, 102)))
-                    using (var pen = this.GetBrush(item.Confidence, image.Width))
                     {
                         if (item.Equals(selectedItem))
                         {
@@ -157,20 +225,18 @@ namespace Alturos.Yolo.TestUI
             oldImage?.Dispose();
         }
 
-        private Pen GetBrush(double confidence, int width)
+        private Brush GetBrush(double confidence)
         {
-            var size = width / 100;
-
             if (confidence > 0.5)
             {
-                return new Pen(Brushes.GreenYellow, size);
+                return Brushes.GreenYellow;
             }
             else if (confidence > 0.2 && confidence <= 0.5)
             {
-                return new Pen(Brushes.Orange, size);
+                return Brushes.Orange;
             }
 
-            return new Pen(Brushes.DarkRed, size);
+            return Brushes.DarkRed;
         }
 
         private void Initialize(string path)
@@ -213,7 +279,8 @@ namespace Alturos.Yolo.TestUI
                 });
 
                 this.statusStrip1.Invoke(action);
-                this.buttonSendImage.Invoke(new MethodInvoker(delegate () { this.buttonSendImage.Enabled = true; }));
+                this.buttonProcessImage.Invoke(new MethodInvoker(delegate () { this.buttonProcessImage.Enabled = true; }));
+                this.buttonStartTracking.Invoke(new MethodInvoker(delegate () { this.buttonStartTracking.Enabled = true; }));
             }
             catch (Exception exception)
             {
@@ -221,14 +288,19 @@ namespace Alturos.Yolo.TestUI
             }
         }        
 
-        private void Detect()
+        private void DetectSelectedImage()
+        {
+            var items = this.Detect();
+            this.dataGridViewResult.DataSource = items;
+            this.DrawBoundingBoxes(items);
+        }
+
+        private List<YoloItem> Detect(bool memoryTransfer = true)
         {
             if (this._yoloWrapper == null)
             {
-                return;
+                return null;
             }
-
-            var memoryTransfer = true;
 
             var imageInfo = this.GetCurrentImage();
             var imageData = File.ReadAllBytes(imageInfo.Path);
@@ -247,8 +319,7 @@ namespace Alturos.Yolo.TestUI
             sw.Stop();
             this.groupBoxResult.Text = $"Result [ processed in {sw.Elapsed.TotalMilliseconds:0} ms ]";
 
-            this.dataGridViewResult.DataSource = items;
-            this.DrawBorder2Image(items);
+            return items;
         }
 
         private void gpuToolStripMenuItem_Click(object sender, EventArgs e)

@@ -2,57 +2,104 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
 using System.Linq;
 
 namespace Alturos.Yolo
 {
     public class YoloTracking
     {
-        private YoloWrapper _yoloWrapper;
-        private Point _trackingObject;
+        //private Point _trackingObject;
         private int _maxDistance;
         private int _index;
+        private readonly Dictionary<string, YoloTrackingItem> _lastItems;
 
-        public YoloTracking(YoloWrapper yoloWrapper, int maxDistance = 1000)
+        public YoloTracking(int maxDistance = 1000)
         {
-            this._yoloWrapper = yoloWrapper;
             this._maxDistance = maxDistance;
+
+            this._lastItems = new Dictionary<string, YoloTrackingItem>();
         }
 
-        public void SetTrackingObject(YoloItem trackingObject)
+        public void Reset()
         {
-            this._trackingObject = trackingObject.Center();
+            this._index = 0;
+            this._lastItems.Clear();
         }
 
-        public void SetTrackingObject(Point trackingObject)
+        public IEnumerable<YoloTrackingItem> Analyse(IEnumerable<YoloItem> items)
         {
-            this._trackingObject = trackingObject;
-        }
+            this._index++;
 
-        public YoloTrackingItem Analyse(byte[] imageData)
-        {
-            var items = this._yoloWrapper.Detect(imageData);
-
-            var probableObject = this.FindBestMatch(items, this._maxDistance);
-            if (probableObject == null)
+            if (this._lastItems.Count == 0)
             {
-                return null;
+                foreach (var item in items)
+                {
+                    var trackingItem = new YoloTrackingItem(item, this.GetObjectId());
+                    this._lastItems.Add(trackingItem.ObjectId, trackingItem);
+                }
+
+                return this._lastItems.Values;
             }
 
-            this._trackingObject = probableObject.Center();
-            var taggedImageData = this.DrawImage(imageData, probableObject);
+            var trackingItems = new List<YoloTrackingItem>();
 
-            return new YoloTrackingItem(probableObject, this._index++, taggedImageData);
+            foreach (var item in items)
+            {
+                var bestMatch = this._lastItems.Values.Select(o => new
+                {
+                    Item = o,
+                    Distance = this.Distance(o.Center(), item.Center()),
+                    SizeDifference = this.GetSizeDifferencePercentage(o, item)
+                })
+                    .Where(o => !trackingItems.Select(x => x.ObjectId).Contains(o.Item.ObjectId) && o.Distance <= this._maxDistance && o.SizeDifference < 30)
+                    .OrderBy(o => o.Distance)
+                    .FirstOrDefault();
+
+                if (bestMatch == null || bestMatch.Item.ProcessIndex + 5 < this._index)
+                {
+                    var trackingItem1 = new YoloTrackingItem(item, this.GetObjectId());
+                    trackingItem1.ProcessIndex = this._index;
+                    trackingItems.Add(trackingItem1);
+                    this._lastItems.Add(trackingItem1.ObjectId, trackingItem1);
+                    continue;
+                }
+
+                bestMatch.Item.X = item.X;
+                bestMatch.Item.Y = item.Y;
+                bestMatch.Item.Width = item.Width;
+                bestMatch.Item.Height = item.Height;
+                bestMatch.Item.ProcessIndex = this._index;
+
+                var trackingItem = new YoloTrackingItem(item, bestMatch.Item.ObjectId);
+                trackingItems.Add(trackingItem);
+            }
+
+            return trackingItems;
         }
 
-        private YoloItem FindBestMatch(IEnumerable<YoloItem> items, int maxDistance)
+        private string GetObjectId()
         {
-            var distanceItems = items.Select(o => new { Distance = this.Distance(o.Center(), this._trackingObject), Item = o }).Where(o => o.Distance <= maxDistance).OrderBy(o => o.Distance);
+            return $"O{this._lastItems.Count:00000}";
+        }
 
-            var bestMatch = distanceItems.FirstOrDefault();
-            return bestMatch?.Item;
+        private double GetSizeDifferencePercentage(YoloTrackingItem item1, YoloItem item2)
+        {
+            var area1 = item1.Width * item1.Height;
+            var area2 = item2.Width * item2.Height;
+
+            if (area1 == area2)
+            {
+                return 0;
+            }
+
+            if (area1 > area2)
+            {
+                var change1 = 100.0 * area2 / area1;
+                return 100 - change1;
+            }
+
+            var change = 100.0 * area1 / area2;
+            return 100 - change;
         }
 
         private double Distance(Point p1, Point p2)
@@ -63,24 +110,6 @@ namespace Alturos.Yolo
         private double Pow2(double x)
         {
             return x * x;
-        }
-
-        private byte[] DrawImage(byte[] imageData, YoloItem item)
-        {
-            using (var memoryStream = new MemoryStream(imageData))
-            using (var image = Image.FromStream(memoryStream))
-            using (var canvas = Graphics.FromImage(image))
-            using (var pen = new Pen(Brushes.Pink, 3))
-            {
-                canvas.DrawRectangle(pen, item.X, item.Y, item.Width, item.Height);
-                canvas.Flush();
-
-                using (var memoryStream2 = new MemoryStream())
-                {
-                    image.Save(memoryStream2, ImageFormat.Bmp);
-                    return memoryStream2.ToArray();
-                }
-            }
         }
     }
 }

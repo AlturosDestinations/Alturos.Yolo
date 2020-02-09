@@ -1,21 +1,22 @@
-﻿namespace Alturos.Yolo.Model
+﻿using System;
+
+namespace Alturos.Yolo.Model
 {
     public class YoloTrackingItem : YoloItem
     {
-        public YoloTrackingItem(YoloItem yoloItem, int index, byte[] imageData)
+        public string ObjectId { get; set; }
+        public int ProcessIndex { get; set; }
+
+        public YoloTrackingItem(YoloItem item, string objectId)
         {
-            this.X = yoloItem.X;
-            this.Y = yoloItem.Y;
-            this.Width = yoloItem.Width;
-            this.Height = yoloItem.Height;
-            this.Type = yoloItem.Type;
-            this.Confidence = yoloItem.Confidence;
+            this.ObjectId = objectId;
 
-            this.Index = index;
-            this.TaggedImageData = imageData;
+            this.Type = item.Type;
+            this.Confidence = item.Confidence;
+            this.X = item.X;
+            this.Y = item.Y;
+            this.Width = item.Width;
+            this.Height = item.Height;
         }
-
-        public int Index { get; set; }
-        public byte[] TaggedImageData { get; set; }
     }
 }
