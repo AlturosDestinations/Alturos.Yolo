@@ -1,0 +1,13 @@
+version: '1.0.{build}'
+image: Visual Studio 2019
+branches:
+  only:
+  - master
+configuration: Release
+before_build:
+   - nuget restore src
+build:
+  project: src/Alturos.Yolo.sln
+  publish_nuget: true
+  publish_nuget_symbols: true
+  verbosity: normal
