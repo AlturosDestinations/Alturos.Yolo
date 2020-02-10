@@ -263,6 +263,8 @@ namespace Alturos.Yolo.TestUI
 
                 var useOnlyCpu = this.cpuToolStripMenuItem.Checked;
 
+                this.toolStripStatusLabelYoloInfo.Text = $"Initialize...";
+
                 var sw = new Stopwatch();
                 sw.Start();
                 this._yoloWrapper = new YoloWrapper(config.ConfigFile, config.WeightsFile, config.NamesFile, 0, useOnlyCpu);

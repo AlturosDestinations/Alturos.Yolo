@@ -58,12 +58,12 @@ It is important to use GPU mode for fast object detection. It is also important 
 It is important to use the mentioned version `10.1`
 
 1) Install the latest Nvidia driver for your graphic device
-2) [Install Nvidia CUDA Toolkit 10.1](https://developer.nvidia.com/cuda-downloads) (must be installed add a hardware driver for cuda support)
-3) [Download Nvidia cuDNN v7.6.3 for CUDA 10.1](https://developer.nvidia.com/rdp/cudnn-download)
+2) [Install Nvidia CUDA Toolkit 10.2](https://developer.nvidia.com/cuda-downloads) (must be installed add a hardware driver for cuda support)
+3) [Download Nvidia cuDNN v7.6.5 for CUDA 10.2](https://developer.nvidia.com/rdp/cudnn-download)
 4) Copy the `cudnn64_7.dll` from the output directory of point 2. into the `x64` folder of your project.
 
 ## Build requirements
-- Visual Studio 2017
+- Visual Studio 2019
 
 ## Benchmark / Performance
 Average processing speed of test images bird1.png, bird2.png, car1.png, motorbike1.png
