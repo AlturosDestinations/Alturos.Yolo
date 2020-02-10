@@ -72,7 +72,7 @@ Average processing speed of test images bird1.png, bird2.png, car1.png, motorbik
 
 Processor | YOLOv2-tiny | YOLOv3 | yolo9000 |
 --- | --- | --- | --- | 
-Intel i7 3770 | 400 ms | 2380 ms | - | 
+Intel i7 3770 | 260 ms | 2200 ms | - | 
 Intel Xeon E5-1620 v3 | 207 ms | 4327 ms | - | 
 Intel Xeon E3-1240 v6 | 182 ms | 3213 ms | - | 
 
