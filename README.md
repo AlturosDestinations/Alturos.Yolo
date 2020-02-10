@@ -66,7 +66,7 @@ It is important to use the mentioned version `10.1`
 - Visual Studio 2019
 
 ## Benchmark / Performance
-Average processing speed of test images bird1.png, bird2.png, car1.png, motorbike1.png with YOLOv2-tiny
+Average processing speed of test images bird1.png, bird2.png, car1.png, motorbike1.png
 
 ### CPU
 
