@@ -129,7 +129,11 @@ namespace Alturos.Yolo.TestUI
 
         private async Task StartTrackingAsync()
         {
-            var yoloTracking = new YoloTracking();
+            this.buttonStartTracking.Enabled = false;
+
+            var imageInfo = this.GetCurrentImage();
+
+            var yoloTracking = new YoloTracking(imageInfo.Width, imageInfo.Height);
             var count = this.dataGridViewFiles.RowCount;
             for (var i = 0; i < count; i++)
             {
@@ -137,6 +141,7 @@ namespace Alturos.Yolo.TestUI
                 {
                     this.dataGridViewFiles.Rows[i - 1].Selected = false;
                 }
+
                 this.dataGridViewFiles.Rows[i].Selected = true;
                 this.dataGridViewFiles.CurrentCell = this.dataGridViewFiles.Rows[i].Cells[0];
 
@@ -147,6 +152,8 @@ namespace Alturos.Yolo.TestUI
 
                 await Task.Delay(100);
             }
+
+            this.buttonStartTracking.Enabled = true;
         }
 
         private void DrawBoundingBoxes(IEnumerable<YoloTrackingItem> items)
@@ -158,8 +165,6 @@ namespace Alturos.Yolo.TestUI
             using (var font = new Font(FontFamily.GenericSansSerif, 16))
             using (var canvas = Graphics.FromImage(image))
             {
-                // Modify the image using g here... 
-                // Create a brush with an alpha value and use the g.FillRectangle function
                 foreach (var item in items)
                 {
                     var x = item.X;
@@ -173,12 +178,16 @@ namespace Alturos.Yolo.TestUI
                     using (var pen = new Pen(brush, penSize))
                     {
                         canvas.DrawRectangle(pen, x, y, width, height);
-
                         canvas.FillRectangle(brush, x - (penSize / 2), y - 15, width + penSize, 25);
-                        canvas.DrawString(item.ObjectId.ToString(), font, Brushes.White, x, y - 12);
-                        canvas.Flush();
                     }
                 }
+
+                foreach (var item in items)
+                {
+                    canvas.DrawString(item.ObjectId.ToString(), font, Brushes.White, item.X, item.Y - 12);
+                }
+
+                canvas.Flush();
             }
 
             var oldImage = this.pictureBox1.Image;
@@ -194,8 +203,6 @@ namespace Alturos.Yolo.TestUI
 
             using (var canvas = Graphics.FromImage(image))
             {
-                // Modify the image using g here... 
-                // Create a brush with an alpha value and use the g.FillRectangle function
                 foreach (var item in items)
                 {
                     var x = item.X;
@@ -215,9 +222,10 @@ namespace Alturos.Yolo.TestUI
                         }
 
                         canvas.DrawRectangle(pen, x, y, width, height);
-                        canvas.Flush();
                     }
                 }
+
+                canvas.Flush();
             }
 
             var oldImage = this.pictureBox1.Image;

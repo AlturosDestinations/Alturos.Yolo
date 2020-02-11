@@ -4,8 +4,7 @@ namespace Alturos.Yolo.Model
 {
     public class YoloTrackingItem : YoloItem
     {
-        public string ObjectId { get; set; }
-        public int ProcessIndex { get; set; }
+        public string ObjectId { get; private set; }
 
         public YoloTrackingItem(YoloItem item, string objectId)
         {
