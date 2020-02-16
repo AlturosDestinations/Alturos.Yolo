@@ -151,42 +151,31 @@ namespace Alturos.Yolo
 
         private bool IsMicrosoftVisualCPlusPlus2017Available()
         {
-            //Detect if Visual C++ Redistributable for Visual Studio is installed
-            //https://stackoverflow.com/questions/12206314/detect-if-visual-c-redistributable-for-visual-studio-2012-is-installed/
-            var checkKeys = new Dictionary<string, string>
+            var index = 14; //Oldest version of VCRedist C++ working with Yolo
+            while (true)
             {
-                { @"Installer\Dependencies\,,amd64,14.0,bundle", "Microsoft Visual C++ 2017 Redistributable (x64)" },
-                { @"Installer\Dependencies\VC,redist.x64,amd64,14.16,bundle", "Microsoft Visual C++ 2017 Redistributable (x64)" },
-                { @"Installer\Dependencies\VC,redist.x64,amd64,14.20,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" }, 
-                { @"Installer\Dependencies\VC,redist.x64,amd64,14.21,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" },
-                { @"Installer\Dependencies\VC,redist.x64,amd64,14.22,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" },
-                { @"Installer\Dependencies\VC,redist.x64,amd64,14.23,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" },
-                { @"Installer\Dependencies\VC,redist.x64,amd64,14.24,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" },
-            };
-
-            foreach (var checkKey in checkKeys)
-            {
-                using (var registryKey = Registry.ClassesRoot.OpenSubKey(checkKey.Key, false))
+                if (GetRegKey(index) != null)
                 {
-                    if (registryKey == null)
-                    {
-                        continue;
-                    }
-
-                    var displayName = registryKey.GetValue("DisplayName") as string;
-                    if (string.IsNullOrEmpty(displayName))
-                    {
-                        continue;
-                    }
-
-                    if (displayName.StartsWith(checkKey.Value, StringComparison.OrdinalIgnoreCase))
+                    if (GetRegKey(index).GetValue("Installed").ToString() == "1")
                     {
                         return true;
                     }
+                    else
+                    {
+                        if (GetRegKey(index + 1) == null)
+                        {
+                            return false;
+                        }
+                    }
                 }
+                index++;
             }
+        }
 
-            return false;
+        private RegistryKey GetRegKey(int index)
+        {
+            RegistryKey registryKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\WOW6432Node\Microsoft\VisualStudio\" + index + @".0\VC\Runtimes\x64", false);
+            return registryKey;
         }
 
         private EnvironmentReport GetEnvironmentReport()
