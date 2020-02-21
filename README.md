@@ -55,13 +55,15 @@ It is important to use GPU mode for fast object detection. It is also important 
 - [Microsoft Visual C++ Redistributable for Visual Studio 2015, 2017 und 2019 x64](https://aka.ms/vs/16/release/vc_redist.x64.exe)
 
 ### GPU requirements (optional)
+It is important to use the mentioned version `10.1`
+
 1) Install the latest Nvidia driver for your graphic device
-2) [Install Nvidia CUDA Toolkit 10.1](https://developer.nvidia.com/cuda-downloads) (must be installed add a hardware driver for cuda support)
-3) [Download Nvidia cuDNN v7.6.3 for CUDA 10.1](https://developer.nvidia.com/rdp/cudnn-download)
+2) [Install Nvidia CUDA Toolkit 10.2](https://developer.nvidia.com/cuda-downloads) (must be installed add a hardware driver for cuda support)
+3) [Download Nvidia cuDNN v7.6.5 for CUDA 10.2](https://developer.nvidia.com/rdp/cudnn-download)
 4) Copy the `cudnn64_7.dll` from the output directory of point 2. into the `x64` folder of your project.
 
 ## Build requirements
-- Visual Studio 2017
+- Visual Studio 2019
 
 ## Benchmark / Performance
 Average processing speed of test images bird1.png, bird2.png, car1.png, motorbike1.png
@@ -70,7 +72,7 @@ Average processing speed of test images bird1.png, bird2.png, car1.png, motorbik
 
 Processor | YOLOv2-tiny | YOLOv3 | yolo9000 |
 --- | --- | --- | --- | 
-Intel i7 3770 | 400 ms | 2380 ms | - | 
+Intel i7 3770 | 260 ms | 2200 ms | - | 
 Intel Xeon E5-1620 v3 | 207 ms | 4327 ms | - | 
 Intel Xeon E3-1240 v6 | 182 ms | 3213 ms | - | 
 
@@ -108,7 +110,7 @@ await repository.DownloadDatasetAsync("YOLOv3", ".");
 Model | Processing Resolution | Cfg | Weights | Names |
 --- | --- | --- | --- | --- |
 YOLOv3 | 608x608 | [yolov3.cfg](https://raw.githubusercontent.com/AlexeyAB/darknet/master/cfg/yolov3.cfg) | [yolov3.weights](https://pjreddie.com/media/files/yolov3.weights) | [coco.names](https://raw.githubusercontent.com/AlexeyAB/darknet/master/cfg/coco.names) |
-YOLOv3-tiny | 416x416 | [yolov3-tiny.cfg](https://raw.githubusercontent.com/AlexeyAB/darknet/master/cfg/yolov3-tiny.cfg) | [yolov3.weights](https://pjreddie.com/media/files/yolov3.weights) | [coco.names](https://raw.githubusercontent.com/AlexeyAB/darknet/master/cfg/coco.names) |
+YOLOv3-tiny | 416x416 | [yolov3-tiny.cfg](https://raw.githubusercontent.com/AlexeyAB/darknet/master/cfg/yolov3-tiny.cfg) | [yolov3-tiny.weights](https://pjreddie.com/media/files/yolov3-tiny.weights) | [coco.names](https://raw.githubusercontent.com/AlexeyAB/darknet/master/cfg/coco.names) |
 YOLOv2 | 608x608 | [yolov2.cfg](https://raw.githubusercontent.com/AlexeyAB/darknet/master/cfg/yolov2.cfg) | [yolov2.weights](https://pjreddie.com/media/files/yolov2.weights) | [coco.names](https://raw.githubusercontent.com/AlexeyAB/darknet/master/cfg/coco.names) |
 YOLOv2-tiny | 416x416 | [yolov2-tiny.cfg](https://raw.githubusercontent.com/AlexeyAB/darknet/master/cfg/yolov2-tiny.cfg) | [yolov2-tiny.weights](https://pjreddie.com/media/files/yolov2-tiny.weights) | [voc.names](https://raw.githubusercontent.com/pjreddie/darknet/master/data/voc.names) |
 yolo9000 | 448x448 | [yolo9000.cfg](https://raw.githubusercontent.com/AlexeyAB/darknet/master/cfg/yolo9000.cfg) | [yolo9000.weights](https://github.com/philipperemy/yolo-9000/tree/master/yolo9000-weights) | [9k.names](https://raw.githubusercontent.com/AlexeyAB/darknet/master/cfg/9k.names) |

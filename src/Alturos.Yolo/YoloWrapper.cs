@@ -163,6 +163,7 @@ namespace Alturos.Yolo
                 { @"Installer\Dependencies\VC,redist.x64,amd64,14.21,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" },
                 { @"Installer\Dependencies\VC,redist.x64,amd64,14.22,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" },
                 { @"Installer\Dependencies\VC,redist.x64,amd64,14.23,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" },
+                { @"Installer\Dependencies\VC,redist.x64,amd64,14.24,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" },
             };
 
             foreach (var checkKey in checkKeys)
@@ -207,7 +208,7 @@ namespace Alturos.Yolo
             {
                 report.CudaExists = true;
             }
-            if (envirormentVariables.Contains("CUDA_PATH_V10_1"))
+            if (envirormentVariables.Contains("CUDA_PATH_V10_2"))
             {
                 report.CudaExists = true;
             }

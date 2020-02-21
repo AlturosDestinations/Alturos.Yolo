@@ -29,37 +29,37 @@ namespace Alturos.Yolo.TestConsole
             }
         }
 
-        static void TestTracking()
-        {
-            Directory.CreateDirectory("trackingImages");
+        //static void TestTracking()
+        //{
+        //    Directory.CreateDirectory("trackingImages");
 
-            var configurationDetector = new ConfigurationDetector();
-            var config = configurationDetector.Detect();
-            using (var yoloWrapper = new YoloWrapper(config))
-            {
-                var yoloTracking = new YoloTracking(yoloWrapper, 200);
+        //    var configurationDetector = new ConfigurationDetector();
+        //    var config = configurationDetector.Detect();
+        //    using (var yoloWrapper = new YoloWrapper(config))
+        //    {
+        //        var yoloTracking = new YoloTracking(yoloWrapper, 200);
 
-                yoloTracking.SetTrackingObject(new Point(216, 343));
-                var files = Directory.GetFiles(@"test");
+        //        yoloTracking.SetTrackingObject(new Point(216, 343));
+        //        var files = Directory.GetFiles(@"test");
 
-                //yoloTracking.SetTrackingObject(new Point(385, 480));
-                //var files = Directory.GetFiles(@"test3");
+        //        //yoloTracking.SetTrackingObject(new Point(385, 480));
+        //        //var files = Directory.GetFiles(@"test3");
 
-                foreach (var file in files)
-                {
-                    var imageData = File.ReadAllBytes(file);
-                    var trackingItem = yoloTracking.Analyse(imageData);
-                    if (trackingItem == null)
-                    {
-                        continue;
-                    }
+        //        foreach (var file in files)
+        //        {
+        //            var imageData = File.ReadAllBytes(file);
+        //            var trackingItem = yoloTracking.Analyse(imageData);
+        //            if (trackingItem == null)
+        //            {
+        //                continue;
+        //            }
 
-                    var fileInfo = new FileInfo(file);
-                    File.WriteAllBytes($@"trackingImages\{trackingItem.Index}.bmp", trackingItem.TaggedImageData);
-                }
-            }
+        //            var fileInfo = new FileInfo(file);
+        //            File.WriteAllBytes($@"trackingImages\{trackingItem.Index}.bmp", trackingItem.TaggedImageData);
+        //        }
+        //    }
 
-            Console.ReadLine();
-        }
+        //    Console.ReadLine();
+        //}
     }
 }

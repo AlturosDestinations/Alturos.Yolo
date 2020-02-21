@@ -32,7 +32,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.buttonSendImage = new System.Windows.Forms.Button();
+            this.buttonProcessImage = new System.Windows.Forms.Button();
             this.dataGridViewResult = new System.Windows.Forms.DataGridView();
             this.ColumnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnConfidence = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -51,6 +51,7 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.buttonStartTracking = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelYoloInfo = new System.Windows.Forms.ToolStripStatusLabel();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
@@ -69,15 +70,15 @@
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // buttonSendImage
+            // buttonProcessImage
             // 
-            this.buttonSendImage.Location = new System.Drawing.Point(9, 9);
-            this.buttonSendImage.Name = "buttonSendImage";
-            this.buttonSendImage.Size = new System.Drawing.Size(121, 25);
-            this.buttonSendImage.TabIndex = 0;
-            this.buttonSendImage.Text = "Process Image";
-            this.buttonSendImage.UseVisualStyleBackColor = true;
-            this.buttonSendImage.Click += new System.EventHandler(this.buttonSendImage_Click);
+            this.buttonProcessImage.Location = new System.Drawing.Point(9, 9);
+            this.buttonProcessImage.Name = "buttonProcessImage";
+            this.buttonProcessImage.Size = new System.Drawing.Size(120, 25);
+            this.buttonProcessImage.TabIndex = 0;
+            this.buttonProcessImage.Text = "Process Image";
+            this.buttonProcessImage.UseVisualStyleBackColor = true;
+            this.buttonProcessImage.Click += new System.EventHandler(this.buttonProcessImage_Click);
             // 
             // dataGridViewResult
             // 
@@ -274,12 +275,23 @@
             // panel1
             // 
             this.tableLayoutPanel1.SetColumnSpan(this.panel1, 2);
-            this.panel1.Controls.Add(this.buttonSendImage);
+            this.panel1.Controls.Add(this.buttonStartTracking);
+            this.panel1.Controls.Add(this.buttonProcessImage);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(3, 257);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(703, 44);
             this.panel1.TabIndex = 4;
+            // 
+            // buttonStartTracking
+            // 
+            this.buttonStartTracking.Location = new System.Drawing.Point(135, 10);
+            this.buttonStartTracking.Name = "buttonStartTracking";
+            this.buttonStartTracking.Size = new System.Drawing.Size(120, 23);
+            this.buttonStartTracking.TabIndex = 1;
+            this.buttonStartTracking.Text = "Start Tracking";
+            this.buttonStartTracking.UseVisualStyleBackColor = true;
+            this.buttonStartTracking.Click += new System.EventHandler(this.buttonStartTracking_Click);
             // 
             // statusStrip1
             // 
@@ -318,7 +330,7 @@
             // cpuToolStripMenuItem
             // 
             this.cpuToolStripMenuItem.Name = "cpuToolStripMenuItem";
-            this.cpuToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cpuToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.cpuToolStripMenuItem.Text = "Use only cpu";
             this.cpuToolStripMenuItem.Click += new System.EventHandler(this.gpuToolStripMenuItem_Click);
             // 
@@ -353,7 +365,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Button buttonSendImage;
+        private System.Windows.Forms.Button buttonProcessImage;
         private System.Windows.Forms.DataGridView dataGridViewResult;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.DataGridView dataGridViewFiles;
@@ -378,6 +390,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnResultWidth;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnResultHeight;
         private System.Windows.Forms.ToolStripMenuItem cpuToolStripMenuItem;
+        private System.Windows.Forms.Button buttonStartTracking;
     }
 }
 

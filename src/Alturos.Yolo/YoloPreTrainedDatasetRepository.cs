@@ -27,7 +27,7 @@ namespace Alturos.Yolo
                     Name = "YOLOv3-tiny",
                     ConfigFileUrl = "https://raw.githubusercontent.com/AlexeyAB/darknet/master/cfg/yolov3-tiny.cfg",
                     NamesFileUrl = "https://raw.githubusercontent.com/AlexeyAB/darknet/master/cfg/coco.names",
-                    WeightsFileUrl = "https://pjreddie.com/media/files/yolov3.weights"
+                    WeightsFileUrl = "https://pjreddie.com/media/files/yolov3-tiny.weights"
                 },
                 new YoloPreTrainedData
                 {
@@ -105,7 +105,7 @@ namespace Alturos.Yolo
                 {
                     if (!httpResponseMessage.IsSuccessStatusCode)
                     {
-                        return false; ;
+                        return false;
                     }
 
                     var fileContentStream = await httpResponseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false);
