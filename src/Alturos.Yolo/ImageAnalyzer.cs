@@ -31,7 +31,7 @@ namespace Alturos.Yolo
                 return false;
             }
 
-            foreach(var imageFormat in this._imageFormats)
+            foreach (var imageFormat in this._imageFormats)
             {
                 if (imageData.Take(imageFormat.Value.Length).SequenceEqual(imageFormat.Value))
                 {
