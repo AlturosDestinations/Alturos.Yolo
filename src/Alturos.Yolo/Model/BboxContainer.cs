@@ -2,6 +2,9 @@
 
 namespace Alturos.Yolo.Model
 {
+    /// <summary>
+    /// C++ Communication object
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     internal struct BboxContainer
     {

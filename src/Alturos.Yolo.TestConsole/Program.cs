@@ -20,7 +20,7 @@ namespace Alturos.Yolo.TestConsole
 
         static void TestLogic2()
         {
-            var configurationDetector = new ConfigurationDetector();
+            var configurationDetector = new YoloConfigurationDetector();
             var config = configurationDetector.Detect();
 
             using (var yoloWrapper = new YoloWrapper(config))
@@ -33,11 +33,11 @@ namespace Alturos.Yolo.TestConsole
         //{
         //    Directory.CreateDirectory("trackingImages");
 
-        //    var configurationDetector = new ConfigurationDetector();
-        //    var config = configurationDetector.Detect();
-        //    using (var yoloWrapper = new YoloWrapper(config))
-        //    {
-        //        var yoloTracking = new YoloTracking(yoloWrapper, 200);
+            var configurationDetector = new YoloConfigurationDetector();
+            var config = configurationDetector.Detect();
+            using (var yoloWrapper = new YoloWrapper(config))
+            {
+                var yoloTracking = new YoloTracking(yoloWrapper, 200);
 
         //        yoloTracking.SetTrackingObject(new Point(216, 343));
         //        var files = Directory.GetFiles(@"test");

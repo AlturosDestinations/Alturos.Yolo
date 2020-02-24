@@ -1,28 +1,34 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)\..\x64\opencv_world411.dll">
-      <Link>x64\opencv_world411.dll</Link>
+  <ItemGroup Condition="'$(OS)' != 'Unix'">
+    <None Include="$(MSBuildThisFileDirectory)/../runtimes/win-x64/native/opencv_world411.dll">
+      <Link>opencv_world411.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="$(MSBuildThisFileDirectory)\..\x64\yolo_cpp_dll_cpu.dll">
-      <Link>x64\yolo_cpp_dll_cpu.dll</Link>
+    <None Include="$(MSBuildThisFileDirectory)/../runtimes/win-x64/native/yolo_cpp_dll_cpu.dll">
+      <Link>yolo_cpp_dll_cpu.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="$(MSBuildThisFileDirectory)\..\x64\yolo_cpp_dll_gpu.dll">
-      <Link>x64\yolo_cpp_dll_gpu.dll</Link>
+    <None Include="$(MSBuildThisFileDirectory)/../runtimes/win-x64/native/yolo_cpp_dll_gpu.dll">
+      <Link>yolo_cpp_dll_gpu.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="$(MSBuildThisFileDirectory)\..\x64\pthreadVC2.dll">
-      <Link>x64\pthreadVC2.dll</Link>
+    <None Include="$(MSBuildThisFileDirectory)/../runtimes/win-x64/native/pthreadVC2.dll">
+      <Link>pthreadVC2.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="$(MSBuildThisFileDirectory)\..\x64\pthreadGC2.dll">
-      <Link>x64\pthreadGC2.dll</Link>
+    <None Include="$(MSBuildThisFileDirectory)/../runtimes/win-x64/native/pthreadGC2.dll">
+      <Link>pthreadGC2.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="$(MSBuildThisFileDirectory)\..\x64\msvcr100.dll">
-      <Link>x64\msvcr100.dll</Link>
+    <None Include="$(MSBuildThisFileDirectory)/../runtimes/win-x64/native/msvcr100.dll">
+      <Link>msvcr100.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup Condition="'$(OS)' == 'Unix'">
+    <None Include="$(MSBuildThisFileDirectory)/../runtimes/linux-x64/native/yolo_cpp_dll_cpu.so">
+      <Link>yolo_cpp_dll_cpu.so</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

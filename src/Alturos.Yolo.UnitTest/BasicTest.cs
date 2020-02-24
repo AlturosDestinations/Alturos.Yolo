@@ -13,7 +13,7 @@ namespace Alturos.Yolo.UnitTest
         [ExpectedException(typeof(FileNotFoundException))]
         public void FileNotFoundTest()
         {
-            var configuration = new ConfigurationDetector().Detect();
+            var configuration = new YoloConfigurationDetector().Detect();
             using (var yoloWrapper = new YoloWrapper(configuration))
             {
                 yoloWrapper.Detect("image-not-exists.jpg");
@@ -23,7 +23,7 @@ namespace Alturos.Yolo.UnitTest
         [TestMethod]
         public void DetectFromFilePath()
         {
-            var configuration = new ConfigurationDetector().Detect();
+            var configuration = new YoloConfigurationDetector().Detect();
             using (var yoloWrapper = new YoloWrapper(configuration))
             {
                 var items = yoloWrapper.Detect(this._imagePath);
@@ -34,7 +34,7 @@ namespace Alturos.Yolo.UnitTest
         [TestMethod]
         public void DetectFromFileData()
         {
-            var configuration = new ConfigurationDetector().Detect();
+            var configuration = new YoloConfigurationDetector().Detect();
             using (var yoloWrapper = new YoloWrapper(configuration))
             {
                 var imageData = File.ReadAllBytes(this._imagePath);

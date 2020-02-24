@@ -1,5 +1,8 @@
 ﻿namespace Alturos.Yolo.Model
 {
+    /// <summary>
+    /// C++ Communication object
+    /// </summary>
     internal struct BboxT
     {
         internal uint x, y, w, h;         // (x,y) - top-left corner, (w, h) - width & height of bounded box

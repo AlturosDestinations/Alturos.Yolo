@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
+[assembly: InternalsVisibleTo("Alturos.Yolo.UnitTest")]
 
 namespace Alturos.Yolo
 {

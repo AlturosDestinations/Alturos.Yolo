@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -85,12 +86,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Alturos.Yolo\Alturos.Yolo.csproj">
-      <Project>{bfdb287f-7e23-4d44-b114-df2e05c2cf04}</Project>
-      <Name>Alturos.Yolo</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\..\Images\Bird1.png">
       <Link>Images\Bird1.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -107,6 +102,12 @@
       <Link>Images\Motorbike1.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Alturos.Yolo\Alturos.Yolo.csproj">
+      <Project>{2c530266-a3da-4175-8311-06e5a2378f22}</Project>
+      <Name>Alturos.Yolo</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Alturos.YoloV2TinyVocData.1.0.0\build\net46\Alturos.YoloV2TinyVocData.targets" Condition="Exists('..\packages\Alturos.YoloV2TinyVocData.1.0.0\build\net46\Alturos.YoloV2TinyVocData.targets')" />

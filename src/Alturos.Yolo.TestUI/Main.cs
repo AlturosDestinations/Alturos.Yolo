@@ -249,7 +249,7 @@ namespace Alturos.Yolo.TestUI
 
         private void Initialize(string path)
         {
-            var configurationDetector = new ConfigurationDetector();
+            var configurationDetector = new YoloConfigurationDetector();
             var config = configurationDetector.Detect(path);
 
             if (config == null)
@@ -269,23 +269,24 @@ namespace Alturos.Yolo.TestUI
                     this._yoloWrapper.Dispose();
                 }
 
+                var gpuConfig = new GpuConfig();
                 var useOnlyCpu = this.cpuToolStripMenuItem.Checked;
+                if (useOnlyCpu)
+                {
+                    gpuConfig = null;
+                }
 
                 this.toolStripStatusLabelYoloInfo.Text = $"Initialize...";
 
                 var sw = new Stopwatch();
                 sw.Start();
-                this._yoloWrapper = new YoloWrapper(config.ConfigFile, config.WeightsFile, config.NamesFile, 0, useOnlyCpu);
+                this._yoloWrapper = new YoloWrapper(config.ConfigFile, config.WeightsFile, config.NamesFile, gpuConfig);
                 sw.Stop();
 
                 var action = new MethodInvoker(delegate ()
                 {
-                    var detectionSystemDetail = string.Empty;
-                    if (!string.IsNullOrEmpty(this._yoloWrapper.EnvironmentReport.GraphicDeviceName))
-                    {
-                        detectionSystemDetail = $"({this._yoloWrapper.EnvironmentReport.GraphicDeviceName})";
-                    }
-                    this.toolStripStatusLabelYoloInfo.Text = $"Initialize Yolo in {sw.Elapsed.TotalMilliseconds:0} ms - Detection System:{this._yoloWrapper.DetectionSystem} {detectionSystemDetail} Weights:{config.WeightsFile}";
+                    var deviceName = this._yoloWrapper.GetGraphicDeviceName(gpuConfig);
+                    this.toolStripStatusLabelYoloInfo.Text = $"Initialize Yolo in {sw.Elapsed.TotalMilliseconds:0} ms - Detection System:{this._yoloWrapper.DetectionSystem} {deviceName} Weights:{config.WeightsFile}";
                 });
 
                 this.statusStrip1.Invoke(action);

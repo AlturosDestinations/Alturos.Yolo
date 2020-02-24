@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Alturos.Yolo
 {
-    public class ConfigurationDetector
+    public class YoloConfigurationDetector
     {
         /// <summary>
         /// Automatict detect the yolo configuration on the given path
