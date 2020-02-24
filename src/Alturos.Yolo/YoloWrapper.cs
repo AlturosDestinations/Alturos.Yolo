@@ -253,6 +253,7 @@ namespace Alturos.Yolo
         /// <param name="imageData"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException">Thrown when the yolo_cpp dll is wrong compiled</exception>
+        /// <exception cref="Exception">Thrown when the byte array is not a valid image</exception>
         public IEnumerable<YoloItem> Detect(byte[] imageData)
         {
             if (!this._imageAnalyzer.IsValidImageFormat(imageData))
@@ -287,6 +288,43 @@ namespace Alturos.Yolo
             {
                 // Free the unmanaged memory.
                 Marshal.FreeHGlobal(pnt);
+            }
+
+            if (count == -1)
+            {
+                throw new NotImplementedException("C++ dll compiled incorrectly");
+            }
+
+            return this.Convert(container);
+        }
+
+        /// <summary>
+        /// Detect objects on an image
+        /// </summary>
+        /// <param name="imagePtr"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException">Thrown when the yolo_cpp dll is wrong compiled</exception>
+        public IEnumerable<YoloItem> Detect(IntPtr imagePtr, int size)
+        {
+            var container = new BboxContainer();
+
+            var count = 0;
+            try
+            {
+                switch (this.DetectionSystem)
+                {
+                    case DetectionSystem.CPU:
+                        count = DetectImageCpu(imagePtr, size, ref container);
+                        break;
+                    case DetectionSystem.GPU:
+                        count = DetectImageGpu(imagePtr, size, ref container);
+                        break;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
             }
 
             if (count == -1)
