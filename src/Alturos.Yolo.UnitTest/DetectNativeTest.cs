@@ -12,7 +12,7 @@ namespace Alturos.Yolo.UnitTest
         [TestMethod]
         public void DetectNative()
         {
-            var configuration = new ConfigurationDetector().Detect();
+            var configuration = new YoloConfigurationDetector().Detect();
             using (var yoloWrapper = new YoloWrapper(configuration))
             {
                 using (var image = new Bitmap(600, 400))

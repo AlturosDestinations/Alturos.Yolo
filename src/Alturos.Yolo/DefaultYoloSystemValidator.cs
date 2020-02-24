@@ -40,7 +40,7 @@ namespace Alturos.Yolo
             {
                 report.CudaExists = true;
             }
-            if (envirormentVariables.Contains("CUDA_PATH_V10_1"))
+            if (envirormentVariables.Contains("CUDA_PATH_V10_2"))
             {
                 report.CudaExists = true;
             }

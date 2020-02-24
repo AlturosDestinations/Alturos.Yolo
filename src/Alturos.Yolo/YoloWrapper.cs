@@ -286,7 +286,6 @@ namespace Alturos.Yolo
             return this.Convert(container);
         }
 
-        private IEnumerable<YoloItem> Convert(BboxContainer container)
         public string GetGraphicDeviceName(GpuConfig gpuConfig)
         {
             if (gpuConfig == null)
