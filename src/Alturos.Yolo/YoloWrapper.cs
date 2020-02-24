@@ -71,6 +71,7 @@ namespace Alturos.Yolo
         public YoloWrapper(YoloConfiguration yoloConfiguration, bool ignoreGpu = false)
         {
             this.Initialize(yoloConfiguration.ConfigFile, yoloConfiguration.WeightsFile, yoloConfiguration.NamesFile, 0, ignoreGpu);
+            this._headerBuffer = new byte[_imageAnalyzer.MinHeaderSize];
         }
 
         /// <summary>
