@@ -51,7 +51,7 @@ using (var yoloWrapper = new YoloWrapper("yolov2-tiny-voc.cfg", "yolov2-tiny-voc
 It is important to use GPU mode for fast object detection. It is also important not to instantiate the wrapper over and over again. A further optimization is to transfer the images as byte stream instead of passing a file path. GPU detection is usually 10 times faster!
 
 ## System requirements
-- .NET Framework 4.6.1
+- .NET Framework 4.6.1 or .net standard 2.0
 - [Microsoft Visual C++ Redistributable for Visual Studio 2015, 2017 und 2019 x64](https://aka.ms/vs/16/release/vc_redist.x64.exe)
 
 ### GPU requirements (optional)
@@ -63,7 +63,7 @@ It is important to use the mentioned version `10.2`
 4) Copy the `cudnn64_7.dll` from the output directory of point 2. into the project folder.
 
 ## Build requirements
-- Visual Studio 2017/2019
+- Visual Studio 2019
 
 ## Benchmark / Performance
 Average processing speed of test images bird1.png, bird2.png, car1.png, motorbike1.png
