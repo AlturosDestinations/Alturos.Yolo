@@ -3,7 +3,7 @@ image: Visual Studio 2019
 branches:
   only:
   - master
-platform: x64
+test: off
 configuration: Release
 before_build:
    - nuget restore src
