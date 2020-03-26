@@ -250,14 +250,21 @@ namespace Alturos.Yolo.TestUI
         private void Initialize(string path)
         {
             var configurationDetector = new YoloConfigurationDetector();
-            var config = configurationDetector.Detect(path);
-
-            if (config == null)
+            try
             {
+                var config = configurationDetector.Detect(path);
+                if (config == null)
+                {
+                    return;
+                }
+
+                this.Initialize(config);
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show($"Cannot found a valid dataset {exception}", "No Dataset available", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-
-            this.Initialize(config);
         }
 
         private void Initialize(YoloConfiguration config)
@@ -336,6 +343,20 @@ namespace Alturos.Yolo.TestUI
         private void gpuToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.cpuToolStripMenuItem.Checked = !this.cpuToolStripMenuItem.Checked;
+        }
+
+        private async void downloadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var repository = new YoloPreTrainedDatasetRepository();
+            var datasets = await repository.GetDatasetsAsync();
+            foreach (var dataset in datasets)
+            {
+                this.statusStrip1.Invoke(new MethodInvoker(delegate () { this.toolStripStatusLabelYoloInfo.Text = $"Start download for {dataset} dataset..."; }));
+                await repository.DownloadDatasetAsync(dataset, $@"config\{dataset}");
+            }
+
+            this.LoadAvailableConfigurations();
+            this.statusStrip1.Invoke(new MethodInvoker(delegate () { this.toolStripStatusLabelYoloInfo.Text = $"Download done"; }));
         }
     }
 }
