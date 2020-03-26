@@ -3,12 +3,12 @@ Thanks for using the Alturos.Yolo package (https://github.com/AlturosDestination
 Please star (★) this project on GitHub!
 
 
-This package deliver all dependencies for CPU detection.
+This package delivers all dependencies for CPU detection.
 
 If you need GPU detection please install cuda and cudnn.
 Nvidia CUDA Toolkit 10.2 (must be installed add a hardware driver for cuda support)
 Nvidia cuDNN v7.6.5 for CUDA 10.2 (DLL cudnn64_7.dll required for gpu processing)
-After that copy the cudnn64_7.dll in the x64 directory of your programm. (source folder of the file %cudnn%\bin)
+After that copy the cudnn64_7.dll in the x64 directory of your program. (source folder of the file %cudnn%\bin)
 
 If all dependencies available Alturos.Yolo switch automatic in GPU mode.
 For an easy start please install-package Alturos.YoloV2TinyVocData (Yolo Pre-trained model)
