@@ -12,8 +12,4 @@ build:
   publish_nuget: true
   publish_nuget_symbols: true
   verbosity: normal
-deploy:
-  provider: NuGet
-  api_key:
-    secure: V3wcx7NZrxhM9OdQ17904TeJPA2G82H8mLffwwKgqcGLghb0grm5Fsphbr9wlx64
-  artifact: /.*\.nupkg/
+
