@@ -58,6 +58,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.configurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cpuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.downloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResult)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFiles)).BeginInit();
@@ -312,7 +313,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.configurationToolStripMenuItem});
+            this.configurationToolStripMenuItem,
+            this.downloadToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(709, 24);
@@ -332,9 +334,17 @@
             this.cpuToolStripMenuItem.Checked = true;
             this.cpuToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cpuToolStripMenuItem.Name = "cpuToolStripMenuItem";
-            this.cpuToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.cpuToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.cpuToolStripMenuItem.Text = "Use only cpu";
             this.cpuToolStripMenuItem.Click += new System.EventHandler(this.gpuToolStripMenuItem_Click);
+            // 
+            // downloadToolStripMenuItem
+            // 
+            this.downloadToolStripMenuItem.Name = "downloadToolStripMenuItem";
+            this.downloadToolStripMenuItem.Size = new System.Drawing.Size(120, 20);
+            this.downloadToolStripMenuItem.Text = "&Download Datasets";
+            this.downloadToolStripMenuItem.ToolTipText = "Download all Pre-Trained Datasets";
+            this.downloadToolStripMenuItem.Click += new System.EventHandler(this.downloadToolStripMenuItem_Click);
             // 
             // Main
             // 
@@ -393,6 +403,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnResultHeight;
         private System.Windows.Forms.ToolStripMenuItem cpuToolStripMenuItem;
         private System.Windows.Forms.Button buttonStartTracking;
+        private System.Windows.Forms.ToolStripMenuItem downloadToolStripMenuItem;
     }
 }
 

@@ -99,20 +99,32 @@ namespace Alturos.Yolo
 
             using (var httpClient = new HttpClient())
             {
-                httpClient.Timeout = TimeSpan.FromMinutes(10);
+                httpClient.Timeout = TimeSpan.FromMinutes(30);
 
-                using (var httpResponseMessage = await httpClient.GetAsync(url).ConfigureAwait(false))
+                using (var httpResponseMessage = await httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))
                 {
                     if (!httpResponseMessage.IsSuccessStatusCode)
                     {
                         return false;
                     }
 
-                    var fileContentStream = await httpResponseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false);
-                    using (var sourceStream = new FileStream(filePath, FileMode.Append, FileAccess.Write, FileShare.None, bufferSize: 4096, useAsync: true))
+                    var fileInfo = new FileInfo(filePath);
+                    if (fileInfo.Exists)
                     {
-                        fileContentStream.Seek(0, SeekOrigin.Begin);
-                        await fileContentStream.CopyToAsync(sourceStream);
+                        if (fileInfo.Length == httpResponseMessage.Content.Headers.ContentLength)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            File.Delete(filePath);
+                        }
+                    }
+
+                    var fileContentStream = await httpResponseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false);
+                    using (var sourceStream = new FileStream(filePath, FileMode.CreateNew, FileAccess.Write, FileShare.None, bufferSize: 4096, useAsync: true))
+                    {
+                        await fileContentStream.CopyToAsync(sourceStream).ConfigureAwait(false);
                     }
 
                     return true;
