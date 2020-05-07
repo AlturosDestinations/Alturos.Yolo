@@ -2,8 +2,10 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 namespace Alturos.Yolo
 {
@@ -52,41 +54,38 @@ namespace Alturos.Yolo
         {
             //Detect if Visual C++ Redistributable for Visual Studio is installed
             //https://stackoverflow.com/questions/12206314/detect-if-visual-c-redistributable-for-visual-studio-2012-is-installed/
-            var checkKeys = new Dictionary<string, string>
-            {
-                { @"Installer\Dependencies\,,amd64,14.0,bundle", "Microsoft Visual C++ 2017 Redistributable (x64)" },
-                { @"Installer\Dependencies\VC,redist.x64,amd64,14.16,bundle", "Microsoft Visual C++ 2017 Redistributable (x64)" },
-                { @"Installer\Dependencies\VC,redist.x64,amd64,14.20,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" },
-                { @"Installer\Dependencies\VC,redist.x64,amd64,14.21,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" },
-                { @"Installer\Dependencies\VC,redist.x64,amd64,14.22,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" },
-                { @"Installer\Dependencies\VC,redist.x64,amd64,14.23,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" },
-                { @"Installer\Dependencies\VC,redist.x64,amd64,14.24,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" },
-                { @"Installer\Dependencies\VC,redist.x64,amd64,14.25,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" },
-                { @"Installer\Dependencies\VC,redist.x64,amd64,14.26,bundle", "Microsoft Visual C++ 2015-2019 Redistributable (x64)" }
-            };
 
-            foreach (var checkKey in checkKeys)
+            var minVer = 14.16;
+            //I don't now whether to use this version, but it was in list of versions.
+            var minVerWithoutRedist = 14.0;
+
+            using (var parentKey = Registry.ClassesRoot.OpenSubKey(@"Installer\Dependencies", false))
             {
-                using (var registryKey = Registry.ClassesRoot.OpenSubKey(checkKey.Key, false))
+                if (parentKey != null)
                 {
-                    if (registryKey == null)
+                    var subKeys = new List<string>();
+                    foreach (var key in parentKey.GetSubKeyNames())
                     {
-                        continue;
+                        if (key.Contains(",amd64,"))
+                            subKeys.Add(key);
                     }
 
-                    var displayName = registryKey.GetValue("DisplayName") as string;
-                    if (string.IsNullOrEmpty(displayName))
+                    var regex = new Regex(@",(?<redist>redist\.x64)?,amd64,(?<version>[\d]+\.[\d]+),bundle");
+                    foreach (var key in subKeys)
                     {
-                        continue;
-                    }
-
-                    if (displayName.StartsWith(checkKey.Value, StringComparison.OrdinalIgnoreCase))
-                    {
-                        return true;
+                        var match = regex.Match(key);
+                        if (match.Success &&
+                            double.TryParse(match.Groups["version"].Value,
+                                            NumberStyles.Number, CultureInfo.InvariantCulture,
+                                            out var version))
+                        {
+                            if ((!string.IsNullOrWhiteSpace(match.Groups["redist"].Value) && version >= minVer)
+                             || version >= minVerWithoutRedist)
+                                return true;
+                        }
                     }
                 }
             }
-
             return false;
         }
     }
