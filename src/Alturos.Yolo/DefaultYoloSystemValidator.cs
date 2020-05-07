@@ -70,14 +70,15 @@ namespace Alturos.Yolo
                             subKeys.Add(key);
                     }
 
-                    var regex = new Regex(@",(?<redist>redist\.x64)*,amd64,(?<version>[^,]+),bundle");
-
+                    var regex = new Regex(@",(?<redist>redist\.x64)?,amd64,(?<version>[\d]+\.[\d]+),bundle");
                     foreach (var key in subKeys)
                     {
                         var match = regex.Match(key);
-                        if (match.Success)
+                        if (match.Success &&
+                            double.TryParse(match.Groups["version"].Value,
+                                            NumberStyles.Number, CultureInfo.InvariantCulture,
+                                            out var version))
                         {
-                            var version = Convert.ToDouble(match.Groups["version"].Value, CultureInfo.InvariantCulture);
                             if ((!string.IsNullOrWhiteSpace(match.Groups["redist"].Value) && version >= minVer)
                              || version >= minVerWithoutRedist)
                                 return true;
