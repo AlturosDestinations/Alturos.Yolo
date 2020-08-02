@@ -1,6 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Alturos.Yolo.UnitTest
 {
@@ -27,7 +27,7 @@ namespace Alturos.Yolo.UnitTest
             using (var yoloWrapper = new YoloWrapper(configuration))
             {
                 var items = yoloWrapper.Detect(this._imagePath);
-                Assert.IsTrue(items.Count() > 0);
+                Assert.IsTrue(items.Any());
             }
         }
 
@@ -39,7 +39,7 @@ namespace Alturos.Yolo.UnitTest
             {
                 var imageData = File.ReadAllBytes(this._imagePath);
                 var items = yoloWrapper.Detect(imageData);
-                Assert.IsTrue(items.Count() > 0);
+                Assert.IsTrue(items.Any());
             }
         }
     }
