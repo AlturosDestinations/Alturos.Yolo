@@ -205,7 +205,7 @@ namespace Alturos.Yolo
         /// <returns></returns>
         /// <exception cref="NotImplementedException">Thrown when the yolo_cpp dll is wrong compiled</exception>
         /// <exception cref="Exception">Thrown when the byte array is not a valid image</exception>
-        public IEnumerable<YoloItem> Detect(byte[] imageData)
+        public unsafe IEnumerable<YoloItem> Detect(byte[] imageData)
         {
             if (!this._imageAnalyzer.IsValidImageFormat(imageData))
             {
@@ -213,32 +213,27 @@ namespace Alturos.Yolo
             }
 
             var container = new BboxContainer();
-            var size = Marshal.SizeOf(imageData[0]) * imageData.Length;
-            var pnt = Marshal.AllocHGlobal(size);
+            var size = imageData.Length;
 
             var count = 0;
             try
             {
-                // Copy the array to unmanaged memory.
-                Marshal.Copy(imageData, 0, pnt, imageData.Length);
-                switch (this.DetectionSystem)
+                fixed (byte* pnt = imageData)
                 {
-                    case DetectionSystem.CPU:
-                        count = DetectImageCpu(pnt, imageData.Length, ref container);
-                        break;
-                    case DetectionSystem.GPU:
-                        count = DetectImageGpu(pnt, imageData.Length, ref container);
-                        break;
+                    switch (this.DetectionSystem)
+                    {
+                        case DetectionSystem.CPU:
+                            count = DetectImageCpu((IntPtr)pnt, imageData.Length, ref container);
+                            break;
+                        case DetectionSystem.GPU:
+                            count = DetectImageGpu((IntPtr)pnt, imageData.Length, ref container);
+                            break;
+                    }
                 }
             }
             catch (Exception)
             {
                 return null;
-            }
-            finally
-            {
-                // Free the unmanaged memory.
-                Marshal.FreeHGlobal(pnt);
             }
 
             if (count == -1)

@@ -16,6 +16,7 @@
     <Version>3.0.6-alpha</Version>
     <AssemblyVersion>3.0.6</AssemblyVersion>
     <FileVersion>3.0.6</FileVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <!-- Only for .netstandard 2.0 -->
