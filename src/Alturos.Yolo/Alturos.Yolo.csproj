@@ -16,6 +16,16 @@
     <Version>3.0.6-alpha</Version>
     <AssemblyVersion>3.0.6</AssemblyVersion>
     <FileVersion>3.0.6</FileVersion>
+    <Platforms>x64</Platforms>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|x64'">
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <!-- Only for .netstandard 2.0 -->

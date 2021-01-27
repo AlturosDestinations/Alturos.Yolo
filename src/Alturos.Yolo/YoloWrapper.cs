@@ -74,6 +74,10 @@ namespace Alturos.Yolo
             {
                 this._yoloSystemValidator = new DefaultYoloSystemValidator();
             }
+            else
+            {
+                this._yoloSystemValidator = yoloSystemValidator;
+            }
 
             this.Initialize(yoloConfiguration.ConfigFile, yoloConfiguration.WeightsFile, yoloConfiguration.NamesFile, gpuConfig);
         }
@@ -93,6 +97,10 @@ namespace Alturos.Yolo
             if (yoloSystemValidator == null)
             {
                 this._yoloSystemValidator = new DefaultYoloSystemValidator();
+            }
+            else
+            {
+                this._yoloSystemValidator = yoloSystemValidator;
             }
 
             this.Initialize(configurationFilename, weightsFilename, namesFilename, gpuConfig);
